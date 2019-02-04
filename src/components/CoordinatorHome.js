@@ -27,16 +27,16 @@ const FlexContainer = styled.div`
 class CoordinatorHome extends Component {
   render() {
     return (
-        <React.Fragment>
-          <Header />
-          <ContentBody>
-            <h2 className="subheader">Term Schedule</h2>
-            <FlexContainer>
-              <TableDisplay />
-            </FlexContainer>
-            <Downloader />
-          </ContentBody>
-        </React.Fragment>
+      <React.Fragment>
+        <Header handleLogout={this.props.handleLogout} />
+        <ContentBody>
+          <h2 className="subheader">Term Schedule</h2>
+          <FlexContainer>
+            <TableDisplay />
+          </FlexContainer>
+          <Downloader />
+        </ContentBody>
+      </React.Fragment>
     );
   }
 }

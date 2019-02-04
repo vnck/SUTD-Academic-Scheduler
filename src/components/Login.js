@@ -65,10 +65,10 @@ button:active:enabled {
 button:focus {
     box-shadow: 0 0 0 4px ${props => props.theme.accentdark};
   }
-`
+`;
 
 class Login extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       user: "",
@@ -80,55 +80,67 @@ class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  validateForm(){
+  validateForm() {
     return this.state.user.length > 0 && this.state.password.length > 0;
   }
 
   updateUser(value) {
     this.setState({
-      user: value,
+      user: value
     });
   }
 
   updatePassword(value) {
     this.setState({
-      password: value,
+      password: value
     });
   }
 
-  handleSubmit = event => {
+  handleSubmit = async event => {
     event.preventDefault();
-    this.props.router.push('/home')
-  }
+    try {
+      // authentication API
+      this.props.userHasAuthenticated(true);
+      this.props.history.push("/");
+    } catch (e) {
+      alert(e);
+    }
+  };
 
-  render(){
+  render() {
     return (
       <React.Fragment>
         <FlexContainer>
           <h1 className="header">SUTD Academic Scheduler</h1>
           <form>
             <label htmlFor="user">Staff ID</label>
-        <input
-          type="text"
-          name="user"
-          placeholder="Enter ID"
-          onChange={(event) => {this.updateUser(event.target.value)}}
-          value={this.state.user}
-        />
-        <label htmlFor="password">Password</label>
-        <input
-            type="password"
-            name="password"
-            placeholder="Enter Password"
-            checked={this.state.acceptedTerms}
-            onChange={(event) => {this.updatePassword(event.target.value)}}
-            value={this.state.password}
-          />
-        <button disabled={!this.validateForm()} onClick={() => {this.handleSubmit()}}>Submit</button>
-      </form>
+            <input
+              type="text"
+              name="user"
+              placeholder="Enter ID"
+              onChange={event => {
+                this.updateUser(event.target.value);
+              }}
+              value={this.state.user}
+            />
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter Password"
+              checked={this.state.acceptedTerms}
+              onChange={event => {
+                this.updatePassword(event.target.value);
+              }}
+              value={this.state.password}
+            />
+            <button disabled={!this.validateForm()} onClick={this.handleSubmit}>
+              Submit
+            </button>
+          </form>
         </FlexContainer>
       </React.Fragment>
-    )
+    );
   }
 }
 

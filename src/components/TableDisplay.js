@@ -21,7 +21,7 @@ const Header = styled.div`
   grid-gap: 1px;
   background-color: ${props => props.theme.grey};
   .cell {
-    font-size: .8em;
+    font-size: 0.8em;
     padding: 0.2em 1em;
     background-color: white;
     text-align: center;
@@ -50,7 +50,7 @@ const TableSidebar = styled.div`
   grid-gap: 1px;
   background-color: ${props => props.theme.grey};
   .cell {
-    font-size: .8em;
+    font-size: 0.8em;
     padding: 0.2em 1em;
     background-color: white;
     text-align: center;
@@ -143,7 +143,7 @@ class TableDisplay extends Component {
             timing: "8AM - 9AM",
             venue: "2.505 LT2",
             instructor: "John. O",
-            code: "50.003",
+            code: "50.002",
             color: "#bba",
             start: 8,
             end: 10
@@ -174,7 +174,7 @@ class TableDisplay extends Component {
             timing: "8AM - 9AM",
             venue: "2.505 LT2",
             instructor: "John. O",
-            code: "50.003",
+            code: "50.013",
             color: "#bba",
             start: 10,
             end: 14
@@ -236,23 +236,24 @@ class TableDisplay extends Component {
         <Table>
           <Header className="header">
             {this.state.days.map(day => (
-              <div className="cell">
+              <div className="cell" key={day}>
                 <p>{day}</p>
               </div>
             ))}
           </Header>
           <TableSidebar>
             {this.state.cells.map(cell => (
-              <div className="cell">
+              <div className="cell" key={cell}>
                 <p>{cell}</p>
               </div>
             ))}
           </TableSidebar>
           <TableBody>
-            {this.state.activities.map(day => (
-              <DayCol>
+            {this.state.activities.map((day, index) => (
+              <DayCol key={day + index}>
                 {day.map(
-                  activity => activity !== "" && <Cell data={activity} />
+                  (activity, index) =>
+                    activity !== "" && <Cell key={index} data={activity} />
                 )}
               </DayCol>
             ))}

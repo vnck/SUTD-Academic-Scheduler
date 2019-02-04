@@ -40,6 +40,7 @@ class Header extends Component {
     return (
       <StyledHeader>
         <Title href="/">SUTD Scheduler</Title>
+        <button onClick={this.props.handleLogout}>Log Out</button>
       </StyledHeader>
     );
   }
