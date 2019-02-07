@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styled, { ThemeProvider } from "styled-components";
 import Header from "./Header";
 import TableDisplay from "./TableDisplay";
-import CoordFunctionContainer from "./CoordFunctionContainer";
+import InstFunctionContainer from "./InstFunctionContainer";
 
 const ContentBody = styled.div`
   width: 100%;
@@ -35,7 +35,7 @@ const FlexChildW = styled.div`
   padding-top: 2.5rem;
 `;
 
-class CoordinatorHome extends Component {
+class InstructorHome extends Component {
   render() {
     return (
       <React.Fragment>
@@ -47,7 +47,7 @@ class CoordinatorHome extends Component {
               <TableDisplay />
             </FlexChild>
             <FlexChildW>
-              <CoordFunctionContainer />
+              <InstFunctionContainer />
             </FlexChildW>
           </FlexContainer>
         </ContentBody>
@@ -56,4 +56,4 @@ class CoordinatorHome extends Component {
   }
 }
 
-export default CoordinatorHome;
+export default InstructorHome;

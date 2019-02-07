@@ -48,6 +48,7 @@ button {
   color: ${props => props.theme.accentdark};
   border-radius: 4px;
   outline: none;
+  cursor: pointer;
 }
 
 button:hover:enabled {
@@ -101,7 +102,13 @@ class Login extends Component {
     try {
       // authentication API
       this.props.userHasAuthenticated(true);
-      this.props.history.push("/");
+      let isCoordinator = false;
+      this.props.userIsCoordinator(isCoordinator);
+      if (isCoordinator) {
+        this.props.history.push("/coordinator-home");
+      } else {
+        this.props.history.push("/instructor-home");
+      }
     } catch (e) {
       alert(e);
     }

@@ -28,6 +28,18 @@ const Title = styled.a`
   }
 `;
 
+const LogoutButton = styled.button`
+  padding: 1rem 2rem;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  color: ${props => props.theme.white};
+  background-color: ${props => props.theme.accentdark};
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+`;
+
 class Header extends Component {
   constructor(props) {
     super(props);
@@ -40,7 +52,7 @@ class Header extends Component {
     return (
       <StyledHeader>
         <Title href="/">SUTD Scheduler</Title>
-        <button onClick={this.props.handleLogout}>Log Out</button>
+        <LogoutButton onClick={this.props.handleLogout}>LOG OUT</LogoutButton>
       </StyledHeader>
     );
   }

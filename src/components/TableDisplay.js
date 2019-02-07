@@ -15,14 +15,13 @@ const Table = styled.div`
 const Header = styled.div`
   display: grid;
   grid-column-start: 2;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(60px, 1fr));
   justify-items: stretch;
   align-items: stretch;
   grid-gap: 1px;
   background-color: ${props => props.theme.grey};
   .cell {
-    font-size: 0.8em;
-    padding: 0.2em 1em;
+    font-size: 0.6em;
     background-color: white;
     text-align: center;
     font-weight: 600;
@@ -50,8 +49,7 @@ const TableSidebar = styled.div`
   grid-gap: 1px;
   background-color: ${props => props.theme.grey};
   .cell {
-    font-size: 0.8em;
-    padding: 0.2em 1em;
+    font-size: 0.6em;
     background-color: white;
     text-align: center;
     display: flex;
@@ -87,11 +85,9 @@ const DayCol = styled.div`
   grid-gap: 1px;
   background-color: ${props => props.theme.silver};
   .cell {
-    padding: 0.4em 1em;
     background-color: white;
   }
   .empty {
-    padding: 0.4em 1em;
     background-color: white;
   }
 `;

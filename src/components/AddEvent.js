@@ -29,16 +29,27 @@ const Container = styled.div`
   }
 `;
 
-class Downloader extends Component {
+class AddEvent extends Component {
+  constructor(props) {
+    super(props);
+    this.confirmRequest = this.confirmRequest.bind(this);
+  }
+
+  confirmRequest() {
+    alert("Add an Event");
+  }
+
   render() {
     return (
       <React.Fragment>
         <Container>
-          <button type="button">Download CSV</button>
+          <button type="button" onClick={this.confirmRequest}>
+            Add an Event
+          </button>
         </Container>
       </React.Fragment>
     );
   }
 }
 
-export default Downloader;
+export default AddEvent;
