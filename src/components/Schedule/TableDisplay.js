@@ -20,6 +20,7 @@ const Header = styled.div`
   align-items: stretch;
   grid-gap: 1px;
   background-color: ${props => props.theme.grey};
+
   .cell {
     font-size: 0.6em;
     background-color: white;
@@ -31,10 +32,12 @@ const Header = styled.div`
     border-top: 1px solid ${props => props.theme.grey};
     border-bottom: 1px solid ${props => props.theme.grey};
   }
+
   .cell:last-child {
     border-right: 1px solid ${props => props.theme.grey};
   }
-  .cell: first-child {
+
+  .cell:first-child {
     border-left: 1px solid ${props => props.theme.grey};
   }
 `;
@@ -58,7 +61,7 @@ const TableSidebar = styled.div`
     border-left: 1px solid ${props => props.theme.grey};
     border-right: 1px solid ${props => props.theme.grey};
   }
-  .cell: first-child {
+  .cell:first-child {
     border-top: 1px solid ${props => props.theme.grey};
   }
   .cell:last-child {

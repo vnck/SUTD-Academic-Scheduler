@@ -14,7 +14,6 @@ const FlexContainer = styled.div`
 
 class HomeRedirect extends Component {
   componentDidMount() {
-    console.log(this.props);
     if (this.props.isAuthenticated) {
       if (this.props.isCoordinator) {
         this.props.history.push("/coordinator-home");

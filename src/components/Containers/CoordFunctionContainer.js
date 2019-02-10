@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import Downloader from "./Downloader";
-import GeneratorButton from "./GeneratorButton";
-import AddEvent from "./AddEvent";
+import Downloader from "../Buttons/Downloader";
+import GeneratorButton from "../Buttons/GeneratorButton";
+import AddEvent from "../Buttons/AddEvent";
 
 const FlexContainer = styled.div`
   display: flex;

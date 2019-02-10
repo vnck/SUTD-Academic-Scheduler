@@ -9,8 +9,7 @@ const Container = styled.div`
     border: none;
     text-align: center;
     text-decoration: none;
-    background-color: ${props => props.theme.accent};
-    color: ${props => props.theme.white};
+    background-color: ${props => props.theme.grey};
     font-weight: 600;
     border-radius: 6px;
     outline: none;
@@ -18,37 +17,34 @@ const Container = styled.div`
   }
 
   button:hover {
-    background-color: ${props => props.theme.accentdark};
+    background-color: ${props => props.theme.darkergrey};
   }
 
   button:active {
-    background-color: ${props => props.theme.accentdark};
+    background-color: ${props => props.theme.darkestgrey};
   }
 
   button:focus {
-    box-shadow: 0 0 0 2px ${props => props.theme.accentdark};
+    box-shadow: 0 0 0 2px ${props => props.theme.darkestgrey};
   }
 `;
 
-class CustomisePreferences extends Component {
+class AddEvent extends Component {
   constructor(props) {
     super(props);
     this.confirmRequest = this.confirmRequest.bind(this);
   }
 
-  confirmRequest() {
-    var r = window.confirm("Are you sure?\nThis action cannot be undone.");
-    if (r == true) {
-      alert("Generated New Schedule");
-    }
-  }
+  confirmRequest = () => {
+    alert("Add an Event");
+  };
 
   render() {
     return (
       <React.Fragment>
         <Container>
           <button type="button" onClick={this.confirmRequest}>
-            Add Block Out
+            Add an Event
           </button>
         </Container>
       </React.Fragment>
@@ -56,4 +52,4 @@ class CustomisePreferences extends Component {
   }
 }
 
-export default CustomisePreferences;
+export default AddEvent;

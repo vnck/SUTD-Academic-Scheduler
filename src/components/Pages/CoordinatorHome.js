@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import styled, { ThemeProvider } from "styled-components";
-import Header from "./Header";
-import TableDisplay from "./TableDisplay";
-import InstFunctionContainer from "./InstFunctionContainer";
+import Header from "../Containers/Header";
+import TableDisplay from "../Schedule/TableDisplay";
+import CoordFunctionContainer from "../Containers/CoordFunctionContainer";
 
 const ContentBody = styled.div`
   width: 100%;
@@ -35,7 +35,7 @@ const FlexChildW = styled.div`
   padding-top: 2.5rem;
 `;
 
-class InstructorHome extends Component {
+class CoordinatorHome extends Component {
   render() {
     return (
       <React.Fragment>
@@ -47,7 +47,7 @@ class InstructorHome extends Component {
               <TableDisplay />
             </FlexChild>
             <FlexChildW>
-              <InstFunctionContainer />
+              <CoordFunctionContainer />
             </FlexChildW>
           </FlexContainer>
         </ContentBody>
@@ -56,4 +56,4 @@ class InstructorHome extends Component {
   }
 }
 
-export default InstructorHome;
+export default CoordinatorHome;

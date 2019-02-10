@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import Downloader from "./Downloader";
-import CustomisePreferences from "./CustomisePreferences";
+import Downloader from "../Buttons/Downloader";
+import CustomisePreferences from "../Buttons/CustomisePreferences";
 
 const FlexContainer = styled.div`
   display: flex;

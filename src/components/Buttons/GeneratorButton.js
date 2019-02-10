@@ -36,12 +36,12 @@ class GeneratorButton extends Component {
     this.confirmRequest = this.confirmRequest.bind(this);
   }
 
-  confirmRequest() {
+  confirmRequest = () => {
     var r = window.confirm("Are you sure?\nThis action cannot be undone.");
     if (r == true) {
       alert("Generated New Schedule");
     }
-  }
+  };
 
   render() {
     return (

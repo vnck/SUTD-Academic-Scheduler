@@ -1,12 +1,12 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import AppliedRoute from "../components/AppliedRoute";
-import PrivateRoute from "../components/PrivateRoute";
-import Error from "../components/Error";
-import Login from "../components/Login";
-import CoordinatorHome from "../components/CoordinatorHome";
-import InstructorHome from "../components/InstructorHome";
-import HomeRedirect from "../components/HomeRedirect";
+import AppliedRoute from "./AppliedRoute";
+import PrivateRoute from "./PrivateRoute";
+import Error from "../components/Pages/Error";
+import Login from "../components/Pages/Login";
+import CoordinatorHome from "../components/Pages/CoordinatorHome";
+import InstructorHome from "../components/Pages/InstructorHome";
+import HomeRedirect from "./HomeRedirect";
 
 const Routes = ({ childProps }) => (
   <main>

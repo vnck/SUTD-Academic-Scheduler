@@ -2,68 +2,68 @@ import React, { Component } from "react";
 import styled from "styled-components";
 
 const FlexContainer = styled.div`
-width: 100vw;
-height: 100vh;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-background-color: ${props => props.theme.accent}
-color: ${props => props.theme.white}
-
-h1.header{
-  margin-bottom: 3rem;
-}
-
-form {
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  font-size: 1.2em;
-}
+  justify-content: center;
+  align-items: center;
+  background-color: ${props => props.theme.accent};
+  color: ${props => props.theme.white};
 
-input {
-  background-color: ${props => props.theme.white};
-  border: none;
-  padding: .3em;
-  font-size: 1.2em;
-  margin: .2em 0;
-  outline: none;
-}
+  h1.header {
+    margin-bottom: 3rem;
+  }
 
-input::placeholder {
-  color: ${props => props.theme.greydark};
-}
+  form {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.2em;
+  }
 
-label.psw {
-  margin-top: .5em;
-}
+  input {
+    background-color: ${props => props.theme.white};
+    border: none;
+    padding: 0.3em;
+    font-size: 1.2em;
+    margin: 0.2em 0;
+    outline: none;
+  }
 
-button {
-  margin-top: 2em;
-  padding: .3em;
-  font-size: 1.2em;
-  font-weight: 600;
-  border: none;
-  background-color: ${props => props.theme.white};
-  color: ${props => props.theme.accentdark};
-  border-radius: 4px;
-  outline: none;
-  cursor: pointer;
-}
+  input::placeholder {
+    color: ${props => props.theme.greydark};
+  }
 
-button:hover:enabled {
-  background-color: ${props => props.theme.silver};
-}
+  label.psw {
+    margin-top: 0.5em;
+  }
 
-button:disabled {
-  color: ${props => props.theme.grey};
-}
+  button {
+    margin-top: 2em;
+    padding: 0.3em;
+    font-size: 1.2em;
+    font-weight: 600;
+    border: none;
+    background-color: ${props => props.theme.white};
+    color: ${props => props.theme.accentdark};
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+  }
 
-button:active:enabled {
-  background-color: ${props => props.theme.grey};
-}
+  button:hover:enabled {
+    background-color: ${props => props.theme.silver};
+  }
 
-button:focus {
+  button:disabled {
+    color: ${props => props.theme.grey};
+  }
+
+  button:active:enabled {
+    background-color: ${props => props.theme.grey};
+  }
+
+  button:focus {
     box-shadow: 0 0 0 4px ${props => props.theme.accentdark};
   }
 `;
@@ -81,21 +81,21 @@ class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  validateForm() {
+  validateForm = () => {
     return this.state.user.length > 0 && this.state.password.length > 0;
-  }
+  };
 
-  updateUser(value) {
+  updateUser = value => {
     this.setState({
       user: value
     });
-  }
+  };
 
-  updatePassword(value) {
+  updatePassword = value => {
     this.setState({
       password: value
     });
-  }
+  };
 
   handleSubmit = async event => {
     event.preventDefault();

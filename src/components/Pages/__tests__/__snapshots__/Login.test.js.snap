@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login should match snapshot 1`] = `
+<Fragment>
+  <styled.div>
+    <h1
+      className="header"
+    >
+      SUTD Academic Scheduler
+    </h1>
+    <form>
+      <label
+        htmlFor="user"
+      >
+        Staff ID
+      </label>
+      <input
+        name="user"
+        onChange={[Function]}
+        placeholder="Enter ID"
+        type="text"
+        value=""
+      />
+      <label
+        htmlFor="password"
+      >
+        Password
+      </label>
+      <input
+        name="password"
+        onChange={[Function]}
+        placeholder="Enter Password"
+        type="password"
+        value=""
+      />
+      <button
+        disabled={true}
+        onClick={[Function]}
+      >
+        Submit
+      </button>
+    </form>
+  </styled.div>
+</Fragment>
+`;

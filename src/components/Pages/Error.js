@@ -2,14 +2,14 @@ import React, { Component } from "react";
 import styled from "styled-components";
 
 const FlexContainer = styled.div`
-width: 100vw;
-height: 100vh;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-background-color: ${props => props.theme.accent}
-color: ${props => props.theme.white}
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: ${props => props.theme.accent};
+  color: ${props => props.theme.white};
 `;
 
 class Error extends Component {
