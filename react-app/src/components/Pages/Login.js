@@ -101,8 +101,15 @@ class Login extends Component {
     event.preventDefault();
     try {
       // authentication API
+      fetch("http://localhost:5000/hello")
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(data) {
+          console.log(data);
+        });
       this.props.userHasAuthenticated(true);
-      let isCoordinator = false;
+      let isCoordinator = true;
       this.props.userIsCoordinator(isCoordinator);
       if (isCoordinator) {
         this.props.history.push("/coordinator-home");
