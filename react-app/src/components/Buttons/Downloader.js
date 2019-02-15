@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
-  display: flex;
-  justify-content: center;
   margin-top: 1rem;
 
   button {
@@ -15,6 +13,7 @@ const Container = styled.div`
     font-weight: 600;
     border-radius: 6px;
     outline: none;
+    cursor: pointer;
   }
 
   button:hover {

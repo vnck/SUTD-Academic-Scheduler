@@ -15,14 +15,14 @@ const Table = styled.div`
 const Header = styled.div`
   display: grid;
   grid-column-start: 2;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(60px, 1fr));
   justify-items: stretch;
   align-items: stretch;
   grid-gap: 1px;
   background-color: ${props => props.theme.grey};
+
   .cell {
-    font-size: .8em;
-    padding: 0.2em 1em;
+    font-size: 0.6em;
     background-color: white;
     text-align: center;
     font-weight: 600;
@@ -32,10 +32,12 @@ const Header = styled.div`
     border-top: 1px solid ${props => props.theme.grey};
     border-bottom: 1px solid ${props => props.theme.grey};
   }
+
   .cell:last-child {
     border-right: 1px solid ${props => props.theme.grey};
   }
-  .cell: first-child {
+
+  .cell:first-child {
     border-left: 1px solid ${props => props.theme.grey};
   }
 `;
@@ -50,8 +52,7 @@ const TableSidebar = styled.div`
   grid-gap: 1px;
   background-color: ${props => props.theme.grey};
   .cell {
-    font-size: .8em;
-    padding: 0.2em 1em;
+    font-size: 0.6em;
     background-color: white;
     text-align: center;
     display: flex;
@@ -60,7 +61,7 @@ const TableSidebar = styled.div`
     border-left: 1px solid ${props => props.theme.grey};
     border-right: 1px solid ${props => props.theme.grey};
   }
-  .cell: first-child {
+  .cell:first-child {
     border-top: 1px solid ${props => props.theme.grey};
   }
   .cell:last-child {
@@ -87,11 +88,9 @@ const DayCol = styled.div`
   grid-gap: 1px;
   background-color: ${props => props.theme.silver};
   .cell {
-    padding: 0.4em 1em;
     background-color: white;
   }
   .empty {
-    padding: 0.4em 1em;
     background-color: white;
   }
 `;
@@ -143,7 +142,7 @@ class TableDisplay extends Component {
             timing: "8AM - 9AM",
             venue: "2.505 LT2",
             instructor: "John. O",
-            code: "50.003",
+            code: "50.002",
             color: "#bba",
             start: 8,
             end: 10
@@ -174,7 +173,7 @@ class TableDisplay extends Component {
             timing: "8AM - 9AM",
             venue: "2.505 LT2",
             instructor: "John. O",
-            code: "50.003",
+            code: "50.013",
             color: "#bba",
             start: 10,
             end: 14
@@ -236,23 +235,24 @@ class TableDisplay extends Component {
         <Table>
           <Header className="header">
             {this.state.days.map(day => (
-              <div className="cell">
+              <div className="cell" key={day}>
                 <p>{day}</p>
               </div>
             ))}
           </Header>
           <TableSidebar>
             {this.state.cells.map(cell => (
-              <div className="cell">
+              <div className="cell" key={cell}>
                 <p>{cell}</p>
               </div>
             ))}
           </TableSidebar>
           <TableBody>
-            {this.state.activities.map(day => (
-              <DayCol>
+            {this.state.activities.map((day, index) => (
+              <DayCol key={day + index}>
                 {day.map(
-                  activity => activity !== "" && <Cell data={activity} />
+                  (activity, index) =>
+                    activity !== "" && <Cell key={index} data={activity} />
                 )}
               </DayCol>
             ))}

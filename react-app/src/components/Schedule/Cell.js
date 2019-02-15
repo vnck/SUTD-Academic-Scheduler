@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
-  padding: 0.2em 0;
+  padding: 0.1em 0;
   border-radius: ${props => (props.color ? "10px" : "")};
   display: flex;
   flex-direction: column;
@@ -10,13 +10,12 @@ const Container = styled.div`
   align-items: center;
   background-color: ${props => props.color || "#fff"};
   p {
-    font-size: 0.6em;
+    font-size: 0.5em;
     text-align: center;
-    padding-bottom: .2em;
   }
 
   p.t {
-    font-size: 0.5em;
+    font-size: 0.3em;
   }
 
   p.b {
