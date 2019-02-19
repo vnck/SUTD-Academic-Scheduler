@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import styled, { ThemeProvider } from "styled-components";
+import styled from "styled-components";
 import Header from "../Containers/Header";
 import TableDisplay from "../Schedule/TableDisplay";
 import InstFunctionContainer from "../Containers/InstFunctionContainer";
