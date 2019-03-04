@@ -34,8 +34,8 @@ class App extends Component {
   async componentDidMount() {
     try {
       // await authentication API
-      this.userHasAuthenticated(true);
       this.userIsCoordinator(false);
+      this.userHasAuthenticated(false);
     } catch (e) {
       alert(e);
     }

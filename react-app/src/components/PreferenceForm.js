@@ -48,7 +48,34 @@ const StyledInput = styled.textarea`
   margin: 1em 0;
 `;
 
-class Error extends Component {
+const TabContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
+const TabButton = styled.div`
+  padding: 0.4rem 1rem;
+  border: none;
+  background-color: ${props => props.theme.accent};
+  color: ${props => props.theme.white};
+  outline: 1px solid ${props => props.theme.darkestgrey};
+  cursor: pointer;
+
+  :hover {
+    background-color: ${props => props.theme.accentdark};
+  }
+
+  :active {
+    background-color: ${props => props.theme.accentdark};
+  }
+
+  :focus {
+    box-shadow: 0 0 0 2px ${props => props.theme.accentdark};
+  }
+`;
+
+class PreferenceForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -85,13 +112,24 @@ class Error extends Component {
         "6:00PM",
         "6:30PM"
       ],
+      weekly: true,
       startTime: "",
       endTime: "",
       daySelect: ""
     };
     this.onSelectStartChange = this.onSelectStartChange.bind(this);
     this.onSelectEndChange = this.onSelectEndChange.bind(this);
+    this.onSelectWeekly = this.onSelectWeekly.bind(this);
+    this.onNotSelectWeekly = this.onNotSelectWeekly.bind(this);
   }
+
+  onSelectWeekly = () => {
+    this.setState({ weekly: true });
+  };
+
+  onNotSelectWeekly = () => {
+    this.setState({ weekly: false });
+  };
 
   onSelectDayChange = e => {
     this.setState({ daySelect: e.target.value });
@@ -109,14 +147,30 @@ class Error extends Component {
     return (
       <React.Fragment>
         <FlexContainer>
-          <FlexChild>
-            <p>Day:</p>
-            <StyledSelect onChange={this.onSelectDayChange}>
-              {this.state.dayOptions.map(dayOption => (
-                <option value={dayOption}>{dayOption}</option>
-              ))}
-            </StyledSelect>
-          </FlexChild>
+          <TabContainer>
+            <TabButton onClick={this.onSelectWeekly}>Day</TabButton>
+            <TabButton onClick={this.onNotSelectWeekly}>Date</TabButton>
+          </TabContainer>
+          {this.state.weekly && (
+            <FlexChild>
+              <p>Day:</p>
+              <StyledSelect onChange={this.onSelectDayChange}>
+                {this.state.dayOptions.map(dayOption => (
+                  <option value={dayOption}>{dayOption}</option>
+                ))}
+              </StyledSelect>
+            </FlexChild>
+          )}
+          {!this.state.weekly && (
+            <FlexChild>
+              <p>Date:</p>
+              <StyledSelect onChange={this.onSelectDayChange}>
+                {this.state.dayOptions.map(dayOption => (
+                  <option value={dayOption}>{dayOption}</option>
+                ))}
+              </StyledSelect>
+            </FlexChild>
+          )}
           <FlexChild>
             <p>Start Time:</p>
             <StyledSelect onChange={this.onSelectStartChange}>
@@ -149,4 +203,4 @@ class Error extends Component {
   }
 }
 
-export default Error;
+export default PreferenceForm;

@@ -15,7 +15,7 @@ class InstFunctionContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      popup: true
+      popup: false
     };
     this.cancelPopup = this.cancelPopup.bind(this);
     this.callPopup = this.callPopup.bind(this);
