@@ -6,7 +6,7 @@ Created on Wed Feb  6 23:09:46 2019
 @author: joseph
 """
 
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request,jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 import sqlalchemy
@@ -21,7 +21,7 @@ class Account(Base.Model):
     __tablename__ = 'Accounts'
     
     id = Base.Column(Base.Integer,primary_key=True)
-    name = Base.Column(Base.String)
+    name = Base.Column(Base.String, unique=True)
     initials = Base.Column(Base.String)
     hash_pass = Base.Column(sqlalchemy.types.LargeBinary)
 
@@ -41,18 +41,17 @@ Base.session.commit()
 def home():
     return "Hello, World!"  # return a string
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', method='POST')
 def login():
-    error = None
     if request.method == 'POST':
-        acc = Account.query.filter_by(name=request.form['username']).first()
-        if acc==None:
-            error = 'Invalid Credentials. Please try again.'
-        elif bcrypt.check_password_hash(acc.hash_pass, request.form['password'])==False:
-            error = 'Invalid Credentials. Please try again.'
+        data = request.data
+        if "user1"==data.user and "password" == data.password:
+            response = jsonify(isAuthenticated= True, isCoordinator= True)
+        elif "user2"==data.user and "password" == data.password:
+            response = jsonify(isAuthenticated= True, isCoordinator= False)
         else:
-            return redirect(url_for('home'))
-    return render_template('welcome.html', error=error)  # render a template
+            return jsonify(message='invalid authentication'),500
+    return response
 
 # start the server with the 'run()' method
 if __name__ == '__main__':
