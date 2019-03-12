@@ -3,6 +3,7 @@ import styled, { ThemeProvider } from "styled-components";
 import Header from "../Containers/Header";
 import TableDisplay from "../Schedule/TableDisplay";
 import CoordFunctionContainer from "../Containers/CoordFunctionContainer";
+import RequestContainer from "../Containers/RequestContainer";
 
 const ContentBody = styled.div`
   width: 100%;
@@ -35,6 +36,17 @@ const FlexChildW = styled.div`
   padding-top: 2.5rem;
 `;
 
+const Container = styled.div`
+  width: 72%;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+
+  p.header {
+    font-weight: 700;
+    padding-bottom: 0.5em;
+  }
+`;
+
 class CoordinatorHome extends Component {
   render() {
     return (
@@ -50,6 +62,10 @@ class CoordinatorHome extends Component {
               <CoordFunctionContainer />
             </FlexChildW>
           </FlexContainer>
+          <Container>
+            <p className="header">Requests</p>
+            <RequestContainer />
+          </Container>
         </ContentBody>
       </React.Fragment>
     );
