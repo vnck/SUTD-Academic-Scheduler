@@ -10,7 +10,16 @@ class StudentGroup:
         self.noClash = False
         self.classes = []
         self.venues = []
+        self.avail = []
+    
+    def AddTimeSlot(self,day,period):
+        self.avail.append((day,period))
 
+    def checkAvail(self,day,period):
+        for tupl in self.avail:
+            if day == tupl[0] and period == tupl[1]:
+                return False
+        return True
     def addTimeDateConstraint(self, day, period, noClash=False):
         self.day = day
         self.period = period
@@ -25,3 +34,6 @@ class StudentGroup:
     def print_summary(self):
         print('SG: {}, label: {}, size: {}, classes: {}, venues: {}'.format(
             self.key, self.label, self.size, self.classes, self.venues))
+    def __repr__(self):
+        return 'SG: {}, label: {}, size: {}, classes: {}, venues: {}'.format(
+            self.key, self.label, self.size, self.classes, self.venues)
