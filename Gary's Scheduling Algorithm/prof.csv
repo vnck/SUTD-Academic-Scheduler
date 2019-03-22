@@ -1,8 +1,13 @@
-Name,Lead
-Digital World,Oka Kurniawan
-Introduction to Probability and Statistics,"Subhajit Datta,Alexander Binder,Tony Quek"
-Elements of Software Construction,"Sun Jun,Sudipta"
-Computer System Engineering,"David Yau,Jit Biswas"
-User Interface Design and Implementation,Hyowon Lee
-Graphics & Visualisation,Yeung Sai-Kit
-Security,"Nils Ole Tippenhauer,Martin Ochoa"
+Name,Courses
+Oka Kurniawan,10.009
+Subhajit Datta,50.034
+Alexander Binder,50.034
+Tony Quek,50.034
+Sun Jun,50.003
+Sudipta,50.003
+David Yau,50.005
+Jit Biswas,50.005
+Hyowon Lee,50.006
+Yeung Sai-Kit,50.017
+Nils Ole Tippenhauer,50.021
+Martin Ochoa,50.021

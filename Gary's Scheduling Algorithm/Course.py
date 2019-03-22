@@ -4,6 +4,7 @@ class Course:
     def __init__(self,name):
         self.name = name
         self._classes = []
+        self.professors = []
     
     def addClass(self,req,duration):
         """stores tuple(req,duration) in classes list"""

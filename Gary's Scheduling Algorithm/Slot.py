@@ -12,3 +12,6 @@ class Slot:
     
     def __repr__(self):
         return "<Slot: day {}  period {}, room {}>".format(self.day,self.period,self.room)
+
+    def getReq(self):
+        return self.room.req

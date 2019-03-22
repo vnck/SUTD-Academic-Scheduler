@@ -4,8 +4,9 @@ def readProfCSV():
     df = pd.read_csv("prof.csv")
     return df
 
-    
-
+def readStgCSV():
+    df = pd.read_csv("stg.csv")
+    return df
 
 def readRoomCSV():
     df = pd.read_csv("Rooms.csv")

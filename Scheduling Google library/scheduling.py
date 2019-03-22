@@ -2,10 +2,10 @@
 from ortools.sat.python import cp_model
 num_of_days = 5
 # 8:30 to 18:00 30 minute periods
-num_of_periods = 20
-num_of_rooms = 30
-num_of_student_groups = 30
-num_of_courses = 30
+num_of_periods = 10
+num_of_rooms = 5
+num_of_student_groups = 5
+num_of_courses = 5
 num_of_instructors = ["gary", "john", "may", "jean", "jack"]
 num_of_room_req = 3  # lab,lec,cbl
 
