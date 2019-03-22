@@ -81,6 +81,10 @@ class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentDidMount(){
+    this.setState({isMounted: true});
+  }
+
   validateForm = () => {
     return this.state.user.length > 0 && this.state.password.length > 0;
   };
@@ -99,23 +103,36 @@ class Login extends Component {
 
   handleSubmit = async event => {
     event.preventDefault();
+    var that = this;
     try {
       // authentication API
-      fetch("http://localhost:5000/hello")
+      fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          user: this.state.user,
+          password: this.state.password
+        })
+      })
         .then(function(response) {
           return response.json();
         })
         .then(function(data) {
-          console.log(data);
+          console.log(data.isAuthenticated);
+          console.log(data.isCoordinator);
+          console.log(that.state.isMounted);
+          that.props.userHasAuthenticated(data.isAuthenticated);
+          that.props.userIsCoordinator(data.isCoordinator);
+
+          if (data.isCoordinator) {
+            that.props.history.push("/coordinator-home");
+          } else {
+            that.props.history.push("/instructor-home");
+          }
         });
-      this.props.userHasAuthenticated(true);
-      let isCoordinator = true;
-      this.props.userIsCoordinator(isCoordinator);
-      if (isCoordinator) {
-        this.props.history.push("/coordinator-home");
-      } else {
-        this.props.history.push("/instructor-home");
-      }
     } catch (e) {
       alert(e);
     }
