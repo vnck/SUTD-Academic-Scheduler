@@ -20,6 +20,8 @@ class Coordinator:
         self.studentGroups = []
         self.courseClasses = []
         self.solution = None
+        #lower fitnessValue is better
+        self.fitnessValue = None
 
     def fitness(self):
         #instructor cannot be at more than 1 room per day per period
@@ -45,7 +47,8 @@ class Coordinator:
             elif courseClass.studentGroup.isFreshmore:
                 courseClass.studentGroup.name != slot.room.name
                 penalty+=1
-        print(penalty)
+        self.fitnessValue = penalty
+        return penalty
 
     def generateOneRandSolution(self):
         
@@ -81,7 +84,19 @@ class Coordinator:
             solution[courseClass] = self.slots[position]
 
         self.solution = solution
+    
+    def getProf(self,name):
+        for prof in self.professors:
+            if prof.name == name:
+                return prof
+        return None
 
+    def getSTG(self,name):
+        for stg in self.studentGroups:
+            if stg.name == name:
+                return stg
+        return None
+    
     def getCourse(self,name):
         """returns course object from courses with given name"""
         for course in self.courses:
@@ -168,17 +183,27 @@ class Coordinator:
         """
         self.periods = ls
 
+    def initalize(self):
+        #to consider separate generation of rooms/slots/courses separately to decrease time complexity
+        self.generateRooms()
+        self.generateSlots(True)
+        self.generateCourses()
+        self.generateProfs()
+        self.generateStudentGroups()
+        self.generateCourseClasses()
+        self.generateOneRandSolution()
+        self.fitness()
 
-c = Coordinator()
-c.generateRooms()
-c.generateSlots(True)
-c.generateCourses()
-c.generateProfs()
-c.generateStudentGroups()
-c.generateCourseClasses()
 
-c.generateOneRandSolution()
-c.fitness()
+
+# c.generateRooms()
+# c.generateSlots(True)
+# c.generateCourses()
+# c.generateProfs()
+# c.generateStudentGroups()
+# c.generateCourseClasses()
+# c.generateOneRandSolution()
+# c.fitness()
 
 
 # print(len(c.slots))
