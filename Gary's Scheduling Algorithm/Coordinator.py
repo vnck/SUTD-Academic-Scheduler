@@ -22,7 +22,30 @@ class Coordinator:
         self.solution = None
 
     def fitness(self):
-        pass
+        #instructor cannot be at more than 1 room per day per period
+        penalty = 0
+        for prof in self.professors:
+            penalty+=prof.fitness()
+        #student group cannot be at more than 1 day per room per period
+        for stg in self.studentGroups:
+            penalty+= stg.fitness()
+        # each room can only be used once per period per day
+        for slot in self.slots:
+            if (slot.counter-1<0):
+                count = 0
+            else:
+                count = slot.counter-1
+            penalty+=count
+
+        #check if room meets requirements
+        for courseClass,slot in self.solution.items():
+            if courseClass.req != slot.room.req:
+                penalty += 1
+            #freshmore need to use their own class
+            elif courseClass.studentGroup.isFreshmore:
+                courseClass.studentGroup.name != slot.room.name
+                penalty+=1
+        print(penalty)
 
     def generateOneRandSolution(self):
         
@@ -53,6 +76,7 @@ class Coordinator:
                 # store the schedule for student groups and professors in a slot[]
                 courseClass.studentGroup.slots.append(self.slots[position])
                 randProf.slots.append(self.slots[position])
+                self.slots[position].counter += 1
 
             solution[courseClass] = self.slots[position]
 
@@ -98,21 +122,16 @@ class Coordinator:
             self.professors.append(p)
 
     def generateCourses(self):
-        for dict in InputUtils.getStudentGroupData():
-            course = Course(dict["subjectCode"])
-            check = True
-            for c in self.courses:
-                if c.name == course.name:
-                    check = False
-            if check:
-                for i in dict["classes"]:
-                    if i[0]=="CBL":
-                        course.addClass("CC",i[1])
-                     
-                    elif i[0]== "LEC":
-                        course.addClass("LEC",i[1])
-                self.courses.append(course)
-
+        df = InputUtils.readCourseCSV()
+        for i,row in df.iterrows():
+            name = str(round(row[0],3))
+            course = Course(name)
+            arr = row[1].split(",")
+            for c in arr:
+                req = c[0:c.find("(")]
+                duration = float(c[c.find("(")+1:c.find(")")])
+                course.addClass(req,duration)
+            self.courses.append(course)
     def generateRooms(self):
         dict = InputUtils.readRoomCSV()
         for k in dict.keys():
@@ -157,9 +176,13 @@ c.generateCourses()
 c.generateProfs()
 c.generateStudentGroups()
 c.generateCourseClasses()
-#print(c.courseClasses)
-print(len(c.slots))
-print(c.solution)
+
+c.generateOneRandSolution()
+c.fitness()
+
+
+# print(len(c.slots))
+# print(c.solution)
 #print(len(c.slots))
 #print(c.professors)
 #print(c.courses)

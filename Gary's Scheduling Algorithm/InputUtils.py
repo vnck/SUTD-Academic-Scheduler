@@ -15,6 +15,9 @@ def readRoomCSV():
         dict[i] = [i+str(int(x)) for x in df[i].dropna().tolist()]
     return dict
 
+def readCourseCSV():
+    df = pd.read_csv("course.csv")
+    return df
 def inputCSV2df():
     input_df = pd.read_csv('schedule_input.csv')
     return input_df
@@ -54,4 +57,3 @@ def getStudentGroupData():
             }
             studentGroupData.append(studentGroup)
     return studentGroupData
-readProfCSV()

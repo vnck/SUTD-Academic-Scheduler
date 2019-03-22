@@ -8,7 +8,7 @@ class Slot:
         self.day = day
         self.period = period
         self.room = room
-        self.isOccupied = False
+        self.counter = 0
     
     def __repr__(self):
         return "<Slot: day {}  period {}, room {}>".format(self.day,self.period,self.room)
