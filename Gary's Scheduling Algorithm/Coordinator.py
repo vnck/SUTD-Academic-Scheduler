@@ -10,25 +10,30 @@ import pandas as pd
 import random
 
 class Coordinator:
+    rooms = []
+    periods = []
     def __init__(self):
         self.days = [1,2,3,4,5]
-        self.periods = self._generate_periods()
-        self.rooms = []
         self.slots = []
         self.courses = []
         self.professors = []
         self.studentGroups = []
         self.courseClasses = []
-        self.solution = None
+        self.solution = {}
         #lower fitnessValue is better
         self.fitnessValue = None
 
     def fitness(self):
         #instructor cannot be at more than 1 room per day per period
+        # print("prof len {}".format(len(self.professors)))
+        # print("stg len {}".format(len(self.studentGroups)))
+        # print("slot len {}".format(len(self.slots)))
+        # print("dict len {}".format(len(self.solution.keys())))
         penalty = 0
         for prof in self.professors:
             penalty+=prof.fitness()
-        #student group cannot be at more than 1 day per room per period
+
+        # #student group cannot be at more than 1 day per room per period
         for stg in self.studentGroups:
             penalty+= stg.fitness()
         # each room can only be used once per period per day
@@ -39,7 +44,7 @@ class Coordinator:
                 count = slot.counter-1
             penalty+=count
 
-        #check if room meets requirements
+        # #check if room meets requirements
         for courseClass,slot in self.solution.items():
             if courseClass.req != slot.room.req:
                 penalty += 1
@@ -47,16 +52,17 @@ class Coordinator:
             elif courseClass.studentGroup.isFreshmore:
                 courseClass.studentGroup.name != slot.room.name
                 penalty+=1
+
         self.fitnessValue = penalty
         return penalty
 
     def generateOneRandSolution(self):
         
         NUM_DAYS = len(self.days)
-        NUM_ROOMS = len(self.rooms)
-        NUM_PERIODS = len(self.periods)
+        NUM_ROOMS = len(Coordinator.rooms)
+        NUM_PERIODS = len(Coordinator.periods)
 
-        solution = {}
+
         for courseClass in self.courseClasses:
             #get the duration for the class
             duration = courseClass.duration
@@ -78,12 +84,13 @@ class Coordinator:
                 position = randDay*NUM_ROOMS*NUM_PERIODS + (randPeriod+i)*NUM_ROOMS + randRoom
                 # store the schedule for student groups and professors in a slot[]
                 courseClass.studentGroup.slots.append(self.slots[position])
+                courseClass.slots.append(self.slots[position])
                 randProf.slots.append(self.slots[position])
                 self.slots[position].counter += 1
 
-            solution[courseClass] = self.slots[position]
+            self.solution[courseClass] = self.slots[position]
 
-        self.solution = solution
+     
     
     def getProf(self,name):
         for prof in self.professors:
@@ -147,29 +154,34 @@ class Coordinator:
                 duration = float(c[c.find("(")+1:c.find(")")])
                 course.addClass(req,duration)
             self.courses.append(course)
-    def generateRooms(self):
+    
+    @staticmethod
+    def generateRooms():
         dict = InputUtils.readRoomCSV()
         for k in dict.keys():
             for v in dict[k]:
-                self.rooms.append(Room(v,k))
+                Coordinator.rooms.append(Room(v,k))
 
     def generateSlots(self,boolSort):
         """
         for space time constraints
         """
+        index = 0
         for days in self.days:
-            for periods in self.periods:
-                for rooms in self.rooms:
-                    self.slots.append(Slot(days,periods,rooms))
-                    
-    def _generate_periods(self):
+            for period in Coordinator.periods:
+                for rooms in Coordinator.rooms:
+                    s = Slot(days,period,rooms)
+                    self.slots.append(s)
+                    s.index = index
+                    index += 1
+    @staticmethod           
+    def _generate_periods():
         x = 8.5
-        lsToReturn = []
-        lsToReturn.append(x)
+        Coordinator.periods.append(x)
         for _ in range(18):
             x+=0.5
-            lsToReturn.append(x)
-        return lsToReturn
+            Coordinator.periods.append(x)
+        
 
     def setDaysList(self,ls):
         """
@@ -181,11 +193,10 @@ class Coordinator:
         """
         setting days if different from default
         """
-        self.periods = ls
+        Coordinator.periods = ls
 
     def initalize(self):
-        #to consider separate generation of rooms/slots/courses separately to decrease time complexity
-        self.generateRooms()
+        #to consider separate generation of rooms/courses separately to decrease time complexity
         self.generateSlots(True)
         self.generateCourses()
         self.generateProfs()
@@ -194,6 +205,10 @@ class Coordinator:
         self.generateOneRandSolution()
         self.fitness()
 
+    @staticmethod
+    def initalizeStatic():
+        Coordinator._generate_periods()
+        Coordinator.generateRooms()
 
 
 # c.generateRooms()

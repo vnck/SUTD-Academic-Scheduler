@@ -29,4 +29,4 @@ class StudentGroup:
                     penatly +=1
         return penatly
     def __repr__(self):
-        return "<Student Group:{} Courses:{}>".format(self.name,self._course)
+        return "<Student Group:{} Courses:{} Slots:{}>".format(self.name,self._course,len(self.slots))

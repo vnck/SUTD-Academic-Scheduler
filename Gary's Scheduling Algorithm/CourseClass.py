@@ -5,7 +5,7 @@ class CourseClass:
         self.req = req
         self.duration = duration
         self.professors = []
-        
+        self.slots = []
     def __repr__(self):
         return "<CourseClass:stg:{} course:{} req:{} duration:{}".format(self.studentGroup.name,\
             self.course.name,self.req,self.duration)
