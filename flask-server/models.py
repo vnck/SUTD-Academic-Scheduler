@@ -102,3 +102,18 @@ class CourseClass(db.Model):
     duration = db.Column(db.Integer,nullable=False)
     size = db.Column(db.Integer,nullable=False)
     classType = db.Column(db.String,nullable=False)
+
+
+class Request(db.Model):
+    __tablename__ = "Request"
+    id = db.Column(db.Integer, primary_key=True)
+    day = db.Column(db.String, nullable=False)
+    requester = db.Column(db.String, nullable=False)
+    startTime = db.Column(db.String, nullable=False)
+    endTime = db.Column(db.String, nullable=False)
+    reason = db.Column(db.String, nullable=False)
+    status = db.Column(db.Boolean, nullable=False)
+
+    def __repr__(self):
+        return "hi"
+        #return "<Request(name='%s',size='%s')>"%(self.name,self.size)

@@ -10,8 +10,8 @@ from flask import Flask, render_template, redirect, url_for, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 #from flask_bcrypt import Bcrypt
 import sqlalchemy
-from app import app, db, bcrypt
-from models import Account, Professor, Course, CourseCoordinator, Room, StudentGroup, CourseClass
+from app import app,db,bcrypt
+from models import Account,Professor,Course,CourseCoordinator,Room,StudentGroup,CourseClass,Request
 
 
 # Adding Courses
@@ -44,6 +44,11 @@ cc1 = CourseClass(courses=[mycourse, mycourse2],
                   classType="cohort class",
                   )
 
+#Adding Request
+
+req1 = Request(day = "Thursday", requester = "JJ", startTime = "2pm", endTime = "2pm", reason = "lazy", status = False)
+req2 = Request(day = "Friday", requester = "GG", startTime = "2pm", endTime = "2pm", reason = "lazy", status = False)
+
 db.drop_all()
 db.create_all()
 
@@ -62,28 +67,35 @@ db.session.add(stg2)
 
 # adding course class
 db.session.add(cc1)
-db.session.commit()
 
+#adding request
+db.session.add(req1)
+db.session.add(req2)
+
+#committing
+db.session.commit()
 
 # use decorators to link the function to a url
 @app.route('/')
 def home():
     return "Hello, World!"  # return a string
 
-
 @app.route('/login', methods=['POST'])
 def login():
     if request.method == 'POST':
         data = request.data
-        if Professor.query.filter_by(name=data.user).first() != None and bcrypt.check_password_hash(Professor.query.filter_by(name=data.user).first().hash_pass, data.password):
-            response = jsonify(isAuthenticated=True, isCoordinator=False)
-        elif CourseCoordinator.query.filter_by(name=data.user).first() != None and bcrypt.check_password_hash(CourseCoordinator.query.filter_by(name=data.user).first().hash_pass, data.password):
-            response = jsonify(isAuthenticated=True, isCoordinator=True)
+        if Professor.query.filter_by(name=data.user).first()!=None and bcrypt.check_password_hash(Professor.query.filter_by(name=data.user).first().hash_pass, data.password):
+            response = jsonify(isAuthenticated= True, isCoordinator= False)
+        elif CourseCoordinator.query.filter_by(name=data.user).first()!=None and bcrypt.check_password_hash(CourseCoordinator.query.filter_by(name=data.user).first().hash_pass, data.password):
+            response = jsonify(isAuthenticated= True, isCoordinator= True)
         else:
             return jsonify(message='invalid authentication'), 500
     return response
 
-
+@app.route('/get-requests', methods=['GET'])
+def get_request():
+    req = Request.query.all()
+    return jsonify(req)
 # start the server with the 'run()' method
 if __name__ == '__main__':
     app.run(debug=True)
