@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Feb  6 23:09:46 2019
+Created on Fri Mar 22 12:21:43 2019
 
 @author: joseph
 """
 
-from app import app,db,bcrypt
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request,jsonify
+from flask_sqlalchemy import SQLAlchemy
+#from flask_bcrypt import Bcrypt
 import sqlalchemy
+from app import app,db,bcrypt
 from models import Account,Professor,Course,CourseCoordinator,Room,StudentGroup,CourseClass
+
+
+
 #Adding Courses
 mycourse = Course(name="math")
 mycourse2 = Course(name="science")
@@ -57,51 +62,28 @@ db.session.add(stg2)
 db.session.add(cc1)
 db.session.commit()
 
-#Test accounts/Professors and CourseCoordinators
-print("Test Accounts")
-acc2 = Account.query.all()
-#Example of how to get an Account object from database
-profacc = Account.query.filter_by(name="JJ").first()
-print(acc2)
 
-#Test courses
-print("Test Courses")
-print(Course.query.all())
 
-#Test rooms
-print("Test rooms")
-print(Room.query.all())
-
-#Test Student Groups
-print("Test Student Groups")
-print(StudentGroup.query.all())
-
-#Test CourseClass
-print("Test Course Class")
-print(CourseClass.query.all())
 
 # use decorators to link the function to a url
 @app.route('/')
 def home():
     return "Hello, World!"  # return a string
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', method='POST')
 def login():
-    error = None
     if request.method == 'POST':
-        acc = Account.query.filter_by(name=request.form['username']).first()
-        if acc==None:
-            error = 'Invalid Credentials. Please try again.'
-        elif bcrypt.check_password_hash(acc.hash_pass, request.form['password'])==False:
-            error = 'Invalid Credentials. Please try again.'
+        data = request.data
+        if Professor.query.filter_by(name=data.user).first().username!=None and bcrypt.check_password_hash(Professor.query.filter_by(name=data.user).first().hash_pass, data.password):
+            response = jsonify(isAuthenticated= True, isCoordinator= False)
+        elif CourseCoordinator.query.filter_by(name=data.user).first().username!=None and bcrypt.check_password_hash(CourseCoordinator.query.filter_by(name=data.user).first().hash_pass, data.password):
+            response = jsonify(isAuthenticated= True, isCoordinator= True)
         else:
-            return redirect(url_for('home'))
-    return render_template('welcome.html', error=error)  # render a template
+            return jsonify(message='invalid authentication'),500
+    return response
 
 # start the server with the 'run()' method
 if __name__ == '__main__':
     app.run(debug=True)
 
 # Route for handling the login page logic
-
-
