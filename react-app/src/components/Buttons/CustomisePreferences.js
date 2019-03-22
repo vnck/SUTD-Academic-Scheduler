@@ -37,10 +37,7 @@ class CustomisePreferences extends Component {
   }
 
   confirmRequest = () => {
-    var r = window.confirm("Are you sure?\nThis action cannot be undone.");
-    if (r == true) {
-      alert("Generated New Schedule");
-    }
+    this.props.handler();
   };
 
   render() {
