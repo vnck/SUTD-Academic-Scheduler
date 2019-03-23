@@ -2,32 +2,36 @@ from Coordinator import Coordinator
 import random
 import copy
 Coordinator.initalizeStatic()
-def geneticScheduler(numberOfGen,popSize,tourSize,elitism=True):
+def geneticScheduler(numberOfGen,popSize,tourSize,mutateRate=0.05,elitismOffset=1):
     currPop = createInitialPop(popSize)
     #keep the best
     for i in range (numberOfGen-1):
         print("iter {}".format(i))
-        currPop = evolvePop(currPop,tourSize,elitism)
+        currPop = evolvePop(currPop,tourSize,mutateRate,elitismOffset)
+
     return currPop
 
 
-def evolvePop(currPop,tourSize,elitism =True):
+def evolvePop(currPop,tourSize,mutateRate=0.05,elitismOffset=1):
     newPop = []
     
     tempPop = sorted(currPop,key = lambda coord : coord.fitnessValue)
     #save the best guy
-    offset = 0
-    if(elitism):
-        newPop.append(tempPop[0])
-        offset = 1
-    for i in range(offset,len(tempPop)):
-
+    print(tempPop[0].fitnessValue," penalty prof:{} stg:{} slot:{} req:{}".format(tempPop[0].profPenalty\
+        ,tempPop[0].stgPenalty,tempPop[0].slotPenalty,tempPop[0].reqPenalty))
+    for j in range (elitismOffset):
+        newPop.append(tempPop[j])
+    
+    for i in range(elitismOffset,len(tempPop)):
         parent1 = tournamentSel(tempPop,tourSize)
         parent2 = tournamentSel(tempPop,tourSize)
-        print(parent1.fitnessValue)
-        print(parent2.fitnessValue)
+        #print(parent1.fitnessValue)
+        #print(parent2.fitnessValue)
         child = mate(parent1,parent2)
-        print("child fit {}".format(child.fitnessValue))
+        
+        mutate(child,mutateRate)
+        child.fitness()
+        #print("child fit {}".format(child.fitnessValue))
         newPop.append(child)
     
     return newPop
@@ -76,7 +80,7 @@ def mate(c1,c2):
         
         for name in profNameList:
             c.courseClasses[i].professors.append(c.getProf(name))
-        
+
         for slot in currCourseClass.slots:
             index = slot.index
             c.slots[index].counter += 1
@@ -86,14 +90,43 @@ def mate(c1,c2):
                 prof.slots.append(c.slots[index])
 
         c.solution[c.courseClasses[i]] = c.slots[index]
-    c.fitness()
-    
-    print(c.studentGroups)
+
     return c
 
-def mutate():
-    pass
+def mutate(c1,mutateRate):
+    NUM_DAYS = len(c1.days)
+    NUM_ROOMS = len(Coordinator.rooms)
+    NUM_PERIODS = len(Coordinator.periods)
+    
+    for cc in c1.courseClasses:
+        #shift a course class somewhere else
+        if(random.random()<mutateRate):
+            for slot in cc.slots:
+                #remove class from allocated slot slot.counter -=1
+                slot.counter-=1
+                cc.studentGroup.slots.remove(slot)
+                
+                for prof in cc.professors:
+                    prof.slots.remove(slot)
+            cc.professors.clear()
+            cc.slots.clear()
+            duration = cc.duration
 
+            randDay = random.randint(0,NUM_DAYS-1)
+            randRoom = random.randint(0,NUM_ROOMS-1)
+            
+            #makes sure that same lesson does not go on to the next day
+            randPeriod = random.randint(0,NUM_PERIODS-1-int((duration-0.5)/0.5))
+            randProf = random.choice(cc.course.professors)
+            cc.professors.append(randProf)
+            for i in range(int(duration/0.5)):
+                position = randDay*NUM_ROOMS*NUM_PERIODS + (randPeriod+i)*NUM_ROOMS + randRoom
+                # store the schedule for student groups and professors in a slot[]
+                cc.studentGroup.slots.append(c1.slots[position])
+                cc.slots.append(c1.slots[position])
+                randProf.slots.append(c1.slots[position])
+                c1.slots[position].counter += 1
+            c1.solution[cc] = c1.slots[position]
 def createInitialPop(popSize):
     ls = []
     for _ in range(popSize):
@@ -103,7 +136,7 @@ def createInitialPop(popSize):
     return ls
 import time
 start = time.time()
-lss = geneticScheduler(100,100,20)
+lss = geneticScheduler(1000,100,5,elitismOffset=5,mutateRate=0.05)
 print([f.fitnessValue for f in lss])
 elasped = time.time() - start
 print(elasped)

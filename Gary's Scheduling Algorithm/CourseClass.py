@@ -7,7 +7,7 @@ class CourseClass:
         self.professors = []
         self.slots = []
     def __repr__(self):
-        return "<CourseClass:stg:{} course:{} req:{} duration:{}".format(self.studentGroup.name,\
+        return "<CourseClass:stg:{} course:{} req:{} duration:{}>".format(self.studentGroup.name,\
             self.course.name,self.req,self.duration)
 
     def addProf(self,prof):

@@ -1,7 +1,7 @@
 import pandas as pd
 
 def readProfCSV():
-    df = pd.read_csv("prof.csv")
+    df = pd.read_csv("prof.csv",dtype=str)
     return df
 
 def readStgCSV():

@@ -23,6 +23,13 @@ class Coordinator:
         #lower fitnessValue is better
         self.fitnessValue = None
 
+        #debugging
+        self.profPenalty = 0
+        self.stgPenalty = 0
+        self.slotPenalty = 0
+        self.reqPenalty = 0
+    
+        
     def fitness(self):
         #instructor cannot be at more than 1 room per day per period
         # print("prof len {}".format(len(self.professors)))
@@ -32,10 +39,11 @@ class Coordinator:
         penalty = 0
         for prof in self.professors:
             penalty+=prof.fitness()
-
+        self.profPenalty = penalty
         # #student group cannot be at more than 1 day per room per period
         for stg in self.studentGroups:
             penalty+= stg.fitness()
+        self.stgPenalty = penalty - self.profPenalty
         # each room can only be used once per period per day
         for slot in self.slots:
             if (slot.counter-1<0):
@@ -43,16 +51,17 @@ class Coordinator:
             else:
                 count = slot.counter-1
             penalty+=count
+        self.slotPenalty = penalty - self.profPenalty - self.stgPenalty
 
         # #check if room meets requirements
-        for courseClass,slot in self.solution.items():
-            if courseClass.req != slot.room.req:
-                penalty += 1
-            #freshmore need to use their own class
-            elif courseClass.studentGroup.isFreshmore:
-                courseClass.studentGroup.name != slot.room.name
-                penalty+=1
-
+        # for courseClass,slot in self.solution.items():
+        #     if courseClass.req != slot.room.req:
+        #         penalty += 1
+        #     #freshmore need to use their own class
+        #     elif courseClass.studentGroup.isFreshmore:
+        #         courseClass.studentGroup.name != slot.room.name
+        #         penalty+=1
+        # self.reqPenalty = penalty - self.slotPenalty - self.profPenalty - self.stgPenalty
         self.fitnessValue = penalty
         return penalty
 
@@ -137,10 +146,10 @@ class Coordinator:
         df = InputUtils.readProfCSV()
         for i,row in df.iterrows():
             inst = row[0]#instructor
-            courseCode = str(round(row[1],3))
-            course = self.getCourse(courseCode)
             p = Professor(inst)
-            p.addCourse(course)
+            for courseCode in row[1].split(","):
+                course = self.getCourse(courseCode)
+                p.addCourse(course)
             self.professors.append(p)
 
     def generateCourses(self):
@@ -210,6 +219,10 @@ class Coordinator:
         Coordinator._generate_periods()
         Coordinator.generateRooms()
 
+# Coordinator.initalizeStatic()
+# c = Coordinator()
+# c.initalize()
+# print(c.studentGroups)
 
 # c.generateRooms()
 # c.generateSlots(True)
