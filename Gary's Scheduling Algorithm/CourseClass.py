@@ -2,7 +2,11 @@ class CourseClass:
     def __init__(self,studentGroup,course,req,duration):
         self.studentGroup = studentGroup
         self.course = course
-        self.req = req
+        
+        if studentGroup.name[0:2]=="CC" and req =="CC":
+            self.req = studentGroup.name
+        else:
+            self.req = req
         self.duration = duration
         self.professors = []
         self.slots = []

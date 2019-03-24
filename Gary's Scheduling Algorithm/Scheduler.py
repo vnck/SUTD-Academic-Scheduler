@@ -6,9 +6,10 @@ def geneticScheduler(numberOfGen,popSize,tourSize,mutateRate=0.05,elitismOffset=
     currPop = createInitialPop(popSize)
     #keep the best
     for i in range (numberOfGen-1):
+        if(currPop[0].fitnessValue==0):break
         print("iter {}".format(i))
         currPop = evolvePop(currPop,tourSize,mutateRate,elitismOffset)
-
+        
     return currPop
 
 
@@ -33,7 +34,7 @@ def evolvePop(currPop,tourSize,mutateRate=0.05,elitismOffset=1):
         child.fitness()
         #print("child fit {}".format(child.fitnessValue))
         newPop.append(child)
-    
+        
     return newPop
 
 def tournamentSel(currPop,tourSize):
@@ -113,7 +114,21 @@ def mutate(c1,mutateRate):
             duration = cc.duration
 
             randDay = random.randint(0,NUM_DAYS-1)
-            randRoom = random.randint(0,NUM_ROOMS-1)
+
+            checker = True
+            for roomNum in range(NUM_ROOMS):
+                
+                if c1.slots[roomNum].getReq() == cc.req and checker:
+                    randRoomStart = roomNum
+                    checker = False
+                if c1.slots[roomNum].getReq() != cc.req and not checker: 
+                    randRoomEnd = roomNum - 1
+                    break
+                if  roomNum == NUM_ROOMS-1:
+                    randRoomEnd = roomNum
+            #print((randRoomStart,randRoomEnd))
+            randRoom = random.randint(randRoomStart,randRoomEnd)
+            #randRoom = random.randint(0,NUM_ROOMS-1)
             
             #makes sure that same lesson does not go on to the next day
             randPeriod = random.randint(0,NUM_PERIODS-1-int((duration-0.5)/0.5))
@@ -136,7 +151,19 @@ def createInitialPop(popSize):
     return ls
 import time
 start = time.time()
-lss = geneticScheduler(1000,100,5,elitismOffset=5,mutateRate=0.05)
+lss = geneticScheduler(100,100,5,elitismOffset=5,mutateRate=0.05)
 print([f.fitnessValue for f in lss])
 elasped = time.time() - start
 print(elasped)
+
+answer = sorted(lss,key = lambda coord : coord.fitnessValue)[0]
+
+for prof in answer.professors:
+    print(prof.name)
+    for slot in prof.slots:
+        for k,v in answer.solution.items():
+            if slot == v:
+                print("start time"+str(slot),k)
+# profName = input("Get schedule for professor:")
+# prof = answer.getProf(profName)
+# print(prof.slots)

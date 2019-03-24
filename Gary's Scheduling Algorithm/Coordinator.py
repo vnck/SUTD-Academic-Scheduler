@@ -29,7 +29,7 @@ class Coordinator:
         self.slotPenalty = 0
         self.reqPenalty = 0
     
-        
+       
     def fitness(self):
         #instructor cannot be at more than 1 room per day per period
         # print("prof len {}".format(len(self.professors)))
@@ -54,14 +54,14 @@ class Coordinator:
         self.slotPenalty = penalty - self.profPenalty - self.stgPenalty
 
         # #check if room meets requirements
-        # for courseClass,slot in self.solution.items():
-        #     if courseClass.req != slot.room.req:
-        #         penalty += 1
-        #     #freshmore need to use their own class
-        #     elif courseClass.studentGroup.isFreshmore:
-        #         courseClass.studentGroup.name != slot.room.name
-        #         penalty+=1
-        # self.reqPenalty = penalty - self.slotPenalty - self.profPenalty - self.stgPenalty
+        for courseClass,slot in self.solution.items():
+            #print(courseClass.req,slot.getReq())
+            if courseClass.req != slot.room.req:
+                penalty += 1
+                print(courseClass.req,slot.getReq())
+                raise("error")
+
+        self.reqPenalty = penalty - self.slotPenalty - self.profPenalty - self.stgPenalty
         self.fitnessValue = penalty
         return penalty
 
@@ -78,7 +78,26 @@ class Coordinator:
 
             #generate random day,num,periods
             randDay = random.randint(0,NUM_DAYS-1)
-            randRoom = random.randint(0,NUM_ROOMS-1)
+            # print(NUM_ROOMS)
+           
+    
+            checker = True
+            for roomNum in range(NUM_ROOMS):
+      
+                
+                if self.slots[roomNum].getReq() == courseClass.req and checker:
+                    randRoomStart = roomNum
+                    checker = False
+                
+                if self.slots[roomNum].getReq() != courseClass.req and not checker:
+                    randRoomEnd = roomNum - 1
+                    break
+
+                if roomNum == NUM_ROOMS - 1:
+                    randRoomEnd = roomNum
+            
+            if(self.slots[randRoomStart].getReq()!= self.slots[randRoomEnd].getReq()):raise("ERR")
+            randRoom = random.randint(randRoomStart,randRoomEnd)
             
             #makes sure that same lesson does not go on to the next day
             randPeriod = random.randint(0,NUM_PERIODS-1-int((duration-0.5)/0.5))
@@ -96,7 +115,6 @@ class Coordinator:
                 courseClass.slots.append(self.slots[position])
                 randProf.slots.append(self.slots[position])
                 self.slots[position].counter += 1
-
             self.solution[courseClass] = self.slots[position]
 
      
@@ -222,8 +240,11 @@ class Coordinator:
 # Coordinator.initalizeStatic()
 # c = Coordinator()
 # c.initalize()
+# print(c.rooms)
+# print(c.courseClasses)
 # print(c.studentGroups)
-
+# print(c.courses)
+# print(c.courseClasses)
 # c.generateRooms()
 # c.generateSlots(True)
 # c.generateCourses()
@@ -241,3 +262,4 @@ class Coordinator:
 #print(c.courses)
 #print(c.studentGroups)
 #print(c.slots)
+
