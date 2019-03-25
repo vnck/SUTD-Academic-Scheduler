@@ -11,8 +11,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 #from flask_bcrypt import Bcrypt
 import sqlalchemy
-from app import app, db, bcrypt
+from app import app, db, bcrypt, UPLOAD_FOLDER
 from models import Account, Professor, Course, CourseCoordinator, Room, StudentGroup, CourseClass, Request
+import os
 
 
 # Adding Courses
@@ -103,6 +104,22 @@ def login():
 def get_request():
     req = Request.query.all()
     return jsonify(req)
+
+
+@app.route('/upload-inputs', methods=['POST'])
+def fileUpload():
+    target = os.path.join(UPLOAD_FOLDER, 'input')
+    if not os.path.isdir(target):
+        os.mkdir(target)
+    file = request.files['file']
+    filename = "input"
+    destination = "/".join([target, filename])
+    try:
+        file.save(destination)
+        out = 1
+    except:
+        out = -1
+    return out
 
 
 # start the server with the 'run()' method
