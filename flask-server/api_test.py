@@ -82,18 +82,6 @@ db.session.add(req2)
 
 # committing
 db.session.commit()
-req = Request.query.all()
-newls = []
-for i in range (len(req)):
-        newls.append({})
-        newls[i]["id"]=req[i].id
-        newls[i]["day"]=req[i].day
-        newls[i]["requester"]=req[i].requester
-        newls[i]["startTime"]=req[i].startTime
-        newls[i]["endTime"]=req[i].endTime
-        newls[i]["reason"]=req[i].reason
-        newls[i]["status"]=req[i].status
-print(newls)
 
 # use decorators to link the function to a url
 
@@ -107,17 +95,10 @@ def home():
 def login():
     if request.method == 'POST':
         data = request.get_json()
-<<<<<<< HEAD
-        if Professor.query.filter_by(name=data.user).first()!=None and bcrypt.check_password_hash(Professor.query.filter_by(name=data.user).first().hash_pass, data.password):
-            response = jsonify(isAuthenticated= True, isCoordinator= False)
-        elif CourseCoordinator.query.filter_by(name=data.user).first()!=None and bcrypt.check_password_hash(CourseCoordinator.query.filter_by(name=data.user).first().hash_pass, data.password):
-            response = jsonify(isAuthenticated= True, isCoordinator= True)
-=======
         if Professor.query.filter_by(name=data['user']).first() != None and bcrypt.check_password_hash(Professor.query.filter_by(name=data['user']).first().hash_pass, data['password']):
             response = jsonify(isAuthenticated=True, isCoordinator=False)
         elif CourseCoordinator.query.filter_by(name=data['user']).first() != None and bcrypt.check_password_hash(CourseCoordinator.query.filter_by(name=data['user']).first().hash_pass, data['password']):
             response = jsonify(isAuthenticated=True, isCoordinator=True)
->>>>>>> 22830049fd5bfed843180377a5e104b8facdeacf
         else:
             return jsonify(message='invalid authentication'), 500
     return response
@@ -126,7 +107,6 @@ def login():
 @app.route('/get-requests', methods=['GET'])
 def get_request():
     req = Request.query.all()
-<<<<<<< HEAD
     newls = []
     for i in range (len(req)):
         newls.append({})
@@ -138,9 +118,6 @@ def get_request():
         newls[i]["reason"]=req[i].reason
         newls[i]["status"]=req[i].status
     return json.dumps(newls)
-    
-=======
-    return jsonify(req)
 
 
 @app.route('/upload-inputs', methods=['POST'])
@@ -157,7 +134,6 @@ def fileUpload():
     except:
         out = -1
     return out
->>>>>>> 22830049fd5bfed843180377a5e104b8facdeacf
 
 
 # start the server with the 'run()' method
