@@ -3,8 +3,26 @@ import styled from "styled-components";
 
 const Container = styled.div`
   margin-top: 1rem;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
 
-  button {
+  [type="file"] {
+    position: absolute;
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  label {
+    font-size: 11px;
+  }
+
+  div.wrapper {
     padding: 1rem;
     border: none;
     text-align: center;
@@ -16,15 +34,18 @@ const Container = styled.div`
     cursor: pointer;
   }
 
-  button:hover {
+  div.wrapper:hover {
+    border-radius: 6px;
     background-color: ${props => props.theme.darkergrey};
   }
 
-  button:active {
+  div.wrapper:active {
+    border-radius: 6px;
     background-color: ${props => props.theme.darkestgrey};
   }
 
-  button:focus {
+  div.wrapper:focus {
+    border-radius: 6px;
     box-shadow: 0 0 0 2px ${props => props.theme.darkestgrey};
   }
 `;
@@ -35,17 +56,16 @@ class Uploader extends Component {
     this.uploadFile = this.uploadFile.bind(this);
   }
 
-  uploadFile = e => {
-    e.preventDefault();
-
+  uploadFile = () => {
     const data = new FormData();
-    data.append("file", this.upload.files[0]);
+    data.append("file", this.uploadInput.files[0]);
 
     fetch("http://localhost:5000/upload-inputs", {
       method: "POST",
       body: data
     }).then(response => {
-      if (response === 1) {
+      this.uploadInput.value = "";
+      if (response.statusText == "OK") {
         alert("File uploaded succesfully");
       } else {
         alert("File failed to upload");
@@ -57,15 +77,17 @@ class Uploader extends Component {
     return (
       <React.Fragment>
         <Container>
-          <input
-            ref={ref => {
-              this.uploadInput = ref;
-            }}
-            type="file"
-          />
-          <button type="button" onClick={this.uploadeFile}>
-            Upload Term Outline (CSV)
-          </button>
+          <div className="wrapper">
+            <label for="file">Upload Term (CSV)</label>
+            <input
+              ref={ref => {
+                this.uploadInput = ref;
+              }}
+              type="file"
+              accept=".csv"
+              onChange={this.uploadFile}
+            />
+          </div>
         </Container>
       </React.Fragment>
     );
