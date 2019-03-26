@@ -143,6 +143,31 @@ class PreferenceForm extends Component {
     this.setState({ endTime: e.target.value });
   };
 
+  submitRequest = e => {
+    e.preventDefault();
+    var that = this;
+    try {
+      // authentication API
+      fetch("http://localhost:5000/add-request", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          weekly: that.state.weekly,
+          startTime: that.state.startTime,
+          endTime: that.state.endTime,
+          daySelect: that.state.daySelect
+        })
+      }).then(function(response) {
+        return response.json();
+      });
+    } catch (e) {
+      alert(e);
+    }
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -196,6 +221,7 @@ class PreferenceForm extends Component {
               Selected Day: {this.state.daySelect}, Start Time:
               {this.state.startTime}, End Time: {this.state.endTime}
             </p>
+            <button onClick={this.submitRequest}>Submit</button>
           </FlexChild>
         </FlexContainer>
       </React.Fragment>

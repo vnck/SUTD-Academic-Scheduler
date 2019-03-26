@@ -45,7 +45,7 @@ class RequestContainer extends Component {
 
   componentDidMount = () => {
     var that = this;
-    fetch("http://localhost:5000/getRequests", {
+    fetch("http://localhost:5000/get-requests", {
       method: "GET",
       headers: {
         Accept: "application/json",

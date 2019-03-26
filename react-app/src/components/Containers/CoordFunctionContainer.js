@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import Downloader from "../Buttons/Downloader";
+import Uploader from "../Buttons/Uploader";
 import GeneratorButton from "../Buttons/GeneratorButton";
 import AddEvent from "../Buttons/AddEvent";
 
@@ -17,6 +18,7 @@ class CoordFunctionContainer extends Component {
         <FlexContainer>
           {/* <h3>Coordinator Menu</h3> */}
           <AddEvent />
+          <Uploader />
           <Downloader />
           <GeneratorButton />
         </FlexContainer>
