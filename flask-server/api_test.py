@@ -8,6 +8,7 @@ Created on Fri Mar 22 12:21:43 2019
 
 from flask import Flask, render_template, redirect, url_for, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+import json
 from flask_cors import CORS
 #from flask_bcrypt import Bcrypt
 import sqlalchemy
@@ -103,7 +104,17 @@ def login():
 @app.route('/get-requests', methods=['GET'])
 def get_request():
     req = Request.query.all()
-    return jsonify(req)
+    newls = []
+    for i in range (len(req)):
+        newls.append({})
+        newls[i]["id"]=req[i].id
+        newls[i]["day"]=req[i].day
+        newls[i]["requester"]=req[i].requester
+        newls[i]["startTime"]=req[i].startTime
+        newls[i]["endTime"]=req[i].endTime
+        newls[i]["reason"]=req[i].reason
+        newls[i]["status"]=req[i].status
+    return json.dumps(newls)
 
 
 @app.route('/upload-inputs', methods=['POST'])
