@@ -8,6 +8,7 @@ Created on Fri Mar 22 12:21:43 2019
 
 from flask import Flask, render_template, redirect, url_for, request,jsonify
 from flask_sqlalchemy import SQLAlchemy
+import json
 #from flask_bcrypt import Bcrypt
 import sqlalchemy
 from app import app,db,bcrypt
@@ -72,6 +73,18 @@ db.session.add(req2)
 
 #committing
 db.session.commit()
+req = Request.query.all()
+newls = []
+for i in range (len(req)):
+        newls.append({})
+        newls[i]["id"]=req[i].id
+        newls[i]["day"]=req[i].day
+        newls[i]["requester"]=req[i].requester
+        newls[i]["startTime"]=req[i].startTime
+        newls[i]["endTime"]=req[i].endTime
+        newls[i]["reason"]=req[i].reason
+        newls[i]["status"]=req[i].status
+print(newls)
 
 # use decorators to link the function to a url
 @app.route('/')
@@ -81,7 +94,7 @@ def home():
 @app.route('/login', methods=['POST'])
 def login():
     if request.method == 'POST':
-        data = request.data
+        data = request.get_json()
         if Professor.query.filter_by(name=data.user).first()!=None and bcrypt.check_password_hash(Professor.query.filter_by(name=data.user).first().hash_pass, data.password):
             response = jsonify(isAuthenticated= True, isCoordinator= False)
         elif CourseCoordinator.query.filter_by(name=data.user).first()!=None and bcrypt.check_password_hash(CourseCoordinator.query.filter_by(name=data.user).first().hash_pass, data.password):
@@ -93,7 +106,20 @@ def login():
 @app.route('/get-requests', methods=['GET'])
 def get_request():
     req = Request.query.all()
-    return jsonify(req)
+    newls = []
+    for i in range (len(req)):
+        newls.append({})
+        newls[i]["id"]=req[i].id
+        newls[i]["day"]=req[i].day
+        newls[i]["requester"]=req[i].requester
+        newls[i]["startTime"]=req[i].startTime
+        newls[i]["endTime"]=req[i].endTime
+        newls[i]["reason"]=req[i].reason
+        newls[i]["status"]=req[i].status
+    return json.dumps(newls)
+    
+
+
 # start the server with the 'run()' method
 if __name__ == '__main__':
     app.run(debug=True)
