@@ -103,7 +103,6 @@ class CourseClass(db.Model):
     size = db.Column(db.Integer,nullable=False)
     classType = db.Column(db.String,nullable=False)
 
-
 class Request(db.Model):
     __tablename__ = "Request"
     id = db.Column(db.Integer, primary_key=True)

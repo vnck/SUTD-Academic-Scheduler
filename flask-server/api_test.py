@@ -21,12 +21,12 @@ mycourse = Course(name="math")
 mycourse2 = Course(name="science")
 
 # Adding Professors/Course Coordinators
-myprof = Professor(name="JJ", initials="j", hash_pass=bcrypt.generate_password_hash(
-    'hunter2'), courses=[mycourse])
-myprof2 = Professor(name="GG", initials="G", hash_pass=bcrypt.generate_password_hash(
-    'gg'), courses=[mycourse, mycourse2])
+myprof = Professor(name="prof1", initials="j", hash_pass=bcrypt.generate_password_hash(
+    '12345'), courses=[mycourse])
+myprof2 = Professor(name="prof2", initials="G", hash_pass=bcrypt.generate_password_hash(
+    '12345'), courses=[mycourse, mycourse2])
 mycourseco = CourseCoordinator(
-    name="cc", initials="c", hash_pass=bcrypt.generate_password_hash('cc'))
+    name="coord1", initials="c", hash_pass=bcrypt.generate_password_hash('12345'))
 
 # Adding rooms
 myroom = Room(name="TT22", size=50, roomType="Think Tank")
@@ -108,17 +108,17 @@ def get_request():
 
 @app.route('/upload-inputs', methods=['POST'])
 def fileUpload():
-    target = os.path.join(UPLOAD_FOLDER, 'input')
+    target = UPLOAD_FOLDER
     if not os.path.isdir(target):
         os.mkdir(target)
     file = request.files['file']
-    filename = "input"
+    filename = "input.csv"
     destination = "/".join([target, filename])
     try:
         file.save(destination)
-        out = 1
+        out = "OK"
     except:
-        out = -1
+        out = "NOT OK"
     return out
 
 
