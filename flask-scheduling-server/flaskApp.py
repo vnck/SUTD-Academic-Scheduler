@@ -19,3 +19,5 @@ for r in rooms:
 
 for s in sg:
     print(s.serialize)
+
+print(len(courses))

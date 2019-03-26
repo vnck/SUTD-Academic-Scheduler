@@ -5,6 +5,9 @@ from Professor import Professor
 from StudentGroup import StudentGroup
 from CourseClass import CourseClass
 
+#for database integration
+import models
+
 import InputUtils
 import pandas as pd
 import random
@@ -146,34 +149,33 @@ class Coordinator:
                     self.courseClasses.append(c)
                 
     def generateStudentGroups(self):
-        df = InputUtils.readStgCSV()
-        for i,row in df.iterrows():
-            stg = row[0]
-            courses = row[1].split(",")
-            studentGroup = StudentGroup(stg)
-            for course in courses:
-                courseObject = self.getCourse(str(course))
+        stgs = models.StudentGroup.query.all()
+        for stg in stgs:
+            name = stg.student_group
+            studentGroup = StudentGroup(name)
+            for course in stg.courses.split(","):
+                courseObject = self.getCourse(course)
                 if(courseObject==None): raise Exception("Course {} not found".format(course))
                 studentGroup.addCourse(courseObject)
             self.studentGroups.append(studentGroup)
 
     def generateProfs(self):
-        df = InputUtils.readProfCSV()
-        for i,row in df.iterrows():
-            inst = row[0]#instructor
-            p = Professor(inst)
-            for courseCode in row[1].split(","):
+        profs = models.Professor.query.all()
+        for prof in profs:
+            name = prof.name
+            p = Professor(name)
+            for courseCode in prof.courses.split(","):
                 course = self.getCourse(courseCode)
                 p.addCourse(course)
             self.professors.append(p)
-
+    
     def generateCourses(self):
-        df = InputUtils.readCourseCSV()
-        for i,row in df.iterrows():
-            name = str(round(row[0],3))
+        courses = models.Course.query.all()
+        for cour in courses:
+            name = cour.course
+            classes = (cour.classes).split(",")
             course = Course(name)
-            arr = row[1].split(",")
-            for c in arr:
+            for c in classes:
                 req = c[0:c.find("(")]
                 duration = float(c[c.find("(")+1:c.find(")")])
                 course.addClass(req,duration)
@@ -181,12 +183,17 @@ class Coordinator:
     
     @staticmethod
     def generateRooms():
-        dict = InputUtils.readRoomCSV()
-        for k in dict.keys():
-            for v in dict[k]:
-                Coordinator.rooms.append(Room(v,k))
+        """copy data from db into ram"""
+        rooms = models.Room.query.all()
+        for room in rooms:
+            name = room.name
+            req = room.req
+            Coordinator.rooms.append(Room(name,req))
 
-    def generateSlots(self,boolSort):
+   
+    
+
+    def generateSlots(self):
         """
         for space time constraints
         """
@@ -221,7 +228,7 @@ class Coordinator:
 
     def initalize(self):
         #to consider separate generation of rooms/courses separately to decrease time complexity
-        self.generateSlots(True)
+        self.generateSlots()
         self.generateCourses()
         self.generateProfs()
         self.generateStudentGroups()
@@ -233,30 +240,4 @@ class Coordinator:
     def initalizeStatic():
         Coordinator._generate_periods()
         Coordinator.generateRooms()
-
-# Coordinator.initalizeStatic()
-# c = Coordinator()
-# c.initalize()
-# print(c.rooms)
-# print(c.courseClasses)
-# print(c.studentGroups)
-# print(c.courses)
-# print(c.courseClasses)
-# c.generateRooms()
-# c.generateSlots(True)
-# c.generateCourses()
-# c.generateProfs()
-# c.generateStudentGroups()
-# c.generateCourseClasses()
-# c.generateOneRandSolution()
-# c.fitness()
-
-
-# print(len(c.slots))
-# print(c.solution)
-#print(len(c.slots))
-#print(c.professors)
-#print(c.courses)
-#print(c.studentGroups)
-#print(c.slots)
 
