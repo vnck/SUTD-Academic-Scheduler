@@ -1,7 +1,7 @@
 from Coordinator import Coordinator 
 import random
 import copy
-Coordinator.initalizeStatic()
+
 def geneticScheduler(numberOfGen,popSize,tourSize,mutateRate=0.05,elitismOffset=1):
     currPop = createInitialPop(popSize)
     #keep the best
@@ -156,6 +156,7 @@ def createInitialPop(popSize):
         ls.append(c)
     return ls
 import time
+Coordinator.initalizeStatic()
 start = time.time()
 lss = geneticScheduler(100,100,5,elitismOffset=5,mutateRate=0.05)
 print([f.fitnessValue for f in lss])
@@ -171,3 +172,14 @@ for prof in answer.professors:
 # profName = input("Get schedule for professor:")
 # prof = answer.getProf(profName)
 # print(prof.slots)
+
+#TODO 
+#1 implement lecture all student groups all profs
+    #change the courseclass to have a stg array
+    #so a lecture class is only 1 course class
+#2 implement time blocks such as HASS/5th rows
+    #in the fitness function when looping the slot,courseclasses dictionary
+#3 implement soft constraints
+    #add it into the professor class and change the prof fitness function
+#4 implement output db
+    
