@@ -57,9 +57,9 @@ class Coordinator:
         self.slotPenalty = penalty - self.profPenalty - self.stgPenalty
 
         # #check if room meets requirements
-        for courseClass,slot in self.solution.items():
+        for slot,courseClass in self.solution.items():
             #print(courseClass.req,slot.getReq())
-            if courseClass.req != slot.room.req:
+            if courseClass.req != slot.getReq():
                 penalty += 1
                 print(courseClass.req,slot.getReq())
                 raise Exception("course class {} does not meet req {}".format(courseClass.req,slot.room.req))
@@ -117,9 +117,9 @@ class Coordinator:
                 courseClass.studentGroup.slots.append(self.slots[position])
                 courseClass.slots.append(self.slots[position])
                 randProf.slots.append(self.slots[position])
+                self.solution[self.slots[position]] = courseClass
                 self.slots[position].counter += 1
-            self.solution[courseClass] = self.slots[position]
-
+                
      
     
     def getProf(self,name):

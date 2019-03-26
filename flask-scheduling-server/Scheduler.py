@@ -89,8 +89,9 @@ def mate(c1,c2):
             c.courseClasses[i].slots.append(c.slots[index])
             for prof in c.courseClasses[i].professors:
                 prof.slots.append(c.slots[index])
+            
+            c.solution[c.slots[index]] = c.courseClasses[i]
 
-        c.solution[c.courseClasses[i]] = c.slots[index]
 
     return c
 
@@ -106,13 +107,17 @@ def mutate(c1,mutateRate):
                 #remove class from allocated slot slot.counter -=1
                 slot.counter-=1
                 cc.studentGroup.slots.remove(slot)
-                
+                try:
+                    del c1.solution[slot]
+                except KeyError:
+                    #key already removed so dont need to do anything
+                    pass
                 for prof in cc.professors:
                     prof.slots.remove(slot)
             cc.professors.clear()
             cc.slots.clear()
+            
             duration = cc.duration
-
             randDay = random.randint(0,NUM_DAYS-1)
 
             checker = True
@@ -140,8 +145,9 @@ def mutate(c1,mutateRate):
                 cc.studentGroup.slots.append(c1.slots[position])
                 cc.slots.append(c1.slots[position])
                 randProf.slots.append(c1.slots[position])
+                c1.solution[c1.slots[position]] = cc
                 c1.slots[position].counter += 1
-            c1.solution[cc] = c1.slots[position]
+            
 def createInitialPop(popSize):
     ls = []
     for _ in range(popSize):
@@ -161,9 +167,7 @@ answer = sorted(lss,key = lambda coord : coord.fitnessValue)[0]
 for prof in answer.professors:
     print(prof.name)
     for slot in prof.slots:
-        for k,v in answer.solution.items():
-            if slot == v:
-                print("start time"+str(slot),k)
+        print(slot,answer.solution[slot])
 # profName = input("Get schedule for professor:")
 # prof = answer.getProf(profName)
 # print(prof.slots)
