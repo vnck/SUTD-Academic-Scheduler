@@ -8,11 +8,8 @@ Created on Fri Mar 22 12:21:43 2019
 
 from flask import Flask, render_template, redirect, url_for, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-<<<<<<< HEAD
 import json
-=======
 from flask_cors import CORS
->>>>>>> 22830049fd5bfed843180377a5e104b8facdeacf
 #from flask_bcrypt import Bcrypt
 import sqlalchemy
 from app import app, db, bcrypt, UPLOAD_FOLDER
