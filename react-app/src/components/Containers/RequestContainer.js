@@ -17,6 +17,11 @@ const FlexChild = styled.div`
   padding: 0.2em;
 `;
 
+const StyledP = styled.p`
+  width: 100%;
+  text-align: center;
+`;
+
 class RequestContainer extends Component {
   constructor(props) {
     super(props);
@@ -87,7 +92,7 @@ class RequestContainer extends Component {
       <React.Fragment>
         <FlexContainer>
           {this.noRequest.bind(this) ? (
-            <p>There are no requests!</p>
+            <StyledP>There are no requests!</StyledP>
           ) : (
             this.state.requests.map((request, index) => (
               <FlexChild key={request.requester + index}>

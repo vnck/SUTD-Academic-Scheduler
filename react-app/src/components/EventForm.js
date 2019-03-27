@@ -107,7 +107,7 @@ const StyledButton = styled.button`
   }
 `;
 
-class PreferenceForm extends Component {
+class EventForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -243,7 +243,7 @@ class PreferenceForm extends Component {
         <FlexContainer>
           <FlexContainer>
             <p style={{ "margin-bottom": "1rem", "font-weight": "600" }}>
-              Add Schedule Block
+              Add Event Form
             </p>
           </FlexContainer>
           <TabContainer>
@@ -326,4 +326,4 @@ class PreferenceForm extends Component {
   }
 }
 
-export default PreferenceForm;
+export default EventForm;

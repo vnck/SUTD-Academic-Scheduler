@@ -83,6 +83,8 @@ class Login extends Component {
 
   componentDidMount() {
     this.props.userHasAuthenticated(true);
+    this.props.history.push("/instructor-home");
+
     this.props.userIsCoordinator(true);
     this.props.history.push("/coordinator-home");
   }
