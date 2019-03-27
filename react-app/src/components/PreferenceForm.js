@@ -52,12 +52,16 @@ const TabContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+  margin-bottom: 1rem;
 `;
 
 const TabButton = styled.div`
+  width: 100%;
+  text-align: center;
   padding: 0.4rem 1rem;
   border: none;
-  background-color: ${props => props.theme.accent};
+  background-color: ${props =>
+    props.weekly ? props.theme.accent : props.theme.grey};
   color: ${props => props.theme.white};
   outline: 1px solid ${props => props.theme.darkestgrey};
   cursor: pointer;
@@ -75,6 +79,34 @@ const TabButton = styled.div`
   }
 `;
 
+const StyledButton = styled.button`
+  padding: 1rem;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  background-color: ${props => props.theme.grey};
+  font-weight: 600;
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+
+  :hover:enabled {
+    background-color: ${props => props.theme.darkergrey};
+  }
+
+  :active:enabled {
+    background-color: ${props => props.theme.darkestgrey};
+  }
+
+  :disabled {
+    color: ${props => props.theme.darkestgrey};
+  }
+
+  :focus:enabled {
+    box-shadow: 0 0 0 2px ${props => props.theme.darkestgrey};
+  }
+`;
+
 class PreferenceForm extends Component {
   constructor(props) {
     super(props);
@@ -87,6 +119,22 @@ class PreferenceForm extends Component {
         "Friday",
         "Saturday",
         "Sunday"
+      ],
+      weekOptions: [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14"
       ],
       timeOptions: [
         "8:00AM",
@@ -113,14 +161,20 @@ class PreferenceForm extends Component {
         "6:30PM"
       ],
       weekly: true,
-      startTime: "",
-      endTime: "",
-      daySelect: ""
+      startTime: "Monday",
+      endTime: "8:00AM",
+      daySelect: "8:00AM",
+      weekSelect: "1",
+      reason: ""
     };
+    this.onSelectDayChange = this.onSelectDayChange.bind(this);
+    this.onSelectDayChange = this.onSelectDayChange.bind(this);
     this.onSelectStartChange = this.onSelectStartChange.bind(this);
     this.onSelectEndChange = this.onSelectEndChange.bind(this);
     this.onSelectWeekly = this.onSelectWeekly.bind(this);
     this.onNotSelectWeekly = this.onNotSelectWeekly.bind(this);
+    this.updateReason = this.updateReason.bind(this);
+    this.checkSubmit = this.checkSubmit.bind(this);
   }
 
   onSelectWeekly = () => {
@@ -135,12 +189,24 @@ class PreferenceForm extends Component {
     this.setState({ daySelect: e.target.value });
   };
 
+  onSelectWeekChange = e => {
+    this.setState({ weekSelect: e.target.value });
+  };
+
   onSelectStartChange = e => {
     this.setState({ startTime: e.target.value });
   };
 
   onSelectEndChange = e => {
     this.setState({ endTime: e.target.value });
+  };
+
+  updateReason = e => {
+    this.setState({ reason: e.target.value });
+  };
+
+  checkSubmit = () => {
+    return this.state.reason === "";
   };
 
   submitRequest = e => {
@@ -160,9 +226,11 @@ class PreferenceForm extends Component {
           endTime: that.state.endTime,
           daySelect: that.state.daySelect
         })
-      }).then(function(response) {
-        return response.json();
-      });
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then(data => alert(data));
     } catch (e) {
       alert(e);
     }
@@ -173,56 +241,82 @@ class PreferenceForm extends Component {
       <React.Fragment>
         <FlexContainer>
           <TabContainer>
-            <TabButton onClick={this.onSelectWeekly}>Day</TabButton>
-            <TabButton onClick={this.onNotSelectWeekly}>Date</TabButton>
+            <TabButton weekly={this.state.weekly} onClick={this.onSelectWeekly}>
+              Day
+            </TabButton>
+            <TabButton
+              weekly={!this.state.weekly}
+              onClick={this.onNotSelectWeekly}
+            >
+              Date
+            </TabButton>
           </TabContainer>
-          {this.state.weekly && (
+          <FlexContainer>
+            {this.state.weekly && (
+              <FlexChild>
+                <p>Day:</p>
+                <StyledSelect onChange={this.onSelectDayChange}>
+                  {this.state.dayOptions.map(dayOption => (
+                    <option value={dayOption}>{dayOption}</option>
+                  ))}
+                </StyledSelect>
+              </FlexChild>
+            )}
+            {!this.state.weekly && (
+              <FlexChild>
+                <p>Week:</p>
+                <StyledSelect onChange={this.onSelectWeekChange}>
+                  {this.state.weekOptions.map(weekOption => (
+                    <option value={weekOption}>{weekOption}</option>
+                  ))}
+                </StyledSelect>
+                <p>Day:</p>
+                <StyledSelect onChange={this.onSelectDayChange}>
+                  {this.state.dayOptions.map(dayOption => (
+                    <option value={dayOption}>{dayOption}</option>
+                  ))}
+                </StyledSelect>
+              </FlexChild>
+            )}
             <FlexChild>
-              <p>Day:</p>
-              <StyledSelect onChange={this.onSelectDayChange}>
-                {this.state.dayOptions.map(dayOption => (
-                  <option value={dayOption}>{dayOption}</option>
+              <p>Start Time:</p>
+              <StyledSelect onChange={this.onSelectStartChange}>
+                {this.state.timeOptions.map(timeOption => (
+                  <option value={timeOption}>{timeOption}</option>
                 ))}
               </StyledSelect>
             </FlexChild>
-          )}
-          {!this.state.weekly && (
             <FlexChild>
-              <p>Date:</p>
-              <StyledSelect onChange={this.onSelectDayChange}>
-                {this.state.dayOptions.map(dayOption => (
-                  <option value={dayOption}>{dayOption}</option>
+              <p>End Time:</p>
+              <StyledSelect onChange={this.onSelectEndChange}>
+                {this.state.timeOptions.map(timeOption => (
+                  <option value={timeOption}>{timeOption}</option>
                 ))}
               </StyledSelect>
             </FlexChild>
-          )}
-          <FlexChild>
-            <p>Start Time:</p>
-            <StyledSelect onChange={this.onSelectStartChange}>
-              {this.state.timeOptions.map(timeOption => (
-                <option value={timeOption}>{timeOption}</option>
-              ))}
-            </StyledSelect>
-          </FlexChild>
-          <FlexChild>
-            <p>End Time:</p>
-            <StyledSelect onChange={this.onSelectEndChange}>
-              {this.state.timeOptions.map(timeOption => (
-                <option value={timeOption}>{timeOption}</option>
-              ))}
-            </StyledSelect>
-          </FlexChild>
-          <FlexChild>
-            <p>Reasons:</p>
-            <StyledInput name="Reasons" rows="4" />
-          </FlexChild>
-          <FlexChild>
-            <p>
-              Selected Day: {this.state.daySelect}, Start Time:
-              {this.state.startTime}, End Time: {this.state.endTime}
-            </p>
-            <button onClick={this.submitRequest}>Submit</button>
-          </FlexChild>
+            <FlexChild>
+              <p>Reasons:</p>
+              <StyledInput
+                type="text"
+                value={this.state.reason}
+                onChange={this.updateReason}
+                name="Reasons"
+                rows="4"
+              />
+            </FlexChild>
+            <FlexChild>
+              <p>
+                Selected Day: {this.state.daySelect}, Start Time:
+                {this.state.startTime}, End Time: {this.state.endTime}
+              </p>
+              <StyledButton
+                disabled={this.checkSubmit()}
+                onClick={this.submitRequest}
+              >
+                Submit
+              </StyledButton>
+            </FlexChild>
+          </FlexContainer>
         </FlexContainer>
       </React.Fragment>
     );

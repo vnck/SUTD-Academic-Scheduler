@@ -81,8 +81,10 @@ class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidMount(){
-    this.setState({isMounted: true});
+  componentDidMount() {
+    this.props.userHasAuthenticated(true);
+    this.props.userIsCoordinator(true);
+    this.props.history.push("/coordinator-home");
   }
 
   validateForm = () => {
@@ -109,7 +111,7 @@ class Login extends Component {
       fetch("http://localhost:5000/login", {
         method: "POST",
         headers: {
-          "Accept": "application/json",
+          Accept: "application/json",
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
@@ -121,16 +123,18 @@ class Login extends Component {
           return response.json();
         })
         .then(function(data) {
-          console.log(data.isAuthenticated);
-          console.log(data.isCoordinator);
-          console.log(that.state.isMounted);
-          that.props.userHasAuthenticated(data.isAuthenticated);
-          that.props.userIsCoordinator(data.isCoordinator);
+          if (data.isAuthenticated) {
+            that.props.userHasAuthenticated(data.isAuthenticated);
+            that.props.userIsCoordinator(data.isCoordinator);
 
-          if (data.isCoordinator) {
-            that.props.history.push("/coordinator-home");
+            if (data.isCoordinator) {
+              that.props.history.push("/coordinator-home");
+            } else {
+              that.props.history.push("/instructor-home");
+            }
           } else {
-            that.props.history.push("/instructor-home");
+            alert("Failed to Log In.");
+            that.props.history.push("/login");
           }
         });
     } catch (e) {
