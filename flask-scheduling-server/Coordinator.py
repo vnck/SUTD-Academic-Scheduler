@@ -15,6 +15,7 @@ import random
 class Coordinator:
     rooms = []
     periods = []
+    coursesDb = None
     def __init__(self):
         self.days = [1,2,3,4,5]
         self.slots = []
@@ -54,6 +55,8 @@ class Coordinator:
                 count = 0
             else:
                 count = slot.counter-1
+            if slot.counter>=1 and slot.hardBlock:
+                penalty += 1
             penalty+=count
         self.slotPenalty = penalty - self.profPenalty - self.stgPenalty
 

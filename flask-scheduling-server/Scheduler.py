@@ -72,13 +72,12 @@ def mate(c1,c2):
         req = currCourseClass.req
         duration = currCourseClass.duration
         
-        stgNameList = [stg.name for stg in currCourseClass.studentGroups]
         profNameList = [p.name for p in currCourseClass.professors]
         #copying courseClasses attributes no alliasing
         c.courseClasses[i].course = c.getCourse(courseName)
         c.courseClasses[i].req = req
         c.courseClasses[i].duration = duration
-        
+
         for name in profNameList:
             c.courseClasses[i].professors.append(c.getProf(name))
 
@@ -109,11 +108,12 @@ def mutate(c1,mutateRate):
                 slot.counter-=1
                 for stg in cc.studentGroups:
                     stg.slots.remove(slot)
-                try:
-                    del c1.solution[slot]
-                except KeyError:
-                    #key already removed so dont need to do anything
-                    pass
+                # try:
+                #cant do this as might accidentally delete another course class
+                #     del c1.solution[slot]
+                # except KeyError:
+                #     #key already removed so dont need to do anything
+                #     pass
                 for prof in cc.professors:
                     prof.slots.remove(slot)
             cc.professors.clear()
@@ -149,11 +149,11 @@ for prof in answer.professors:
 # print(prof.slots)
 
 #TODO 
-#1 implement lecture all student groups all profs
+#1 DONE:implement lecture all student groups all profs
     #change the courseclass to have a stg array
     #so a lecture class is only 1 course class
 #2 implement time blocks such as HASS/5th rows
-    #in the fitness function when looping the slot,courseclasses dictionary
+    #in Slot class hardBlock
 #3 implement soft constraints
     #add it into the professor class and change the prof fitness function
 #4 implement output db
