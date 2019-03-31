@@ -15,7 +15,9 @@ import random
 class Coordinator:
     rooms = []
     periods = []
-    coursesDb = None
+    coursesDb = []
+    profDb = []
+    stgDb = []
     def __init__(self):
         self.days = [1,2,3,4,5]
         self.slots = []
@@ -168,15 +170,15 @@ class Coordinator:
                             c = CourseClass(course,req,duration)
                         c.studentGroups.append(stg)
                         self.courseClasses.append(c)
-                    elif req =="LEC:":
-                         c.studentGroups.append(stg)
+                    elif req =="LEC":
+                        c.studentGroups.append(stg)
                 if req =="LEC":
                     self.courseClasses.append(c)
 
 
                 
     def generateStudentGroups(self):
-        stgs = models.StudentGroup.query.all()
+        stgs = Coordinator.stgDb
         for stg in stgs:
             name = stg.student_group
             studentGroup = StudentGroup(name)
@@ -187,7 +189,7 @@ class Coordinator:
             self.studentGroups.append(studentGroup)
 
     def generateProfs(self):
-        profs = models.Professor.query.all()
+        profs = Coordinator.profDb
         for prof in profs:
             name = prof.name
             p = Professor(name)
@@ -197,7 +199,7 @@ class Coordinator:
             self.professors.append(p)
     
     def generateCourses(self):
-        courses = models.Course.query.all()
+        courses = Coordinator.coursesDb
         for cour in courses:
             name = cour.course
             classes = (cour.classes).split(",")
@@ -267,4 +269,6 @@ class Coordinator:
     def initalizeStatic():
         Coordinator._generate_periods()
         Coordinator.generateRooms()
-        
+        Coordinator.coursesDb = models.Course.query.all()
+        Coordinator.profDb = models.Professor.query.all()
+        Coordinator.stgDb = models.StudentGroup.query.all()

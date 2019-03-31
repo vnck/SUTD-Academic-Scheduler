@@ -108,17 +108,11 @@ def mutate(c1,mutateRate):
                 slot.counter-=1
                 for stg in cc.studentGroups:
                     stg.slots.remove(slot)
-                # try:
-                #cant do this as might accidentally delete another course class
-                #     del c1.solution[slot]
-                # except KeyError:
-                #     #key already removed so dont need to do anything
-                #     pass
                 for prof in cc.professors:
                     prof.slots.remove(slot)
             cc.professors.clear()
             cc.slots.clear()
-            cc.studentGroups.clear()
+        
             
             #rerandom courseclass
             c1.randomizeCourseClass(cc,NUM_DAYS,NUM_ROOMS,NUM_PERIODS)
