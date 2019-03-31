@@ -18,6 +18,7 @@ class Coordinator:
     coursesDb = []
     profDb = []
     stgDb = []
+    hardBlocksDb = []
     def __init__(self):
         self.days = [1,2,3,4,5]
         self.slots = []
@@ -241,8 +242,18 @@ class Coordinator:
         for _ in range(18):
             x+=0.5
             Coordinator.periods.append(x)
-        
+    
+    def setHardBlocks(self):
+        for hb in Coordinator.hardBlocksDb:
+            for slot in self.slots:
+                if hb.room == "all":
+                    if slot.day == hb.day and slot.period == hb.period:
 
+                        slot.hardBlock = True
+                elif hb.room == slot.room and slot.day == hb.day and slot.period == hb.period:
+                    
+                    slot.hardBlock = True
+             
     def setDaysList(self,ls):
         """
         setting days if different from default
@@ -262,6 +273,7 @@ class Coordinator:
         self.generateProfs()
         self.generateStudentGroups()
         self.generateCourseClasses()
+        self.setHardBlocks()
         self.generateOneRandSolution()
         self.fitness()
 
@@ -272,3 +284,4 @@ class Coordinator:
         Coordinator.coursesDb = models.Course.query.all()
         Coordinator.profDb = models.Professor.query.all()
         Coordinator.stgDb = models.StudentGroup.query.all()
+        Coordinator.hardBlocksDb = models.HardBlocks.query.all()
