@@ -68,13 +68,13 @@ def mate(c1,c2):
             currCourseClass = c2.courseClasses[i]
        
         #from courseclass get stg, get prof, get slot and update values
-        stgName = currCourseClass.studentGroup.name
         courseName = currCourseClass.course.name
         req = currCourseClass.req
         duration = currCourseClass.duration
+        
+        stgNameList = [stg.name for stg in currCourseClass.studentGroups]
         profNameList = [p.name for p in currCourseClass.professors]
         #copying courseClasses attributes no alliasing
-        c.courseClasses[i].studentGroup = c.getSTG(stgName)
         c.courseClasses[i].course = c.getCourse(courseName)
         c.courseClasses[i].req = req
         c.courseClasses[i].duration = duration
@@ -85,8 +85,9 @@ def mate(c1,c2):
         for slot in currCourseClass.slots:
             index = slot.index
             c.slots[index].counter += 1
-            c.courseClasses[i].studentGroup.slots.append(c.slots[index])
             c.courseClasses[i].slots.append(c.slots[index])
+            for stg in c.courseClasses[i].studentGroups:
+                stg.slots.append(c.slots[index])
             for prof in c.courseClasses[i].professors:
                 prof.slots.append(c.slots[index])
             
@@ -106,7 +107,8 @@ def mutate(c1,mutateRate):
             for slot in cc.slots:
                 #remove class from allocated slot slot.counter -=1
                 slot.counter-=1
-                cc.studentGroup.slots.remove(slot)
+                for stg in cc.studentGroups:
+                    stg.slots.remove(slot)
                 try:
                     del c1.solution[slot]
                 except KeyError:
@@ -116,37 +118,10 @@ def mutate(c1,mutateRate):
                     prof.slots.remove(slot)
             cc.professors.clear()
             cc.slots.clear()
+            cc.studentGroups.clear()
             
-            duration = cc.duration
-            randDay = random.randint(0,NUM_DAYS-1)
-
-            checker = True
-            for roomNum in range(NUM_ROOMS):
-                
-                if c1.slots[roomNum].getReq() == cc.req and checker:
-                    randRoomStart = roomNum
-                    checker = False
-                if c1.slots[roomNum].getReq() != cc.req and not checker: 
-                    randRoomEnd = roomNum - 1
-                    break
-                if  roomNum == NUM_ROOMS-1:
-                    randRoomEnd = roomNum
-            #print((randRoomStart,randRoomEnd))
-            randRoom = random.randint(randRoomStart,randRoomEnd)
-            #randRoom = random.randint(0,NUM_ROOMS-1)
-            
-            #makes sure that same lesson does not go on to the next day
-            randPeriod = random.randint(0,NUM_PERIODS-1-int((duration-0.5)/0.5))
-            randProf = random.choice(cc.course.professors)
-            cc.professors.append(randProf)
-            for i in range(int(duration/0.5)):
-                position = randDay*NUM_ROOMS*NUM_PERIODS + (randPeriod+i)*NUM_ROOMS + randRoom
-                # store the schedule for student groups and professors in a slot[]
-                cc.studentGroup.slots.append(c1.slots[position])
-                cc.slots.append(c1.slots[position])
-                randProf.slots.append(c1.slots[position])
-                c1.solution[c1.slots[position]] = cc
-                c1.slots[position].counter += 1
+            #rerandom courseclass
+            c1.randomizeCourseClass(cc,NUM_DAYS,NUM_ROOMS,NUM_PERIODS)
             
 def createInitialPop(popSize):
     ls = []

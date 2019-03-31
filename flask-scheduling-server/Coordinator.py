@@ -45,6 +45,7 @@ class Coordinator:
         self.profPenalty = penalty
         # #student group cannot be at more than 1 day per room per period
         for stg in self.studentGroups:
+            #print("stg len slots",len(stg.slots))
             penalty+= stg.fitness()
         self.stgPenalty = penalty - self.profPenalty
         # each room can only be used once per period per day
@@ -61,9 +62,9 @@ class Coordinator:
             #print(courseClass.req,slot.getReq())
             if courseClass.req != slot.getReq():
                 penalty += 1
-                print(courseClass.req,slot.getReq())
+                #print(courseClass.req,slot.getReq())
                 raise Exception("course class {} does not meet req {}".format(courseClass.req,slot.room.req))
-
+            #if the slot lies in a blocked period we increase the penalty?
         self.reqPenalty = penalty - self.slotPenalty - self.profPenalty - self.stgPenalty
         self.fitnessValue = penalty
         return penalty
@@ -76,52 +77,61 @@ class Coordinator:
 
 
         for courseClass in self.courseClasses:
-            #get the duration for the class
-            duration = courseClass.duration
+            self.randomizeCourseClass(courseClass,NUM_DAYS,NUM_ROOMS,NUM_PERIODS)    
 
-            #generate random day,num,periods
-            randDay = random.randint(0,NUM_DAYS-1)
-            # print(NUM_ROOMS)
+     
+    def randomizeCourseClass(self,courseClass,NUM_DAYS,NUM_ROOMS,NUM_PERIODS):
+        #get the duration for the class
+        duration = courseClass.duration
+
+        #generate random day,num,periods
+        randDay = random.randint(0,NUM_DAYS-1)
+        # print(NUM_ROOMS)
            
     
-            checker = True
-            for roomNum in range(NUM_ROOMS):
+        checker = True
+        for roomNum in range(NUM_ROOMS):
       
                 
-                if self.slots[roomNum].getReq() == courseClass.req and checker:
-                    randRoomStart = roomNum
-                    checker = False
+            if self.slots[roomNum].getReq() == courseClass.req and checker:
+                randRoomStart = roomNum
+                checker = False
                 
-                if self.slots[roomNum].getReq() != courseClass.req and not checker:
-                    randRoomEnd = roomNum - 1
-                    break
+            if self.slots[roomNum].getReq() != courseClass.req and not checker:
+                randRoomEnd = roomNum - 1
+                break
 
-                if roomNum == NUM_ROOMS - 1:
-                    randRoomEnd = roomNum
+            if roomNum == NUM_ROOMS - 1:
+                randRoomEnd = roomNum
             
-            if(self.slots[randRoomStart].getReq()!= self.slots[randRoomEnd].getReq()):raise Exception("random rooms does not meet req")
-            randRoom = random.randint(randRoomStart,randRoomEnd)
+        if(self.slots[randRoomStart].getReq()!= self.slots[randRoomEnd].getReq()):raise Exception("random rooms does not meet req")
+        randRoom = random.randint(randRoomStart,randRoomEnd)
             
-            #makes sure that same lesson does not go on to the next day
-            randPeriod = random.randint(0,NUM_PERIODS-1-int((duration-0.5)/0.5))
+        #makes sure that same lesson does not go on to the next day
+        randPeriod = random.randint(0,NUM_PERIODS-1-int((duration-0.5)/0.5))
             
-            #get random prof teaching the class
-            #guarantees that the prof teaches the class
+        #get random prof teaching the class
+        #guarantees that the prof teaches the class
+        if courseClass.req == "LEC":
+            for prof in courseClass.course.professors:
+                courseClass.professors.append(prof)
+        else:
             randProf = random.choice(courseClass.course.professors)
             courseClass.professors.append(randProf)
             
-            #get the slots position from the random values
-            for i in range(int(duration/0.5)):
-                position = randDay*NUM_ROOMS*NUM_PERIODS + (randPeriod+i)*NUM_ROOMS + randRoom
-                # store the schedule for student groups and professors in a slot[]
-                courseClass.studentGroup.slots.append(self.slots[position])
-                courseClass.slots.append(self.slots[position])
-                randProf.slots.append(self.slots[position])
-                self.solution[self.slots[position]] = courseClass
-                self.slots[position].counter += 1
-                
-     
-    
+        #get the slots position from the random values
+        for i in range(int(duration/0.5)):
+            position = randDay*NUM_ROOMS*NUM_PERIODS + (randPeriod+i)*NUM_ROOMS + randRoom
+            # store the schedule for student groups and professors in a slot[]
+
+            for stg in courseClass.studentGroups:
+                stg.slots.append(self.slots[position])
+            courseClass.slots.append(self.slots[position])
+            for prof in courseClass.professors:
+                prof.slots.append(self.slots[position])
+            self.solution[self.slots[position]] = courseClass
+            self.slots[position].counter += 1
+
     def getProf(self,name):
         for prof in self.professors:
             if prof.name == name:
@@ -142,11 +152,25 @@ class Coordinator:
         return None
 
     def generateCourseClasses(self):
-        for stg in self.studentGroups:
-            for course in stg.getCourses():
-                for req,duration in course.getClasses():
-                    c = CourseClass(stg,course,req,duration)
+        for course in self.courses:
+            for req,duration in course.getClasses():
+                if req == "LEC":
+                    c = CourseClass(course,req,duration)
+                for stg in course.studentGroups:
+                    if req != "LEC":
+                        if req == "CC" and stg.name[0:2] == "CC":
+                            #if it is cohort class we set the req to the class name
+                            c = CourseClass(course,stg.name,duration)
+                        else:
+                            c = CourseClass(course,req,duration)
+                        c.studentGroups.append(stg)
+                        self.courseClasses.append(c)
+                    elif req =="LEC:":
+                         c.studentGroups.append(stg)
+                if req =="LEC":
                     self.courseClasses.append(c)
+
+
                 
     def generateStudentGroups(self):
         stgs = models.StudentGroup.query.all()
@@ -240,4 +264,3 @@ class Coordinator:
     def initalizeStatic():
         Coordinator._generate_periods()
         Coordinator.generateRooms()
-

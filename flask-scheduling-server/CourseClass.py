@@ -1,17 +1,13 @@
 class CourseClass:
-    def __init__(self,studentGroup,course,req,duration):
-        self.studentGroup = studentGroup
+    def __init__(self,course,req,duration):
+        self.studentGroups = []
         self.course = course
-        
-        if studentGroup.name[0:2]=="CC" and req =="CC":
-            self.req = studentGroup.name
-        else:
-            self.req = req
+        self.req = req
         self.duration = duration
         self.professors = []
         self.slots = []
     def __repr__(self):
-        return "<CourseClass:stg:{} course:{} req:{} duration:{}>".format(self.studentGroup.name,\
+        return "<CourseClass:stg:{} course:{} req:{} duration:{}>".format(self.studentGroups,\
             self.course.name,self.req,self.duration)
 
     def addProf(self,prof):

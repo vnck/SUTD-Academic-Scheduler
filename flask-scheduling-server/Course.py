@@ -5,7 +5,7 @@ class Course:
         self.name = name
         self._classes = []
         self.professors = []
-    
+        self.studentGroups = []
     def addClass(self,req,duration):
         """stores tuple(req,duration) in classes list"""
         tupl = (req,duration)

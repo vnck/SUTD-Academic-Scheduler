@@ -15,7 +15,8 @@ class StudentGroup:
     def addCourse(self,course):
         """adds course object"""
         self._course.append(course)
-
+        #adds student groups to course object
+        course.studentGroups.append(self)
     def getCourses(self):
         return self._course
 
