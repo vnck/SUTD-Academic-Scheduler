@@ -267,3 +267,4 @@ class Coordinator:
     def initalizeStatic():
         Coordinator._generate_periods()
         Coordinator.generateRooms()
+        

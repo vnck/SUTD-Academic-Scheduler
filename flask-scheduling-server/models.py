@@ -78,6 +78,17 @@ class StudentGroup(db.Model):
     def __repr__(self):
         return "<StudentGroup(student group='%s', courses='[%s]'>" % (self.student_group, self.courses)
 
+class HardBlocks(db.Model):
+    __tablename__ = 'Hard Blocks'
+    id = db.Column(db.Integer, primary_key=True)
+    day = db.Column(db.Integer)
+    period = db.Column(db.Float)
+    room = db.Column(db.String)
+    reason = db.Column(db.String)
+
+    def __repr__(self):
+        return "<HardBlocks, day = {}, period ={}, room={}, reason={}>"\
+        .format(self.day,self.period,self.room,self.reason)
 
 def createDB():
     """
@@ -91,6 +102,7 @@ def createDB():
     df_courses = pd.read_csv("data/courses.csv", dtype=str)
     df_rooms = pd.read_csv("data/rooms.csv", dtype=str)
     df_student_groups = pd.read_csv("data/student_groups.csv", dtype=str)
+    df_hardblocks = pd.read_csv("data/hard_blocks.csv")
 
     for row in df_professors.iterrows():
         prof = Professor(name=row[1]['Name'], courses=row[1]['Courses'])
@@ -115,6 +127,13 @@ def createDB():
                         courses=row[1]['Courses'])
         db.session.add(sg)
 
+
+    for row in df_hardblocks.iterrows():
+        hb = HardBlocks(day=row[1]["day"],period=row[1]["period"],
+                        room =row[1]["room"],
+                        reason = row[1]["reason"])
+        db.session.add(hb)
+    
     db.session.commit()
 
 def existDB():
