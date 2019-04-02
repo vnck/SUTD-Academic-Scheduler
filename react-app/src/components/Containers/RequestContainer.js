@@ -17,11 +17,6 @@ const FlexChild = styled.div`
   padding: 0.2em;
 `;
 
-const StyledP = styled.p`
-  width: 100%;
-  text-align: center;
-`;
-
 class RequestContainer extends Component {
   constructor(props) {
     super(props);
@@ -29,77 +24,76 @@ class RequestContainer extends Component {
       requests: []
     };
     this.remRequest = this.remRequest.bind(this);
+    this.updateRequests = this.updateRequests.bind(this);
   }
 
-  // componentDidMount = () => {
-  //   var that = this;
-  //   fetch("http://localhost:5000/get-requests", {
-  //     method: "GET",
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-Type": "application/json"
-  //     }
-  //   })
-  //     .then(result => result.json())
-  //     .then(items => {
-  //       var requests = [];
-  //       for (var i = 0; i < items.length; i++) {
-  //         var req = {
-  //           id: items[i].id,
-  //           day: items[i].day,
-  //           requester: items[i].requester,
-  //           startTime: items[i].startTime,
-  //           endTime: items[i].endTime,
-  //           reason: items[i].reason,
-  //           status: items[i].status
-  //         };
-  //         requests.add(req);
-  //       }
-  //       that.setState({
-  //         requests: requests
-  //       });
-  //     });
-  // };
-
-  noRequest = () => {
-    return this.state.requests === [];
+  componentDidMount = () => {
+    var that = this;
+    fetch("http://localhost:5000/get-requests", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+      .then(result => result.json())
+      .then(items => {
+        var requests = [];
+        for (var i = 0; i < items.length; i++) {
+          var req = {
+            id: items[i]["id"],
+            day: items[i]["day"],
+            requester: items[i]["requester"],
+            startTime: items[i]["startTime"],
+            endTime: items[i]["endTime"],
+            reason: items[i]["reason"],
+            status: items[i]["status"]
+          };
+          requests.push(req);
+          console.log(requests);
+        }
+        that.updateRequests(requests);
+        console.log(that.state.requests);
+      });
+  };
+  
+  updateRequests = (reqs) => {
+	  this.setState({
+		  requests: reqs
+	  });
   };
 
   remRequest = async id => {
-    try {
-      // authentication API
-      fetch("http://localhost:5000/del-request", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          id: this.state.id
-        })
-      });
-      var newReqls = this.state.requests.filter(r => r.id === id);
-      this.setState({
-        requests: newReqls
-      });
-    } catch (e) {
-      alert(e);
-    }
+    //try {
+      //// authentication API
+      //fetch("http://localhost:5000/del-request", {
+        //method: "POST",
+        //headers: {
+          //Accept: "application/json",
+          //"Content-Type": "application/json"
+        //},
+        //body: JSON.stringify({
+          //id: this.state.id
+        //})
+      //});
+      //var newReqls = this.state.requests.filter(r => r.id === id);
+      //this.setState({
+        //requests: newReqls
+      //});
+    //} catch (e) {
+      //alert(e);
+    //}
   };
 
   render() {
     return (
       <React.Fragment>
         <FlexContainer>
-          {this.noRequest.bind(this) ? (
-            <StyledP>There are no requests!</StyledP>
-          ) : (
-            this.state.requests.map((request, index) => (
-              <FlexChild key={request.requester + index}>
-                <RequestCard request={request} remRequest={this.remRequest} />
-              </FlexChild>
-            ))
-          )}
+          {this.state.requests.map((request, index) => (
+            <FlexChild key={request.requester + index}>
+              <RequestCard request={request} remRequest={this.remRequest} />
+            </FlexChild>
+          ))}
         </FlexContainer>
       </React.Fragment>
     );
