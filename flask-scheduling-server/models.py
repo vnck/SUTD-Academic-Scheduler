@@ -28,6 +28,10 @@ class Professor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     courses = db.Column(db.String)
+    
+    day = db.Column(db.Integer)
+    startTime = db.Column(db.Float)
+    endTime = db.Column(db.Float)
 
     @property
     def serialize(self):
@@ -146,3 +150,4 @@ def existDB():
 if not existDB():
     #if database does not exist we create it
     createDB()
+

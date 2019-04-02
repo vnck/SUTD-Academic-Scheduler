@@ -5,6 +5,10 @@ class Professor:
         self.name = name
         self._course = []
         self.slots = []
+        
+        self.day = None
+        self.startTime = None
+        self.endTime = None
     def addCourse(self,course):
         """adds Course Object to list"""
         self._course.append(course)
@@ -22,6 +26,14 @@ class Professor:
                 if self.slots[s].day == self.slots[i].day\
                     and self.slots[s].period == self.slots[i].period:
                     penatly +=1
+        if self.startTime != None and self.endTime != None and self.day != None:
+            for slot in self.slots:
+                if slot.day == self.day:
+                    if slot.period<=self.endTime and slot.period>= self.startTime:
+                        #penalise once
+                        penatly+=0.01
+                        break
+
         return penatly
 
     def __repr__(self):
