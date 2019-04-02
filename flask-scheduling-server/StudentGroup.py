@@ -1,17 +1,14 @@
 class StudentGroup:
     def __init__(self,name):
         """
-        attr:name,isFreshmore,course
+        attr:name,course
         note course is a list of course objects
         """
         self.name = name
-        if name[0:2] == "CC":
-            self.isFreshmore = True
-        else:
-            self.isFreshmore = False
         self._course = []
         self.slots = []
         
+        self.courseClasses = []
     def addCourse(self,course):
         """adds course object"""
         self._course.append(course)
@@ -22,11 +19,20 @@ class StudentGroup:
 
     def fitness(self):
         penatly = 0
+        #check time space constraints
         for s in range(len(self.slots)-1):
             for i in range(s+1,len(self.slots)):
                 #if day and period is the same we add
                 if self.slots[s].day == self.slots[i].day\
                     and self.slots[s].period == self.slots[i].period:
+                    penatly +=1
+        
+        #Check that no two of the same course in a single day
+        #cannot have the same subject twice in a single day 
+        for i in range(len(self.courseClasses)-1):
+            for j in range(s+1,len(self.courseClasses)):
+                if self.courseClasses[i].day == self.courseClasses[j].day\
+                    and self.courseClasses[i].course == self.courseClasses[j].course:
                     penatly +=1
         return penatly
     def __repr__(self):

@@ -19,6 +19,7 @@ class Coordinator:
     profDb = []
     stgDb = []
     hardBlocksDb = []
+    roomDic = {}
     def __init__(self):
         self.days = [1,2,3,4,5]
         self.slots = []
@@ -26,7 +27,6 @@ class Coordinator:
         self.professors = []
         self.studentGroups = []
         self.courseClasses = []
-        self.solution = {}
         #lower fitnessValue is better
         self.fitnessValue = None
 
@@ -39,10 +39,6 @@ class Coordinator:
        
     def fitness(self):
         #instructor cannot be at more than 1 room per day per period
-        # print("prof len {}".format(len(self.professors)))
-        # print("stg len {}".format(len(self.studentGroups)))
-        # print("slot len {}".format(len(self.slots)))
-        # print("dict len {}".format(len(self.solution.keys())))
         penalty = 0
         for prof in self.professors:
             penalty+=prof.fitness()
@@ -50,6 +46,7 @@ class Coordinator:
         # #student group cannot be at more than 1 day per room per period
         for stg in self.studentGroups:
             penalty+= stg.fitness()
+
         self.stgPenalty = penalty - self.profPenalty
         # each room can only be used once per period per day
         for slot in self.slots:
@@ -63,13 +60,11 @@ class Coordinator:
         self.slotPenalty = penalty - self.profPenalty - self.stgPenalty
 
         # #check if room meets requirements
-        for slot,courseClass in self.solution.items():
-            #print(courseClass.req,slot.getReq())
-            if courseClass.req != slot.getReq():
-                penalty += 1
-                #print(courseClass.req,slot.getReq())
-                raise Exception("course class {} does not meet req {}".format(courseClass.req,slot.room.req))
-        
+        for cc in self.courseClasses:
+            for slot in cc.slots:
+                if cc.req != slot.getReq():
+                    penalty+=1
+
         self.reqPenalty = penalty - self.slotPenalty - self.profPenalty - self.stgPenalty
         self.fitnessValue = penalty
         return penalty
@@ -123,18 +118,25 @@ class Coordinator:
         else:
             randProf = random.choice(courseClass.course.professors)
             courseClass.professors.append(randProf)
-            
+        #set attr for course class
+        courseClass.day = randDay
+        courseClass.startTime = randPeriod
+        courseClass.endTime = randPeriod + duration
+
+        for prof in courseClass.professors:
+            prof.courseClasses.append(courseClass)
         #get the slots position from the random values
+        
         for i in range(int(duration/0.5)):
             position = randDay*NUM_ROOMS*NUM_PERIODS + (randPeriod+i)*NUM_ROOMS + randRoom
             # store the schedule for student groups and professors in a slot[]
-
+            
             for stg in courseClass.studentGroups:
                 stg.slots.append(self.slots[position])
+                
             courseClass.slots.append(self.slots[position])
             for prof in courseClass.professors:
                 prof.slots.append(self.slots[position])
-            self.solution[self.slots[position]] = courseClass
             self.slots[position].counter += 1
 
     def getProf(self,name):
@@ -175,7 +177,9 @@ class Coordinator:
                 if req =="LEC":
                     self.courseClasses.append(c)
 
-
+    def appendSTGtoCC(self):
+        for cc in self.courseClasses:
+            cc.appendStg()
                 
     def generateStudentGroups(self):
         stgs = Coordinator.stgDb
@@ -219,11 +223,13 @@ class Coordinator:
     def generateRooms():
         """copy data from db into ram"""
         rooms = models.Room.query.all()
+        index = 0
         for room in rooms:
             name = room.name
             req = room.req
             Coordinator.rooms.append(Room(name,req))
-
+            Coordinator.roomDic[name] = index
+            index +=1
    
     
 
@@ -248,14 +254,24 @@ class Coordinator:
             Coordinator.periods.append(x)
     
     def setHardBlocks(self):
+        NUM_DAYS = len(self.days)
+        NUM_ROOMS = len(Coordinator.rooms)
+        NUM_PERIODS = len(Coordinator.periods)
+        
         for hb in Coordinator.hardBlocksDb:
-            for slot in self.slots:
-                if hb.room == "all":
-                    if slot.day == hb.day and slot.period == hb.period:
-                        slot.hardBlock = True
-                elif hb.room == slot.room.name and slot.day == hb.day and slot.period == hb.period:
-                    
-                    slot.hardBlock = True
+            if hb.room == "all":
+                for i in range (NUM_ROOMS):
+                    # print(hb.period)   
+                    position = (hb.day-1)*NUM_ROOMS*NUM_PERIODS + (hb.period-8.5)/0.5*NUM_ROOMS + i
+                    # print(position)
+                    #slot = self.slots[int(position)]
+                    # assert(slot.day ==hb.day)
+                    # assert(slot.period == hb.period)
+                    self.slots[int(position)].hardBlock = True
+            else:
+                position = (hb.day-1)*NUM_ROOMS*NUM_PERIODS + (hb.period-8.5)/0.5*NUM_ROOMS + Coordinator.roomDic[hb.room]
+                # print(position)
+                self.slots[int(position)].hardBlock = True
              
     def setDaysList(self,ls):
         """
@@ -276,6 +292,7 @@ class Coordinator:
         self.generateProfs()
         self.generateStudentGroups()
         self.generateCourseClasses()
+        self.appendSTGtoCC()
         self.setHardBlocks()
         self.generateOneRandSolution()
         self.fitness()

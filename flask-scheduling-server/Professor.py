@@ -5,10 +5,13 @@ class Professor:
         self.name = name
         self._course = []
         self.slots = []
-        
+        self.courseClasses = []
+
+        #for soft constraints
         self.day = None
         self.startTime = None
         self.endTime = None
+        self.penatly = 0
     def addCourse(self,course):
         """adds Course Object to list"""
         self._course.append(course)
@@ -26,6 +29,8 @@ class Professor:
                 if self.slots[s].day == self.slots[i].day\
                     and self.slots[s].period == self.slots[i].period:
                     penatly +=1
+        
+        #check soft constraints
         if self.startTime != None and self.endTime != None and self.day != None:
             for slot in self.slots:
                 if slot.day == self.day:
@@ -33,7 +38,7 @@ class Professor:
                         #penalise once
                         penatly+=0.01
                         break
-
+        self.penatly = penatly
         return penatly
 
     def __repr__(self):
