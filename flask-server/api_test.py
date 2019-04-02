@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Mar 22 12:21:43 2019
-
-@author: joseph
-"""
-
 from flask import Flask, render_template, redirect, url_for, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import json
@@ -105,15 +97,15 @@ def login():
 def get_request():
     req = Request.query.all()
     newls = []
-    for i in range (len(req)):
+    for i in range(len(req)):
         newls.append({})
-        newls[i]["id"]=req[i].id
-        newls[i]["day"]=req[i].day
-        newls[i]["requester"]=req[i].requester
-        newls[i]["startTime"]=req[i].startTime
-        newls[i]["endTime"]=req[i].endTime
-        newls[i]["reason"]=req[i].reason
-        newls[i]["status"]=req[i].status
+        newls[i]["id"] = req[i].id
+        newls[i]["day"] = req[i].day
+        newls[i]["requester"] = req[i].requester
+        newls[i]["startTime"] = req[i].startTime
+        newls[i]["endTime"] = req[i].endTime
+        newls[i]["reason"] = req[i].reason
+        newls[i]["status"] = req[i].status
     return json.dumps(newls)
 
 
@@ -125,16 +117,17 @@ def del_request():
         db.session.delete(to_delete)
     req = Request.query.all()
     newls = []
-    for i in range (len(req)):
+    for i in range(len(req)):
         newls.append({})
-        newls[i]["id"]=req[i].id
-        newls[i]["day"]=req[i].day
-        newls[i]["requester"]=req[i].requester
-        newls[i]["startTime"]=req[i].startTime
-        newls[i]["endTime"]=req[i].endTime
-        newls[i]["reason"]=req[i].reason
-        newls[i]["status"]=req[i].status
+        newls[i]["id"] = req[i].id
+        newls[i]["day"] = req[i].day
+        newls[i]["requester"] = req[i].requester
+        newls[i]["startTime"] = req[i].startTime
+        newls[i]["endTime"] = req[i].endTime
+        newls[i]["reason"] = req[i].reason
+        newls[i]["status"] = req[i].status
     return json.dumps(newls)
+
 
 @app.route('/approve-requests', methods=['POST'])
 def approve_request():
@@ -145,16 +138,17 @@ def approve_request():
         db.session.commit()
     req = Request.query.all()
     newls = []
-    for i in range (len(req)):
+    for i in range(len(req)):
         newls.append({})
-        newls[i]["id"]=req[i].id
-        newls[i]["day"]=req[i].day
-        newls[i]["requester"]=req[i].requester
-        newls[i]["startTime"]=req[i].startTime
-        newls[i]["endTime"]=req[i].endTime
-        newls[i]["reason"]=req[i].reason
-        newls[i]["status"]=req[i].status
+        newls[i]["id"] = req[i].id
+        newls[i]["day"] = req[i].day
+        newls[i]["requester"] = req[i].requester
+        newls[i]["startTime"] = req[i].startTime
+        newls[i]["endTime"] = req[i].endTime
+        newls[i]["reason"] = req[i].reason
+        newls[i]["status"] = req[i].status
     return json.dumps(newls)
+
 
 @app.route('/upload-inputs', methods=['POST'])
 def fileUpload():

@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Feb  6 23:09:46 2019
-
-@author: joseph
-"""
-
 from app import app, db, bcrypt
 from flask import Flask, render_template, redirect, url_for, request
 import sqlalchemy

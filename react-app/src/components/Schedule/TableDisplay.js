@@ -136,6 +136,16 @@ class TableDisplay extends Component {
             start: 1,
             end: 4
           },
+          {
+            name: "Digital World",
+            timing: "8AM - 9AM",
+            venue: "2.505 LT2",
+            instructor: "John. O",
+            code: "50.003",
+            color: "#bba",
+            start: 1,
+            end: 4
+          },
           { start: 4, end: 5 },
           {
             name: "Digital World",
