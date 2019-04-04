@@ -1,19 +1,32 @@
 from Coordinator import Coordinator 
 import random
 import copy
+import models
+import time
+import models
+from app import db
 
-def geneticScheduler(numberOfGen,popSize,tourSize,mutateRate=0.05,elitismOffset=1):
+def geneticScheduler(numberOfGen,popSize,tourSize,mutateProb = 0.5,mutateRate=0.05,elitismOffset=1):
+    """
+    parameters \n
+    number of generations/iterations \n
+    population size \n
+    tournament size:for mating select random sample of tournameSize and choose the best \n
+    mutateProb: probability of those who mate to mutate \n
+    mutateRate:probability of genes to be mutated \n
+    elitismOffset: selects the best handful to keep for the next generation
+    """
     currPop = createInitialPop(popSize)
     #keep the best
     for i in range (numberOfGen-1):
         if(currPop[0].fitnessValue<=0.001):break
         print("iter {}".format(i))
-        currPop = evolvePop(currPop,tourSize,mutateRate,elitismOffset)
+        currPop = evolvePop(currPop,tourSize,mutateProb,mutateRate,elitismOffset)
         
     return currPop
 
 
-def evolvePop(currPop,tourSize,mutateRate=0.05,elitismOffset=1):
+def evolvePop(currPop,tourSize,mutateProb=0.5,mutateRate=0.05,elitismOffset=1):
     newPop = []
     
     tempPop = sorted(currPop,key = lambda coord : coord.fitnessValue)
@@ -29,8 +42,8 @@ def evolvePop(currPop,tourSize,mutateRate=0.05,elitismOffset=1):
         #print(parent1.fitnessValue)
         #print(parent2.fitnessValue)
         child = mate(parent1,parent2)
-        
-        mutate(child,mutateRate)
+        if random.random()<mutateProb:
+            mutate(child,mutateRate)
         child.fitness()
         #print("child fit {}".format(child.fitnessValue))
         newPop.append(child)
@@ -140,24 +153,45 @@ def createInitialPop(popSize):
         c.initalize()
         ls.append(c)
     return ls
-import time
-Coordinator.initalizeStatic()
-start = time.time()
-lss = geneticScheduler(500,100,5,elitismOffset=5,mutateRate=0.05)
-print([f.fitnessValue for f in lss])
-elasped = time.time() - start
-print(elasped)
 
-answer = sorted(lss,key = lambda coord : coord.fitnessValue)[0]
+def startAlgo():
+    print("Initializing and reading from db")
+    Coordinator.initalizeStatic()
+    print("Algorithm starts")
+    start = time.time()
+    lss = geneticScheduler(1000,100,5,mutateProb=0.8,elitismOffset=5,mutateRate=0.05)
+    print([f.fitnessValue for f in lss])
+    elasped = time.time() - start
+    print("time taken = {}s".format(elasped))
+    answer = sorted(lss,key = lambda coord : coord.fitnessValue)[0]
+    #key into database
+    #deletes all previous data
+    models.CourseClass.query.delete()
 
-# for prof in answer.professors:
-#     print(prof.name)
-#     for cc in prof.courseClasses:
-#         print(cc)
+    for cc in answer.courseClasses:
+        stgString = cc.studentGroups[0].name
+        profString = cc.professors[0].name
+        
+        for i in range(1,len(cc.studentGroups)):
+            stgString += ",{}".format(cc.studentGroups[i].name)
 
-# profName = input("Get schedule for professor:")
-# prof = answer.getProf(profName)
-# print(prof.slots)
+        for j in range(1,len(cc.studentGroups)):
+            profString += ",{}".format(cc.professors[j].name)
+        
+        day = cc.day
+        startTime = cc.startTime
+        endTime = cc.endTime
+        roomName = cc.slots[0].room.name
+        courseName = cc.course.name
+        courseClassDb = models.CourseClass(course=courseName,studentGroups = stgString,professors = profString,
+                                            day = day,startTime= startTime,endTime = endTime,room= roomName)
+        db.session.add(courseClassDb)
+
+
+startAlgo()
+
+for cc in models.CourseClass.query.all():
+    print(cc)
 
 #TODO 
 #1 DONE:implement lecture all student groups all profs

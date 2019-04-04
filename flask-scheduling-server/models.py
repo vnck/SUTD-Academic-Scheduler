@@ -94,6 +94,23 @@ class HardBlocks(db.Model):
         return "<HardBlocks, day = {}, period ={}, room={}, reason={}>"\
         .format(self.day,self.period,self.room,self.reason)
 
+class CourseClass(db.Model):
+    __tablename__ = 'Course Class'
+    
+    id = db.Column(db.Integer,primary_key =True)
+    studentGroups = db.Column(db.String)
+    professors = db.Column(db.String)
+    
+    course = db.Column(db.String) 
+    room = db.Column(db.String)
+    day = db.Column(db.Integer)
+    startTime = db.Column(db.Float)
+    endTime = db.Column(db.Float)
+
+    def __repr__(self):
+        return "<CourseclassDb,course = {} ,studentGroups = {},professors = {},day={},startTime={},endTime={},room = {}>"\
+        .format(self.course,self.studentGroups,self.professors,self.day,self.startTime,self.endTime,self.room)
+
 def createDB():
     """
     Warning do not call this in the middle of the application or all current data will be lost
