@@ -46,7 +46,7 @@ const TableSidebar = styled.div`
   display: grid;
   grid-row-start: 2;
   grid-column-start: 1;
-  grid-template-rows: repeat(22, 1fr);
+  grid-template-rows: repeat(19, 1fr);
   justify-items: stretch;
   align-items: stretch;
   grid-gap: 1px;
@@ -74,25 +74,11 @@ const TableBody = styled.div`
   grid-row-start: 2;
   grid-column-start: 2;
   grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(19, 1fr);
   justify-items: stretch;
   align-items: stretch;
   grid-gap: 1px;
   background-color: ${props => props.theme.grey};
-`;
-
-const DayCol = styled.div`
-  display: grid;
-  grid-template-rows: repeat(22, 1fr);
-  justify-items: stretch;
-  align-items: stretch;
-  grid-gap: 1px;
-  background-color: ${props => props.theme.silver};
-  .cell {
-    background-color: white;
-  }
-  .empty {
-    background-color: white;
-  }
 `;
 
 class TableDisplay extends Component {
@@ -101,7 +87,6 @@ class TableDisplay extends Component {
     this.state = {
       days: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
       cells: [
-        "8:00AM",
         "8:30AM",
         "9:00AM",
         "9:30AM",
@@ -120,124 +105,34 @@ class TableDisplay extends Component {
         "4:00PM",
         "4:30PM",
         "5:00PM",
-        "5:30PM",
-        "6:00PM",
-        "6:30PM"
+        "5:30PM"
       ],
-      activities: [
-        [
-          {
-            name: "Digital World",
-            timing: "8AM - 9AM",
-            venue: "2.505 LT2",
-            instructor: "John. O",
-            code: "50.003",
-            color: "#bba",
-            start: 1,
-            end: 4
-          },
-          {
-            name: "Digital World",
-            timing: "8AM - 9AM",
-            venue: "2.505 LT2",
-            instructor: "John. O",
-            code: "50.003",
-            color: "#bba",
-            start: 1,
-            end: 4
-          },
-          { start: 4, end: 5 },
-          {
-            name: "Digital World",
-            timing: "8AM - 9AM",
-            venue: "2.505 LT2",
-            instructor: "John. O",
-            code: "50.002",
-            color: "#bba",
-            start: 8,
-            end: 10
-          },
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          ""
-        ],
-        [
-          { start: 4, end: 5 },
-          {
-            name: "Digital World",
-            timing: "8AM - 9AM",
-            venue: "2.505 LT2",
-            instructor: "John. O",
-            code: "50.013",
-            color: "#bba",
-            start: 10,
-            end: 14
-          },
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          ""
-        ],
-        [
-          { start: 4, end: 5 },
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          ""
-        ],
-        [],
-        [],
-        [],
-        []
-      ]
+      schedule: []
     };
+    this.updateSchedule = this.updateSchedule.bind(this);
   }
+
+  componentDidMount = () => {
+    var that = this;
+    fetch("http://localhost:5000/get-schedule", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      }
+    })
+      .then(result => result.json())
+      .then(schedule => {
+        that.updateSchedule(schedule);
+        console.log(schedule);
+      });
+  };
+
+  updateSchedule = cc => {
+    this.setState({
+      schedule: cc
+    });
+  };
 
   render() {
     return (
@@ -258,13 +153,8 @@ class TableDisplay extends Component {
             ))}
           </TableSidebar>
           <TableBody>
-            {this.state.activities.map((day, index) => (
-              <DayCol key={day + index}>
-                {day.map(
-                  (activity, index) =>
-                    activity !== "" && <Cell key={index} data={activity} />
-                )}
-              </DayCol>
+            {this.state.schedule.map((item, index) => (
+              <Cell key={index} data={item} times={this.state.cells} />
             ))}
           </TableBody>
         </Table>

@@ -186,12 +186,14 @@ def startAlgo():
         courseClassDb = models.CourseClass(course=courseName,studentGroups = stgString,professors = profString,
                                             day = day,startTime= startTime,endTime = endTime,room= roomName)
         db.session.add(courseClassDb)
+    db.session.commit()
 
 
-startAlgo()
+if __name__ == "__main__":
+    startAlgo()
 
-for cc in models.CourseClass.query.all():
-    print(cc)
+    for cc in models.CourseClass.query.all():
+        print(cc)
 
 #TODO 
 #1 DONE:implement lecture all student groups all profs

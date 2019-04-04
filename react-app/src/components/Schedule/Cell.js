@@ -23,28 +23,39 @@ const Container = styled.div`
   }
   grid-row-start: ${props => props.start || ""};
   grid-row-end: ${props => props.end || ""};
+  grid-column-start: ${props => props.day || ""};
+  grid-column-end: ${props => props.day + 1 || ""};
 `;
 
 class Cell extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      timing: "",
-      venue: "",
-      instructor: "",
-      code: ""
+      course: "",
+      day: 0,
+      endTime: 0,
+      professors: "",
+      room: "",
+      startTime: 0,
+      studentGroups: "",
+      timing: ""
     };
   }
 
   componentDidMount() {
     if (this.props.data) {
       this.setState({
-        name: this.props.data.name,
-        timing: this.props.data.timing,
-        venue: this.props.data.venue,
-        instructor: this.props.data.instructor,
-        code: this.props.data.code
+        course: this.props.data.course,
+        day: this.props.data.day,
+        endTime: (this.props.data.endTime - 8.0) * 2,
+        professors: this.props.data.professors,
+        room: this.props.data.room,
+        startTime: (this.props.data.startTime - 8.0) * 2,
+        studentGroups: this.props.data.studentGroups,
+        timing:
+          this.props.times[(this.props.data.startTime - 8.0) * 2] +
+          " - " +
+          this.props.times[(this.props.data.endTime - 8.0) * 2]
       });
     }
   }
@@ -54,16 +65,18 @@ class Cell extends Component {
       <React.Fragment>
         <Container
           color={this.props.data.color}
-          start={this.props.data.start}
-          end={this.props.data.end}
+          start={this.state.startTime}
+          end={this.state.endTime}
+          day={this.props.data.day}
         >
-          <p className="b">{this.state.code}</p>
-          <p className="b">{this.state.name}</p>
-          <p>{this.state.venue}</p>
+          <p className="b">{this.state.course}</p>
+          <p className="b">{this.state.course}</p>
+          <p>{this.state.room}</p>
+          <p>{this.state.day}</p>
           <p className="t">{this.state.timing}</p>
           <p>
-            {this.state.instructor
-              ? "Instructors : " + this.state.instructor
+            {this.state.professors
+              ? "Instructors : " + this.state.professors
               : ""}
           </p>
         </Container>
