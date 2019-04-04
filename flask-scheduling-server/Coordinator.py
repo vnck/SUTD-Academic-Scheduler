@@ -119,9 +119,9 @@ class Coordinator:
             randProf = random.choice(courseClass.course.professors)
             courseClass.professors.append(randProf)
         #set attr for course class
-        courseClass.day = randDay
-        courseClass.startTime = randPeriod
-        courseClass.endTime = randPeriod + duration
+        courseClass.day = randDay +1
+        courseClass.startTime = Coordinator.periods[randPeriod]
+        courseClass.endTime = courseClass.startTime + duration
 
         for prof in courseClass.professors:
             prof.courseClasses.append(courseClass)
@@ -286,7 +286,6 @@ class Coordinator:
         Coordinator.periods = ls
 
     def initalize(self):
-        #to consider separate generation of rooms/courses separately to decrease time complexity
         self.generateSlots()
         self.generateCourses()
         self.generateProfs()
