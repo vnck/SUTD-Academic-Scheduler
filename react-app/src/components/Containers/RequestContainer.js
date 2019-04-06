@@ -50,10 +50,8 @@ class RequestContainer extends Component {
             status: items[i]["status"]
           };
           requests.push(req);
-          console.log(requests);
         }
         that.updateRequests(requests);
-        console.log(that.state.requests);
       });
   };
 

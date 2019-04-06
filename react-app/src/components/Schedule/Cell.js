@@ -8,7 +8,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: ${props => props.color || "#fff"};
+  background-color: hsl(${props => props.color || 0}, 50%, 75%);
   p {
     font-size: 0.5em;
     text-align: center;
@@ -23,8 +23,6 @@ const Container = styled.div`
   }
   grid-row-start: ${props => props.start || ""};
   grid-row-end: ${props => props.end || ""};
-  grid-column-start: ${props => props.day || ""};
-  grid-column-end: ${props => props.day + 1 || ""};
 `;
 
 class Cell extends Component {
@@ -43,19 +41,20 @@ class Cell extends Component {
   }
 
   componentDidMount() {
+    console.log(this.props.color);
     if (this.props.data) {
       this.setState({
         course: this.props.data.course,
         day: this.props.data.day,
-        endTime: (this.props.data.endTime - 8.0) * 2,
+        endTime: (this.props.data.endTime - 8.5) * 2,
         professors: this.props.data.professors,
         room: this.props.data.room,
-        startTime: (this.props.data.startTime - 8.0) * 2,
+        startTime: (this.props.data.startTime - 8.5) * 2,
         studentGroups: this.props.data.studentGroups,
         timing:
-          this.props.times[(this.props.data.startTime - 8.0) * 2] +
-          " - " +
-          this.props.times[(this.props.data.endTime - 8.0) * 2]
+          this.props.times[(this.props.data.startTime - 8.5) * 2] +
+          "-" +
+          this.props.times[(this.props.data.endTime - 8.5) * 2]
       });
     }
   }
@@ -64,21 +63,15 @@ class Cell extends Component {
     return (
       <React.Fragment>
         <Container
-          color={this.props.data.color}
-          start={this.state.startTime}
-          end={this.state.endTime}
-          day={this.props.data.day}
+          color={this.props.color}
+          start={this.state.startTime + 1}
+          end={this.state.endTime + 1}
         >
           <p className="b">{this.state.course}</p>
           <p className="b">{this.state.course}</p>
           <p>{this.state.room}</p>
-          <p>{this.state.day}</p>
           <p className="t">{this.state.timing}</p>
-          <p>
-            {this.state.professors
-              ? "Instructors : " + this.state.professors
-              : ""}
-          </p>
+          <p>{this.state.professors}</p>
         </Container>
       </React.Fragment>
     );

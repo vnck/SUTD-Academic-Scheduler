@@ -6,6 +6,8 @@ import time
 import models
 from app import db
 
+running = False
+
 def geneticScheduler(numberOfGen,popSize,tourSize,mutateProb = 0.5,mutateRate=0.05,elitismOffset=1):
     """
     parameters \n

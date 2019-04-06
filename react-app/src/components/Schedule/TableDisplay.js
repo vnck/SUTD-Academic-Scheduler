@@ -1,80 +1,20 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import Cell from "./Cell";
+import DayCol from "./DayCol";
 
-const Table = styled.div`
-  display: grid;
-  grid-template-columns: 6em 1fr;
-  grid-template-rows: auto 1fr;
-  justify-items: stretch;
-  align-items: stretch;
-  width: 100%;
-  grid-gap: 1px;
-`;
-
-const Header = styled.div`
-  display: grid;
-  grid-column-start: 2;
-  grid-template-columns: repeat(7, minmax(60px, 1fr));
-  justify-items: stretch;
-  align-items: stretch;
-  grid-gap: 1px;
-  background-color: ${props => props.theme.grey};
-
-  .cell {
-    font-size: 0.6em;
-    background-color: white;
-    text-align: center;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-top: 1px solid ${props => props.theme.grey};
-    border-bottom: 1px solid ${props => props.theme.grey};
-  }
-
-  .cell:last-child {
-    border-right: 1px solid ${props => props.theme.grey};
-  }
-
-  .cell:first-child {
-    border-left: 1px solid ${props => props.theme.grey};
-  }
-`;
-
-const TableSidebar = styled.div`
-  display: grid;
-  grid-row-start: 2;
-  grid-column-start: 1;
-  grid-template-rows: repeat(19, 1fr);
-  justify-items: stretch;
-  align-items: stretch;
-  grid-gap: 1px;
-  background-color: ${props => props.theme.grey};
-  .cell {
-    font-size: 0.6em;
-    background-color: white;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-left: 1px solid ${props => props.theme.grey};
-    border-right: 1px solid ${props => props.theme.grey};
-  }
-  .cell:first-child {
-    border-top: 1px solid ${props => props.theme.grey};
-  }
-  .cell:last-child {
-    border-bottom: 1px solid ${props => props.theme.grey};
-  }
+const DayHeader = styled.div`
+  background-color: ${props => props.theme.white};
+  border: 1px solid ${props => props.theme.darkestgrey};
+  text-align: center;
+  font-size: 0.6em;
+  font-weight: 600;
 `;
 
 const TableBody = styled.div`
   display: grid;
   grid-row-start: 2;
   grid-column-start: 2;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(19, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   justify-items: stretch;
   align-items: stretch;
   grid-gap: 1px;
@@ -85,7 +25,7 @@ class TableDisplay extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      days: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
+      days: ["TIME / DAY", "MON", "TUE", "WED", "THU", "FRI"],
       cells: [
         "8:30AM",
         "9:00AM",
@@ -105,9 +45,11 @@ class TableDisplay extends Component {
         "4:00PM",
         "4:30PM",
         "5:00PM",
-        "5:30PM"
+        "5:30PM",
+        "6:00PM"
       ],
-      schedule: []
+      schedule: [],
+      colorCode: []
     };
     this.updateSchedule = this.updateSchedule.bind(this);
   }
@@ -129,35 +71,41 @@ class TableDisplay extends Component {
   };
 
   updateSchedule = cc => {
-    this.setState({
-      schedule: cc
+    let sortedByDay = [this.state.cells.slice(0, 19), [], [], [], [], []];
+    let subjects = [];
+    cc.forEach(item => {
+      if (subjects.indexOf(item.professors) < 0) {
+        let colorCode = [item.professors, Math.floor(Math.random() * 361)];
+        subjects.push(colorCode);
+      }
+      sortedByDay[item.day].push(item);
     });
+    this.setState({
+      schedule: sortedByDay,
+      colorCode: subjects
+    });
+    console.log(this.state.colorCode);
   };
 
   render() {
     return (
       <React.Fragment>
-        <Table>
-          <Header className="header">
-            {this.state.days.map(day => (
-              <div className="cell" key={day}>
-                <p>{day}</p>
-              </div>
-            ))}
-          </Header>
-          <TableSidebar>
-            {this.state.cells.map(cell => (
-              <div className="cell" key={cell}>
-                <p>{cell}</p>
-              </div>
-            ))}
-          </TableSidebar>
-          <TableBody>
-            {this.state.schedule.map((item, index) => (
-              <Cell key={index} data={item} times={this.state.cells} />
-            ))}
-          </TableBody>
-        </Table>
+        <TableBody>
+          {this.state.schedule.map((day, index) => (
+            <div key={index}>
+              <DayHeader className="cell">
+                <p>{this.state.days[index]}</p>
+              </DayHeader>
+              <DayCol
+                day={this.state.days}
+                data={day}
+                idx={index}
+                times={this.state.cells}
+                cc={this.state.colorCode}
+              />
+            </div>
+          ))}
+        </TableBody>
       </React.Fragment>
     );
   }

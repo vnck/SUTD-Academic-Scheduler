@@ -6,6 +6,7 @@ from flask_cors import CORS
 import sqlalchemy
 from app import app, db, bcrypt, UPLOAD_FOLDER
 from models import Account, Request, CourseClass
+import Scheduler
 import os
 
 
@@ -16,9 +17,11 @@ def login():
 
         if Account.query.filter_by(user=data['user']).first() != None and bcrypt.check_password_hash(Account.query.filter_by(user=data['user']).first().password, data['password']):
             if Account.query.filter_by(user=data['user']).first().role == 'Coordinator':
-                response = jsonify(isAuthenticated=True, isCoordinator=True)
+                response = jsonify(isAuthenticated=True,
+                                   isCoordinator=True), 200
             else:
-                response = jsonify(isAuthenticated=True, isCoordinator=False)
+                response = jsonify(isAuthenticated=True,
+                                   isCoordinator=False), 200
         else:
             return jsonify(message='invalid authentication'), 500
     return response
@@ -40,6 +43,26 @@ def get_schedule():
         }
         sched.append(cc_dict)
     return json.dumps(sched)
+
+
+@app.route('/get-schedule-status', methods=['GET'])
+def scheduler_status():
+    return jsonify(message=Scheduler.running), 200
+
+
+@app.route('/generate-schedule', methods=['GET'])
+def generate_schedule():
+    if not Scheduler.running:
+        try:
+            Scheduler.running = True
+            Scheduler.startAlgo()
+            Scheduler.running = False
+            response = jsonify(message='generating schedule'), 200
+        except:
+            response = jsonify(message='failed to generate'), 500
+    else:
+        response = jsonify(message='a scheduler is being generated'), 200
+    return response
 
 
 @app.route('/get-requests', methods=['GET'])

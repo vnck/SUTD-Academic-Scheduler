@@ -78,7 +78,7 @@ class Uploader extends Component {
       <React.Fragment>
         <Container>
           <div className="wrapper">
-            <label for="file">Upload Term (CSV)</label>
+            <label htmlFor="file">Upload Term (CSV)</label>
             <input
               ref={ref => {
                 this.uploadInput = ref;
