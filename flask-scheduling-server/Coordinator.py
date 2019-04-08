@@ -90,6 +90,8 @@ class Coordinator:
            
     
         checker = True
+        randRoomStart = None
+        randRoomEnd = None
         for roomNum in range(NUM_ROOMS):
       
                 
@@ -103,7 +105,7 @@ class Coordinator:
 
             if roomNum == NUM_ROOMS - 1:
                 randRoomEnd = roomNum
-            
+        if randRoomStart == None or randRoomEnd == None: raise Exception("Assigning CC to non freshmore class")
         if(self.slots[randRoomStart].getReq()!= self.slots[randRoomEnd].getReq()):raise Exception("random rooms does not meet req")
         randRoom = random.randint(randRoomStart,randRoomEnd)
             
