@@ -38,7 +38,7 @@ class InstFunctionContainer extends Component {
         </FlexContainer>
         {this.state.popup && (
           <PopUp handler={this.cancelPopup}>
-            <PreferenceForm />
+            <PreferenceForm handler={this.cancelPopup} />
           </PopUp>
         )}
       </React.Fragment>

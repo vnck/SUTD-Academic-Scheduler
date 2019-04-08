@@ -1,0 +1,4 @@
+User,Password,Role,Name
+user1,12345,Coordinator,"Felice Peck"
+user2,12345,Instructor,"Natalie Agus"
+user3,12345,Instructor,"David Yau"

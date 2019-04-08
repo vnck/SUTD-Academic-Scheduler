@@ -17,7 +17,6 @@ const OuterPopup = styled.div`
 `;
 
 const InnerPopup = styled.div`
-  min-width: 60%;
   background: white;
   display: flex;
   flex-direction: column;
@@ -26,7 +25,7 @@ const InnerPopup = styled.div`
 `;
 
 const Container = styled.div`
-  width: 60%;
+  width: 100%;
   padding: 1em;
 `;
 

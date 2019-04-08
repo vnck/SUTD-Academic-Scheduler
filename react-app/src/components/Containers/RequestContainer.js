@@ -21,31 +21,75 @@ class RequestContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      requests: [
-        {
-          day: "Monday",
-          requester: "John. O",
-          startTime: "8.00AM",
-          endTime: "9.00AM",
-          reason: "Commutation in the morning."
-        },
-        {
-          day: "Wednesday",
-          requester: "John. O",
-          startTime: "4.00PM",
-          endTime: "5.00PM",
-          reason: "Family"
-        }
-      ]
+      requests: []
     };
+    this.remRequest = this.remRequest.bind(this);
+    this.updateRequests = this.updateRequests.bind(this);
   }
+
+  componentDidMount = () => {
+    var that = this;
+    fetch("http://localhost:5000/get-requests", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      }
+    })
+      .then(result => result.json())
+      .then(items => {
+        var requests = [];
+        for (var i = 0; i < items.length; i++) {
+          var req = {
+            id: items[i]["id"],
+            day: items[i]["day"],
+            requester: items[i]["requester"],
+            startTime: items[i]["startTime"],
+            endTime: items[i]["endTime"],
+            reason: items[i]["reason"],
+            status: items[i]["status"]
+          };
+          requests.push(req);
+        }
+        that.updateRequests(requests);
+      });
+  };
+
+  updateRequests = reqs => {
+    this.setState({
+      requests: reqs
+    });
+  };
+
+  remRequest = async id => {
+    //try {
+    //// authentication API
+    //fetch("http://localhost:5000/del-request", {
+    //method: "POST",
+    //headers: {
+    //Accept: "application/json",
+    //"Content-Type": "application/json"
+    //},
+    //body: JSON.stringify({
+    //id: this.state.id
+    //})
+    //});
+    //var newReqls = this.state.requests.filter(r => r.id === id);
+    //this.setState({
+    //requests: newReqls
+    //});
+    //} catch (e) {
+    //alert(e);
+    //}
+  };
+
   render() {
     return (
       <React.Fragment>
         <FlexContainer>
           {this.state.requests.map((request, index) => (
             <FlexChild key={request.requester + index}>
-              <RequestCard request={request} />
+              <RequestCard request={request} remRequest={this.remRequest} />
             </FlexChild>
           ))}
         </FlexContainer>

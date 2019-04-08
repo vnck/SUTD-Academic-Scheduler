@@ -5,6 +5,7 @@ const Container = styled.div`
   margin-top: 1rem;
 
   button {
+    width: 100%;
     padding: 1rem;
     border: none;
     text-align: center;
@@ -36,7 +37,7 @@ class AddEvent extends Component {
   }
 
   confirmRequest = () => {
-    alert("Add an Event");
+    this.props.handler();
   };
 
   render() {

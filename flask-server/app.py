@@ -1,13 +1,13 @@
-from flask import Flask, render_template
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
+from flask_cors import CORS
 
-app = Flask(__name__, static_folder="../static/static",
-            template_folder="../static")
+UPLOAD_FOLDER = "./files"
 
-
-@app.route("/hello")
-def hello():
-    return "Hello World!"
-
-
-if __name__ == "__main__":
-    app.run()
+app = Flask(__name__)
+CORS(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+bcrypt = Bcrypt(app)
+db = SQLAlchemy(app)
