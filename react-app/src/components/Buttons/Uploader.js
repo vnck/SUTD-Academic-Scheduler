@@ -65,7 +65,7 @@ class Uploader extends Component {
       body: data
     }).then(response => {
       this.uploadInput.value = "";
-      if (response.statusText == "OK") {
+      if (response.statusText === "OK") {
         alert("File uploaded succesfully");
       } else {
         alert("File failed to upload");

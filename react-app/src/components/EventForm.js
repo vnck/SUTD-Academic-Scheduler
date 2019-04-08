@@ -44,11 +44,6 @@ const StyledSelect = styled.select`
   }
 `;
 
-const StyledInput = styled.textarea`
-  width: 100%;
-  margin: 1em 0;
-`;
-
 const TabContainer = styled.div`
   width: 100%;
   display: flex;

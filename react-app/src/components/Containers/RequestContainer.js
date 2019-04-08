@@ -17,6 +17,14 @@ const FlexChild = styled.div`
   padding: 0.2em;
 `;
 
+const EmptyContainer = styled(FlexChild)`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+`;
+
 class RequestContainer extends Component {
   constructor(props) {
     super(props);
@@ -33,7 +41,7 @@ class RequestContainer extends Component {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        Accept: "application/json"
       }
     })
       .then(result => result.json())
@@ -87,6 +95,11 @@ class RequestContainer extends Component {
     return (
       <React.Fragment>
         <FlexContainer>
+          {this.state.requests.length === 0 && (
+            <EmptyContainer>
+              <p>No requests.</p>
+            </EmptyContainer>
+          )}
           {this.state.requests.map((request, index) => (
             <FlexChild key={request.requester + index}>
               <RequestCard request={request} remRequest={this.remRequest} />

@@ -52,6 +52,7 @@ class Header extends Component {
     return (
       <StyledHeader>
         <Title href="/">SUTD Scheduler</Title>
+        <p>Welcome, {this.props.name}</p>
         <LogoutButton onClick={this.props.handleLogout}>LOG OUT</LogoutButton>
       </StyledHeader>
     );

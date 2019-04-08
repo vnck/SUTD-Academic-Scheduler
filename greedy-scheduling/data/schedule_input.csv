@@ -1,9 +1,0 @@
-Term,Type,Code,Name,Lead,Classes,Class Size,Cohort Size,Class Labels,Common Label,Components,Room Types
-3,Freshmore,"10.009",Digital World,Oka Kurniawan,10,50,500,F,,"CBL(1.5), CBL(2), CBL(2)",CBL:CC
-5,Core,"50.034",Introduction to Probability and Statistics,"Subhajit Datta,
-Alexander Binder, Tony Quek",3,50,150,CI,LI,"LEC(1.5), LEC(1.5), CBL(2)","CBL:CC,LEC:LT"
-5,Core,"50.003",Elements of Software Construction,"Sun Jun, Sudipta",3,50,150,CI,,"CBL(1.5), CBL(1.5), CBL(2)",CBL:CC
-5,Core,"50.005",Computer System Engineering,"David Yau, Jit Biswas",3,50,150,CI,,"CBL(1.5), CBL(1.5), LAB(2)","CBL:CC,LAB:LT"
-7,Elective,"50.006",User Interface Design and Implementation,Hyowon Lee,1,50,50,CI,,"CBL(1.5), CBL(1.5), CBL(2)",CBL:CC
-7,Elective,"50.017",Graphics & Visualisation,Yeung Sai-Kit,1,50,50,CI,,"CBL(1.5), CBL(1.5), CBL(2)",CBL:CC
-7,Elective,"50.012",Security,"Nils Ole Tippenhauer, Martin Ochoa",2,50,100,CI,,"CBL(1.5), CBL(1.5), LAB(2)","CBL:CC,LAB:LEET"

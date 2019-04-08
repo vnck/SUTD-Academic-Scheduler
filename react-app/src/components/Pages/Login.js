@@ -82,11 +82,10 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    this.props.userHasAuthenticated(true);
+    // this.props.userHasAuthenticated(true);
     // this.props.history.push("/instructor-home");
-
-    this.props.userIsCoordinator(true);
-    this.props.history.push("/coordinator-home");
+    // this.props.userIsCoordinator(true);
+    // this.props.history.push("/coordinator-home");
   }
 
   validateForm = () => {
@@ -128,6 +127,7 @@ class Login extends Component {
           if (data.isAuthenticated) {
             that.props.userHasAuthenticated(data.isAuthenticated);
             that.props.userIsCoordinator(data.isCoordinator);
+            that.props.setName(data.name);
 
             if (data.isCoordinator) {
               that.props.history.push("/coordinator-home");

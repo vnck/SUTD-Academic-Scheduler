@@ -50,7 +50,6 @@ class GeneratorButton extends Component {
   }
 
   componentDidMount = () => {
-    var that = this;
     fetch("http://localhost:5000/get-schedule-status", {
       method: "GET",
       headers: {
@@ -74,7 +73,6 @@ class GeneratorButton extends Component {
       generate_status: "Generating Schedule...",
       generate_button_disabled: true
     });
-    var that = this;
     fetch("http://localhost:5000/generate-schedule", {
       method: "GET",
       headers: {
@@ -82,7 +80,8 @@ class GeneratorButton extends Component {
         Accept: "application/json"
       }
     }).then(response => {
-      if (response.status == 200) {
+      console.log(response);
+      if (response.status === 200) {
         this.setState({
           generate_status: "Generate New Schedule",
           generate_button_disabled: false
@@ -93,7 +92,7 @@ class GeneratorButton extends Component {
 
   confirmRequest = () => {
     var r = window.confirm("Are you sure?\nThis action cannot be undone.");
-    if (r == true) {
+    if (r === true) {
       this.generateSchedule();
     }
   };

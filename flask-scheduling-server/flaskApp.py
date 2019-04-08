@@ -17,10 +17,11 @@ def login():
 
         if Account.query.filter_by(user=data['user']).first() != None and bcrypt.check_password_hash(Account.query.filter_by(user=data['user']).first().password, data['password']):
             if Account.query.filter_by(user=data['user']).first().role == 'Coordinator':
-                response = jsonify(isAuthenticated=True,
+                response = jsonify(name=Account.query.filter_by(user=data['user']).first().name,
+                                   isAuthenticated=True,
                                    isCoordinator=True), 200
             else:
-                response = jsonify(isAuthenticated=True,
+                response = jsonify(name=Account.query.filter_by(user=data['user']).first().name, isAuthenticated=True,
                                    isCoordinator=False), 200
         else:
             return jsonify(message='invalid authentication'), 500

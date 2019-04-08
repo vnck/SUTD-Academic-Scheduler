@@ -12,6 +12,7 @@ class Account(db.Model):
     password = db.Column(db.String)
     name = db.Column(db.String)
     role = db.Column(db.String)
+    logged = db.Column(db.Boolean, default=False)
 
 
 class Course(db.Model):
@@ -40,6 +41,7 @@ class Professor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     courses = db.Column(db.String)
+    colorCode = db.Column(db.Integer)
 
     day = db.Column(db.Integer)
     startTime = db.Column(db.Float)
@@ -156,19 +158,23 @@ def createDB():
     df_hardblocks = pd.read_csv("data/hard_blocks.csv")
     df_accounts = pd.read_csv("data/accounts.csv")
 
+    colors = list(range(0, 360, 10))
+    random_colors = random.sample(colors, len(colors))
+
     for row in df_accounts.iterrows():
         hash_pass = bcrypt.generate_password_hash(str(row[1]['Password']))
         acc = Account(user=row[1]['User'], password=hash_pass,
                       role=row[1]['Role'], name=row[1]['Name'])
         db.session.add(acc)
 
-    for row in df_professors.iterrows():
-        prof = Professor(name=row[1]['Name'], courses=row[1]['Courses'])
+    for index, row in df_professors.iterrows():
+        prof = Professor(name=row['Name'], courses=row['Courses'],
+                         colorCode=random_colors[index])
         db.session.add(prof)
 
-    for row in df_courses.iterrows():
-        course = Course(course=row[1]['Course'], classes=row[1]
-                        ['Class'], colorCode=random.randint(0, 360))
+    for index, row in df_courses.iterrows():
+        course = Course(course=row['Course'], classes=row['Class'],
+                        colorCode=random_colors[index])
         db.session.add(course)
 
     # for row in df_rooms.iterrows():

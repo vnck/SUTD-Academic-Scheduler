@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const Container = styled.div`
   padding: 0.1em 0;
-  border-radius: ${props => (props.color ? "10px" : "")};
+  border-radius: ${props => (props.color != null ? "10px" : "")};
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -41,8 +41,25 @@ class Cell extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.color);
     if (this.props.data) {
+      this.setState({
+        course: this.props.data.course,
+        day: this.props.data.day,
+        endTime: (this.props.data.endTime - 8.5) * 2,
+        professors: this.props.data.professors,
+        room: this.props.data.room,
+        startTime: (this.props.data.startTime - 8.5) * 2,
+        studentGroups: this.props.data.studentGroups,
+        timing:
+          this.props.times[(this.props.data.startTime - 8.5) * 2] +
+          "-" +
+          this.props.times[(this.props.data.endTime - 8.5) * 2]
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.data !== this.props.data) {
       this.setState({
         course: this.props.data.course,
         day: this.props.data.day,

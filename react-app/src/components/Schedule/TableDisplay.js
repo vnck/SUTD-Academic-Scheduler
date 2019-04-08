@@ -88,9 +88,16 @@ class TableDisplay extends Component {
     })
       .then(result => result.json())
       .then(schedule => {
-        that.updateSchedule(schedule);
-        that.updateFilters(schedule);
-        console.log(schedule);
+        let filtered_schedule;
+        if (this.props.isCoordinator) {
+          filtered_schedule = schedule;
+        } else {
+          filtered_schedule = schedule.filter(
+            items => items.professors === this.props.name
+          );
+        }
+        that.updateSchedule(filtered_schedule);
+        that.updateFilters(filtered_schedule);
       });
 
     fetch("http://localhost:5000/get-course-colors", {
@@ -115,7 +122,6 @@ class TableDisplay extends Component {
     this.setState({
       colorCode: colorCode
     });
-    console.log(this.state.colorCode);
   };
 
   updateSchedule = cc => {
@@ -170,21 +176,25 @@ class TableDisplay extends Component {
 
   setFilter = event => {
     let opt = event.target.value;
-    if (this.state.profs.includes(opt)) {
+    if (opt === "") {
+      this.setState({
+        profFilter: "",
+        coursesFilter: "",
+        studentGroupsFilter: ""
+      });
+    } else if (this.state.profs.includes(opt)) {
       this.setState({
         profFilter: opt,
         coursesFilter: "",
         studentGroupsFilter: ""
       });
-    }
-    if (this.state.courses.includes(opt)) {
+    } else if (this.state.courses.includes(opt)) {
       this.setState({
         profFilter: "",
         coursesFilter: opt,
         studentGroupsFilter: ""
       });
-    }
-    if (this.state.studentGroups.includes(opt)) {
+    } else if (this.state.studentGroups.includes(opt)) {
       this.setState({
         profFilter: "",
         coursesFilter: "",
@@ -194,24 +204,30 @@ class TableDisplay extends Component {
   };
 
   render() {
+    let ProfFilter;
+    if (this.props.isCoordinator) {
+      ProfFilter = (
+        <FilterContainerChild>
+          <p>Professors: </p>
+          <select onChange={this.setFilter} value={this.state.profFilter}>
+            <option />
+            {this.state.profs.map((prof, index) => (
+              <option key={index}>{prof}</option>
+            ))}
+          </select>
+        </FilterContainerChild>
+      );
+    }
     return (
       <React.Fragment>
         <FilterContainer>
-          <FilterContainerChild>
-            <p>Professors: </p>
-            <select onChange={this.setFilter} value={this.state.profFilter}>
-              <option />
-              {this.state.profs.map((prof, index) => (
-                <option>{prof}</option>
-              ))}
-            </select>
-          </FilterContainerChild>
+          {ProfFilter}
           <FilterContainerChild>
             <p>Courses: </p>
             <select onChange={this.setFilter} value={this.state.coursesFilter}>
               <option />
               {this.state.courses.map((course, index) => (
-                <option>{course}</option>
+                <option key={index}>{course}</option>
               ))}
             </select>
           </FilterContainerChild>
@@ -223,7 +239,7 @@ class TableDisplay extends Component {
             >
               <option />
               {this.state.studentGroups.map((sg, index) => (
-                <option>{sg}</option>
+                <option key={index}>{sg}</option>
               ))}
             </select>
           </FilterContainerChild>
@@ -240,6 +256,11 @@ class TableDisplay extends Component {
                 idx={index}
                 times={this.state.cells}
                 cc={this.state.colorCode}
+                filter={[
+                  this.state.profFilter,
+                  this.state.coursesFilter,
+                  this.state.studentGroupsFilter
+                ]}
               />
             </div>
           ))}
