@@ -21,6 +21,20 @@ const TableBody = styled.div`
   background-color: ${props => props.theme.grey};
 `;
 
+const FilterContainer = styled.div`
+  display: flex;
+  width: 80%;
+  justify-content: center;
+  padding: 0.6rem;
+`;
+
+const FilterContainerChild = styled.div`
+  padding: 0 3rem;
+  display: flex;
+  p {
+    margin-right: 0.4rem;
+  }
+`;
 class TableDisplay extends Component {
   constructor(props) {
     super(props);
@@ -49,10 +63,18 @@ class TableDisplay extends Component {
         "6:00PM"
       ],
       schedule: [],
-      colorCode: []
+      colorCode: [],
+      profs: [],
+      courses: [],
+      studentGroups: [],
+      profFilter: "",
+      coursesFilter: "",
+      studentGroupsFilter: ""
     };
+
     this.updateSchedule = this.updateSchedule.bind(this);
     this.updateColorCodes = this.updateColorCodes.bind(this);
+    this.updateFilters = this.updateFilters.bind(this);
   }
 
   componentDidMount = () => {
@@ -67,6 +89,7 @@ class TableDisplay extends Component {
       .then(result => result.json())
       .then(schedule => {
         that.updateSchedule(schedule);
+        that.updateFilters(schedule);
         console.log(schedule);
       });
 
@@ -105,9 +128,106 @@ class TableDisplay extends Component {
     });
   };
 
+  updateFilters = cc => {
+    let profs = [];
+    let courses = [];
+    let studentGroups = [];
+    cc.forEach(cc => {
+      if (cc.professors.includes(",")) {
+        let profls = cc.professors.split(",");
+        profls.forEach(prof => {
+          if (!profs.includes(prof)) {
+            profs.push(prof);
+          }
+        });
+      } else {
+        if (!profs.includes(cc.professors)) {
+          profs.push(cc.professors);
+        }
+      }
+      if (cc.studentGroups.includes(",")) {
+        let sGls = cc.studentGroups.split(",");
+        sGls.forEach(sg => {
+          if (!sGls.includes(sg)) {
+            sGls.push(sg);
+          }
+        });
+      } else {
+        if (!studentGroups.includes(cc.studentGroups)) {
+          studentGroups.push(cc.studentGroups);
+        }
+      }
+      if (!courses.includes(cc.course)) {
+        courses.push(cc.course);
+      }
+    });
+    this.setState({
+      profs: profs,
+      courses: courses,
+      studentGroups: studentGroups
+    });
+  };
+
+  setFilter = event => {
+    let opt = event.target.value;
+    if (this.state.profs.includes(opt)) {
+      this.setState({
+        profFilter: opt,
+        coursesFilter: "",
+        studentGroupsFilter: ""
+      });
+    }
+    if (this.state.courses.includes(opt)) {
+      this.setState({
+        profFilter: "",
+        coursesFilter: opt,
+        studentGroupsFilter: ""
+      });
+    }
+    if (this.state.studentGroups.includes(opt)) {
+      this.setState({
+        profFilter: "",
+        coursesFilter: "",
+        studentGroupsFilter: opt
+      });
+    }
+  };
+
   render() {
     return (
       <React.Fragment>
+        <FilterContainer>
+          <FilterContainerChild>
+            <p>Professors: </p>
+            <select onChange={this.setFilter} value={this.state.profFilter}>
+              <option />
+              {this.state.profs.map((prof, index) => (
+                <option>{prof}</option>
+              ))}
+            </select>
+          </FilterContainerChild>
+          <FilterContainerChild>
+            <p>Courses: </p>
+            <select onChange={this.setFilter} value={this.state.coursesFilter}>
+              <option />
+              {this.state.courses.map((course, index) => (
+                <option>{course}</option>
+              ))}
+            </select>
+          </FilterContainerChild>
+          <FilterContainerChild>
+            <p>Student Group: </p>
+            <select
+              onChange={this.setFilter}
+              value={this.state.studentGroupsFilter}
+            >
+              <option />
+              {this.state.studentGroups.map((sg, index) => (
+                <option>{sg}</option>
+              ))}
+            </select>
+          </FilterContainerChild>
+        </FilterContainer>
         <TableBody>
           {this.state.schedule.map((day, index) => (
             <div key={index}>
