@@ -52,6 +52,7 @@ class TableDisplay extends Component {
       colorCode: []
     };
     this.updateSchedule = this.updateSchedule.bind(this);
+    this.updateColorCodes = this.updateColorCodes.bind(this);
   }
 
   componentDidMount = () => {
@@ -68,23 +69,40 @@ class TableDisplay extends Component {
         that.updateSchedule(schedule);
         console.log(schedule);
       });
+
+    fetch("http://localhost:5000/get-course-colors", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      }
+    })
+      .then(result => result.json())
+      .then(colorCodes => {
+        that.updateColorCodes(colorCodes);
+      });
+  };
+
+  updateColorCodes = cc => {
+    let colorCode = [];
+    cc.forEach(color => {
+      let colorCodeItem = [color.course, color.color];
+      colorCode.push(colorCodeItem);
+    });
+    this.setState({
+      colorCode: colorCode
+    });
+    console.log(this.state.colorCode);
   };
 
   updateSchedule = cc => {
     let sortedByDay = [this.state.cells.slice(0, 19), [], [], [], [], []];
-    let subjects = [];
     cc.forEach(item => {
-      if (subjects.indexOf(item.professors) < 0) {
-        let colorCode = [item.professors, Math.floor(Math.random() * 361)];
-        subjects.push(colorCode);
-      }
       sortedByDay[item.day].push(item);
     });
     this.setState({
-      schedule: sortedByDay,
-      colorCode: subjects
+      schedule: sortedByDay
     });
-    console.log(this.state.colorCode);
   };
 
   render() {

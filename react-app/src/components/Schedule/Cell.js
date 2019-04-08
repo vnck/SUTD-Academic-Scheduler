@@ -69,6 +69,7 @@ class Cell extends Component {
         >
           <p className="b">{this.state.course}</p>
           <p className="b">{this.state.course}</p>
+          <p>{this.state.studentGroups}</p>
           <p>{this.state.room}</p>
           <p className="t">{this.state.timing}</p>
           <p>{this.state.professors}</p>

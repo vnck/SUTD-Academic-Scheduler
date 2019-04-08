@@ -5,7 +5,7 @@ from flask_cors import CORS
 #from flask_bcrypt import Bcrypt
 import sqlalchemy
 from app import app, db, bcrypt, UPLOAD_FOLDER
-from models import Account, Request, CourseClass
+from models import Account, Request, CourseClass, Course
 import Scheduler
 import os
 
@@ -48,6 +48,19 @@ def get_schedule():
 @app.route('/get-schedule-status', methods=['GET'])
 def scheduler_status():
     return jsonify(message=Scheduler.running), 200
+
+
+@app.route('/get-course-colors', methods=['GET'])
+def get_course_colors():
+    courses = Course.query.all()
+    colorCodes = []
+    for course in courses:
+        cc = {
+            "course": course.course,
+            "color": course.colorCode
+        }
+        colorCodes.append(cc)
+    return json.dumps(colorCodes)
 
 
 @app.route('/generate-schedule', methods=['GET'])

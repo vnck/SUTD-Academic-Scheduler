@@ -1,6 +1,8 @@
 from app import db, bcrypt
 import sqlalchemy
 import pandas as pd
+import random
+
 
 class Account(db.Model):
     __tablename__ = 'Accounts'
@@ -18,6 +20,7 @@ class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     course = db.Column(db.String)
     classes = db.Column(db.String)
+    colorCode = db.Column(db.Integer)
 
     @property
     def serialize(self):
@@ -164,7 +167,8 @@ def createDB():
         db.session.add(prof)
 
     for row in df_courses.iterrows():
-        course = Course(course=row[1]['Course'], classes=row[1]['Class'])
+        course = Course(course=row[1]['Course'], classes=row[1]
+                        ['Class'], colorCode=random.randint(0, 360))
         db.session.add(course)
 
     # for row in df_rooms.iterrows():
@@ -189,6 +193,7 @@ def createDB():
         db.session.add(hb)
 
     db.session.commit()
+
 
 def existDB():
     """

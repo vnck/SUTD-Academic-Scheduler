@@ -45,7 +45,7 @@ class DayCol extends Component {
           key={index}
           data={item}
           times={this.props.times}
-          color={this.getColorValue(item.professors)}
+          color={this.getColorValue(item.course)}
         />
       );
     } else {
