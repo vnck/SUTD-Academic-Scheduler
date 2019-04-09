@@ -21,7 +21,7 @@ class Coordinator:
     stgDb = []
     hardBlocksDb = []
     roomDic = {}
-
+    requests = []
     def __init__(self):
         self.days = [1, 2, 3, 4, 5]
         self.slots = []
@@ -138,6 +138,15 @@ class Coordinator:
             for prof in courseClass.professors:
                 prof.slots.append(self.slots[position])
             self.slots[position].counter += 1
+    def assignRequests(self):
+        for req in Coordinator.requests:
+            prof = self.getProf(req.requester)
+            day = req.day
+            startTime = req.startTime
+            endTime = req.endTime
+
+            prof.requests.append((day,startTime,endTime))
+
 
     def getProf(self, name):
         for prof in self.professors:
@@ -195,14 +204,11 @@ class Coordinator:
             self.studentGroups.append(studentGroup)
 
     def generateProfs(self):
+        
         profs = Coordinator.profDb
         for prof in profs:
             name = prof.name
             p = Professor(name)
-            # setting soft constraints
-            p.day = prof.day
-            p.startTime = prof.startTime
-            p.endTime = prof.endTime
 
             for courseCode in prof.courses.split(","):
                 course = self.getCourse(courseCode)
@@ -292,6 +298,7 @@ class Coordinator:
         self.generateSlots()
         self.generateCourses()
         self.generateProfs()
+        self.assignRequests()
         self.generateStudentGroups()
         self.generateCourseClasses()
         self.appendSTGtoCC()
@@ -307,3 +314,4 @@ class Coordinator:
         Coordinator.profDb = models.Professor.query.all()
         Coordinator.stgDb = models.StudentGroup.query.all()
         Coordinator.hardBlocksDb = models.HardBlocks.query.all()
+        Coordinator.requests = models.Request.query.all()
