@@ -48,13 +48,20 @@ const Container = styled.div`
 `;
 
 class CoordinatorHome extends Component {
+  constructor(props) {
+    super(props);
+    this.requestChild = React.createRef();
+    this.updateRequests = this.updateRequests.bind(this);
+  }
+
+  updateRequests = () => {
+    this.requestChild.current.updateRequests();
+  };
+
   render() {
     return (
       <React.Fragment>
-        <Header
-          name={this.props.name}
-          handleLogout={this.props.handleLogout}
-        />
+        <Header name={this.props.name} handleLogout={this.props.handleLogout} />
         <ContentBody>
           <FlexContainer>
             <FlexChild>
@@ -65,12 +72,12 @@ class CoordinatorHome extends Component {
               />
             </FlexChild>
             <FlexChildW>
-              <CoordFunctionContainer />
+              <CoordFunctionContainer reqHandler={this.updateRequests} />
             </FlexChildW>
           </FlexContainer>
           <Container>
             <p className="header">Requests</p>
-            <RequestContainer />
+            <RequestContainer ref={this.requestChild} />
           </Container>
         </ContentBody>
       </React.Fragment>

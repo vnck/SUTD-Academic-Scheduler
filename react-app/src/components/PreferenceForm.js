@@ -221,22 +221,24 @@ class PreferenceForm extends Component {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-		  daySelect: that.state.daySelect,
-		  requester: this.props.name,
+          daySelect: that.state.daySelect,
+          requester: this.props.name,
           weekly: that.state.weekly,
           startTime: that.state.startTime,
           endTime: that.state.endTime,
           reason: that.state.reason
         })
-      })
-        //.then(response => {
-          //return response.json();
-        //})
-        //.then(data => alert(data));
+      }).then(() => {
+        this.props.popUpHandler();
+        this.props.reqHandler();
+      });
+      //.then(response => {
+      //return response.json();
+      //})
+      //.then(data => alert(data));
     } catch (e) {
       alert(e);
     }
-    this.props.handler();
   };
 
   render() {
@@ -244,7 +246,7 @@ class PreferenceForm extends Component {
       <React.Fragment>
         <FlexContainer>
           <FlexContainer>
-            <p style={{ "margin-bottom": "1rem", "font-weight": "600" }}>
+            <p style={{ marginBottom: "1rem", fontWeight: "600" }}>
               Add Schedule Block
             </p>
           </FlexContainer>
@@ -264,8 +266,10 @@ class PreferenceForm extends Component {
               <FlexChild>
                 <p>Day:</p>
                 <StyledSelect onChange={this.onSelectDayChange}>
-                  {this.state.dayOptions.map(dayOption => (
-                    <option value={dayOption}>{dayOption}</option>
+                  {this.state.dayOptions.map((dayOption, index) => (
+                    <option key={index} value={dayOption}>
+                      {dayOption}
+                    </option>
                   ))}
                 </StyledSelect>
               </FlexChild>
@@ -274,14 +278,18 @@ class PreferenceForm extends Component {
               <FlexChild>
                 <p>Week:</p>
                 <StyledSelect onChange={this.onSelectWeekChange}>
-                  {this.state.weekOptions.map(weekOption => (
-                    <option value={weekOption}>{weekOption}</option>
+                  {this.state.weekOptions.map((weekOption, index) => (
+                    <option key={index} value={weekOption}>
+                      {weekOption}
+                    </option>
                   ))}
                 </StyledSelect>
                 <p>Day:</p>
                 <StyledSelect onChange={this.onSelectDayChange}>
-                  {this.state.dayOptions.map(dayOption => (
-                    <option value={dayOption}>{dayOption}</option>
+                  {this.state.dayOptions.map((dayOption, index) => (
+                    <option key={index} value={dayOption}>
+                      {dayOption}
+                    </option>
                   ))}
                 </StyledSelect>
               </FlexChild>
@@ -289,16 +297,20 @@ class PreferenceForm extends Component {
             <FlexChild>
               <p>Start Time:</p>
               <StyledSelect onChange={this.onSelectStartChange}>
-                {this.state.timeOptions.map(timeOption => (
-                  <option value={timeOption}>{timeOption}</option>
+                {this.state.timeOptions.map((timeOption, idx) => (
+                  <option key={idx} value={timeOption}>
+                    {timeOption}
+                  </option>
                 ))}
               </StyledSelect>
             </FlexChild>
             <FlexChild>
               <p>End Time:</p>
               <StyledSelect onChange={this.onSelectEndChange}>
-                {this.state.timeOptions.map(timeOption => (
-                  <option value={timeOption}>{timeOption}</option>
+                {this.state.timeOptions.map((timeOption, idx) => (
+                  <option key={idx} value={timeOption}>
+                    {timeOption}
+                  </option>
                 ))}
               </StyledSelect>
             </FlexChild>

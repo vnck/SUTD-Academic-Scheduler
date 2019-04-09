@@ -13,10 +13,6 @@ const FlexContainer = styled.div`
   padding: 0.4rem;
 `;
 
-const FlexChild = styled.div`
-  padding: 0.2em;
-`;
-
 class RequestContainer extends Component {
   constructor(props) {
     super(props);
@@ -25,9 +21,15 @@ class RequestContainer extends Component {
     };
     this.remRequest = this.remRequest.bind(this);
     this.updateRequests = this.updateRequests.bind(this);
+
+    this.RequestCardChild = React.createRef();
   }
 
   componentDidMount = () => {
+    this.updateRequests();
+  };
+
+  updateRequests = () => {
     var that = this;
     fetch("http://localhost:5000/get-requests", {
       method: "GET",
@@ -49,32 +51,30 @@ class RequestContainer extends Component {
             reason: items[i]["reason"],
             status: items[i]["status"]
           };
-          requests.push(req);
-          //requests.push(req);
-          console.log(requests);
+          if (this.props.name != null) {
+            if (req.requester === this.props.name) {
+              requests.push(req);
+            }
+          } else {
+            requests.push(req);
+          }
         }
-        that.updateRequests(requests);
-        console.log(that.state.requests);
+        that.setState({
+          requests: requests
+        });
       });
-  };
-  
-  updateRequests = (reqs) => {
-	  this.setState({
-		  requests: reqs
-	  });
   };
 
   remRequest = async id => {
-	console.log(id);
-    try { 
-      var newReqls = this.state.requests.filter(r => r.id === id-1);
+    try {
+      let newReqls = this.state.requests.filter(r => r.id !== id);
       this.setState({
         requests: newReqls
       });
+      this.RequestCardChild.current.setRequests();
     } catch (e) {
       alert(e);
     }
-    
   };
 
   render() {
@@ -82,9 +82,13 @@ class RequestContainer extends Component {
       <React.Fragment>
         <FlexContainer>
           {this.state.requests.map((request, index) => (
-            <FlexChild key={request.requester + index}>
-              <RequestCard request={request} remRequest={this.remRequest} />
-            </FlexChild>
+            <RequestCard
+              style={{ padding: "0.2em" }}
+              ref={this.RequestCardChild}
+              request={request}
+              remRequest={this.remRequest}
+              key={index}
+            />
           ))}
         </FlexContainer>
       </React.Fragment>
