@@ -12,7 +12,8 @@ class App extends Component {
     this.state = {
       isAuthenticated: false,
       isAuthenticating: true,
-      isCoordinator: false
+      isCoordinator: false,
+      name: ""
     };
   }
 
@@ -24,11 +25,20 @@ class App extends Component {
     this.setState({ isCoordinator: isCoordinator });
   };
 
+  setName = name => {
+    this.setState({ name: name });
+  };
+
+  getName = () => {
+    return this.state.name;
+  };
+
   handleLogout = async event => {
     // await logout api
     this.userHasAuthenticated(false);
     this.userIsCoordinator(false);
     this.props.history.push("/login");
+    this.setName("");
   };
 
   async componentDidMount() {
@@ -48,7 +58,9 @@ class App extends Component {
       userHasAuthenticated: this.userHasAuthenticated,
       handleLogout: this.handleLogout,
       isCoordinator: this.state.isCoordinator,
-      userIsCoordinator: this.userIsCoordinator
+      userIsCoordinator: this.userIsCoordinator,
+      setName: this.setName,
+      name: this.state.name
     };
     return (
       !this.state.isAuthenticating && (

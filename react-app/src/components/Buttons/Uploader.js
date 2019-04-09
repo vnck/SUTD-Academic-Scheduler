@@ -65,7 +65,7 @@ class Uploader extends Component {
       body: data
     }).then(response => {
       this.uploadInput.value = "";
-      if (response.statusText == "OK") {
+      if (response.statusText === "OK") {
         alert("File uploaded succesfully");
       } else {
         alert("File failed to upload");
@@ -78,7 +78,7 @@ class Uploader extends Component {
       <React.Fragment>
         <Container>
           <div className="wrapper">
-            <label for="file">Upload Term (CSV)</label>
+            <label htmlFor="file">Upload Term (CSV)</label>
             <input
               ref={ref => {
                 this.uploadInput = ref;

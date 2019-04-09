@@ -3,12 +3,12 @@ import styled from "styled-components";
 
 const Container = styled.div`
   padding: 0.1em 0;
-  border-radius: ${props => (props.color ? "10px" : "")};
+  border-radius: ${props => (props.color != null ? "10px" : "")};
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: ${props => props.color || "#fff"};
+  background-color: hsl(${props => props.color || 0}, 50%, 75%);
   p {
     font-size: 0.5em;
     text-align: center;
@@ -29,22 +29,49 @@ class Cell extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      timing: "",
-      venue: "",
-      instructor: "",
-      code: ""
+      course: "",
+      day: 0,
+      endTime: 0,
+      professors: "",
+      room: "",
+      startTime: 0,
+      studentGroups: "",
+      timing: ""
     };
   }
 
   componentDidMount() {
     if (this.props.data) {
       this.setState({
-        name: this.props.data.name,
-        timing: this.props.data.timing,
-        venue: this.props.data.venue,
-        instructor: this.props.data.instructor,
-        code: this.props.data.code
+        course: this.props.data.course,
+        day: this.props.data.day,
+        endTime: (this.props.data.endTime - 8.5) * 2,
+        professors: this.props.data.professors,
+        room: this.props.data.room,
+        startTime: (this.props.data.startTime - 8.5) * 2,
+        studentGroups: this.props.data.studentGroups,
+        timing:
+          this.props.times[(this.props.data.startTime - 8.5) * 2] +
+          "-" +
+          this.props.times[(this.props.data.endTime - 8.5) * 2]
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.data !== this.props.data) {
+      this.setState({
+        course: this.props.data.course,
+        day: this.props.data.day,
+        endTime: (this.props.data.endTime - 8.5) * 2,
+        professors: this.props.data.professors,
+        room: this.props.data.room,
+        startTime: (this.props.data.startTime - 8.5) * 2,
+        studentGroups: this.props.data.studentGroups,
+        timing:
+          this.props.times[(this.props.data.startTime - 8.5) * 2] +
+          "-" +
+          this.props.times[(this.props.data.endTime - 8.5) * 2]
       });
     }
   }
@@ -53,19 +80,16 @@ class Cell extends Component {
     return (
       <React.Fragment>
         <Container
-          color={this.props.data.color}
-          start={this.props.data.start}
-          end={this.props.data.end}
+          color={this.props.color}
+          start={this.state.startTime + 1}
+          end={this.state.endTime + 1}
         >
-          <p className="b">{this.state.code}</p>
-          <p className="b">{this.state.name}</p>
-          <p>{this.state.venue}</p>
+          <p className="b">{this.state.course}</p>
+          <p className="b">{this.state.course}</p>
+          <p>{this.state.studentGroups}</p>
+          <p>{this.state.room}</p>
           <p className="t">{this.state.timing}</p>
-          <p>
-            {this.state.instructor
-              ? "Instructors : " + this.state.instructor
-              : ""}
-          </p>
+          <p>{this.state.professors}</p>
         </Container>
       </React.Fragment>
     );

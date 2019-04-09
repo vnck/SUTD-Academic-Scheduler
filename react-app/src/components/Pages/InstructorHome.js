@@ -39,12 +39,15 @@ class InstructorHome extends Component {
   render() {
     return (
       <React.Fragment>
-        <Header handleLogout={this.props.handleLogout} />
+        <Header name={this.props.name} handleLogout={this.props.handleLogout} />
         <ContentBody>
           <FlexContainer>
             <FlexChild>
               <h2 className="subheader">Term Schedule</h2>
-              <TableDisplay />
+              <TableDisplay
+                name={this.props.name}
+                isCoordinator={this.props.isCoordinator}
+              />
             </FlexChild>
             <FlexChildW>
               <InstFunctionContainer />

@@ -44,11 +44,6 @@ const StyledSelect = styled.select`
   }
 `;
 
-const StyledInput = styled.textarea`
-  width: 100%;
-  margin: 1em 0;
-`;
-
 const TabContainer = styled.div`
   width: 100%;
   display: flex;
@@ -160,12 +155,13 @@ class EventForm extends Component {
         "6:00PM",
         "6:30PM"
       ],
+      roomOptions: ["TT1", "TT2", "TT3", "TT4"],
       weekly: true,
       startTime: "Monday",
       endTime: "8:00AM",
       daySelect: "8:00AM",
       weekSelect: "1",
-      reason: ""
+      room: ""
     };
     this.onSelectDayChange = this.onSelectDayChange.bind(this);
     this.onSelectDayChange = this.onSelectDayChange.bind(this);
@@ -173,7 +169,7 @@ class EventForm extends Component {
     this.onSelectEndChange = this.onSelectEndChange.bind(this);
     this.onSelectWeekly = this.onSelectWeekly.bind(this);
     this.onNotSelectWeekly = this.onNotSelectWeekly.bind(this);
-    this.updateReason = this.updateReason.bind(this);
+    this.onSelectRoomChange = this.onSelectRoomChange.bind(this);
     this.checkSubmit = this.checkSubmit.bind(this);
   }
 
@@ -201,8 +197,8 @@ class EventForm extends Component {
     this.setState({ endTime: e.target.value });
   };
 
-  updateReason = e => {
-    this.setState({ reason: e.target.value });
+  onSelectRoomChange = e => {
+    this.setState({ room: e.target.value });
   };
 
   checkSubmit = () => {
@@ -242,7 +238,14 @@ class EventForm extends Component {
       <React.Fragment>
         <FlexContainer>
           <FlexContainer>
-            <p style={{ "margin-bottom": "1rem", "font-weight": "600" }}>
+            <p
+              style={{
+                "margin-bottom": "1rem",
+                "font-weight": "600",
+                width: "24rem",
+                "text-align": "center"
+              }}
+            >
               Add Event Form
             </p>
           </FlexContainer>
@@ -301,15 +304,12 @@ class EventForm extends Component {
               </StyledSelect>
             </FlexChild>
             <FlexChild>
-              <p>Reasons:</p>
-              <StyledInput
-                style={{ width: "24rem" }}
-                type="text"
-                value={this.state.reason}
-                onChange={this.updateReason}
-                name="Reasons"
-                rows="4"
-              />
+              <p>Room:</p>
+              <StyledSelect onChange={this.onSelectRoomChange}>
+                {this.state.roomOptions.map(roomOption => (
+                  <option value={roomOption}>{roomOption}</option>
+                ))}
+              </StyledSelect>
             </FlexChild>
             <FlexChild>
               <StyledButton
