@@ -49,35 +49,35 @@ const StyledInput = styled.textarea`
   margin: 1em 0;
 `;
 
-// const TabContainer = styled.div`
-//   width: 100%;
-//   display: flex;
-//   justify-content: center;
-//   margin-bottom: 1rem;
-// `;
+const TabContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+`;
 
-// const TabButton = styled.div`
-//   width: 100%;
-//   text-align: center;
-//   padding: 0.4rem 1rem;
-//   border: none;
-//   background-color: ${props =>
-//     props.weekly ? props.theme.accent : props.theme.grey};
-//   color: ${props => props.theme.white};
-//   cursor: pointer;
+const TabButton = styled.div`
+  width: 100%;
+  text-align: center;
+  padding: 0.4rem 1rem;
+  border: none;
+  background-color: ${props =>
+    props.weekly ? props.theme.accent : props.theme.grey};
+  color: ${props => props.theme.white};
+  cursor: pointer;
 
-//   :hover {
-//     background-color: ${props => props.theme.accentdark};
-//   }
+  :hover {
+    background-color: ${props => props.theme.accentdark};
+  }
 
-//   :active {
-//     background-color: ${props => props.theme.accentdark};
-//   }
+  :active {
+    background-color: ${props => props.theme.accentdark};
+  }
 
-//   :focus {
-//     box-shadow: 0 0 0 2px ${props => props.theme.accentdark};
-//   }
-// `;
+  :focus {
+    box-shadow: 0 0 0 2px ${props => props.theme.accentdark};
+  }
+`;
 
 const StyledButton = styled.button`
   padding: 1rem;
@@ -221,16 +221,18 @@ class PreferenceForm extends Component {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
+		  daySelect: that.state.daySelect,
+		  requester: this.props.name,
           weekly: that.state.weekly,
           startTime: that.state.startTime,
           endTime: that.state.endTime,
-          daySelect: that.state.daySelect
+          reason: that.state.reason
         })
       })
-        .then(response => {
-          return response.json();
-        })
-        .then(data => alert(data));
+        //.then(response => {
+          //return response.json();
+        //})
+        //.then(data => alert(data));
     } catch (e) {
       alert(e);
     }
@@ -246,7 +248,7 @@ class PreferenceForm extends Component {
               Add Schedule Block
             </p>
           </FlexContainer>
-          {/* <TabContainer>
+          <TabContainer>
             <TabButton weekly={this.state.weekly} onClick={this.onSelectWeekly}>
               Day
             </TabButton>
@@ -283,16 +285,7 @@ class PreferenceForm extends Component {
                   ))}
                 </StyledSelect>
               </FlexChild>
-            )} */}
-          <FlexContainer>
-            <FlexChild>
-              <p>Day:</p>
-              <StyledSelect onChange={this.onSelectDayChange}>
-                {this.state.dayOptions.map(dayOption => (
-                  <option value={dayOption}>{dayOption}</option>
-                ))}
-              </StyledSelect>
-            </FlexChild>
+            )}
             <FlexChild>
               <p>Start Time:</p>
               <StyledSelect onChange={this.onSelectStartChange}>

@@ -50,7 +50,7 @@ class InstructorHome extends Component {
               />
             </FlexChild>
             <FlexChildW>
-              <InstFunctionContainer />
+              <InstFunctionContainer name={this.props.name} />
             </FlexChildW>
           </FlexContainer>
         </ContentBody>
