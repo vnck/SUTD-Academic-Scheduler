@@ -162,7 +162,7 @@ def startAlgo():
     Coordinator.initalizeStatic()
     print("Algorithm starts")
     start = time.time()
-    lss = geneticScheduler(1000,100,5,mutateProb=0.8,elitismOffset=5,mutateRate=0.05)
+    lss = geneticScheduler(1000,100,5,mutateProb=0.8,elitismOffset=5,mutateRate=0.015)
     print([f.fitnessValue for f in lss])
     elasped = time.time() - start
     print("time taken = {}s".format(elasped))
