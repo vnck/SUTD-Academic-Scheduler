@@ -38,7 +38,7 @@ class Professor:
                 for slot in self.slots:
                     if float(slot.day) == day:
                         if float(slot.period) <= endTime and float(slot.period) >= startTime:
-                            penalty += 0.5
+                            penalty += 0.1
                             break
         # check soft constraints
         # if self.startTime != None and self.endTime != None and self.day != None:

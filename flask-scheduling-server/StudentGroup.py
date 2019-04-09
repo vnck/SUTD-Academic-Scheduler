@@ -35,7 +35,7 @@ class StudentGroup:
             for j in range(i+1, len(self.courseClasses)):
                 if self.courseClasses[i].day == self.courseClasses[j].day\
                         and self.courseClasses[i].course == self.courseClasses[j].course:
-                    penalty += 1.25
+                    penalty += 1.1
         return penalty
 
     def __repr__(self):
