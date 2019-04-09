@@ -205,12 +205,6 @@ def existDB():
     import os
     return os.path.isfile('app.db')
 
-<<<<<<< HEAD
-
-if not existDB():
-    # if database does not exist we create it
-    createDB()
-=======
 def createTestDB(pathName):
     """
     Same as createDB but for testing purposes only
@@ -260,4 +254,3 @@ def createTestDB(pathName):
 #     #if database does not exist we create it
 #     createDB()
 
->>>>>>> GaryAlgo
