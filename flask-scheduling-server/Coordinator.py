@@ -89,6 +89,8 @@ class Coordinator:
         # print(NUM_ROOMS)
 
         checker = True
+        randRoomStart = None
+        randRoomEnd = None
         for roomNum in range(NUM_ROOMS):
 
             if self.slots[roomNum].getReq() == courseClass.req and checker:
@@ -101,16 +103,15 @@ class Coordinator:
 
             if roomNum == NUM_ROOMS - 1:
                 randRoomEnd = roomNum
-
-        if(self.slots[randRoomStart].getReq() != self.slots[randRoomEnd].getReq()):
-            raise Exception("random rooms does not meet req")
-        randRoom = random.randint(randRoomStart, randRoomEnd)
-
-        # makes sure that same lesson does not go on to the next day
-        randPeriod = random.randint(0, NUM_PERIODS-1-int((duration-0.5)/0.5))
-
-        # get random prof teaching the class
-        # guarantees that the prof teaches the class
+        if randRoomStart == None or randRoomEnd == None: raise Exception("Assigning CC to non freshmore class")
+        if(self.slots[randRoomStart].getReq()!= self.slots[randRoomEnd].getReq()):raise Exception("random rooms does not meet req")
+        randRoom = random.randint(randRoomStart,randRoomEnd)
+            
+        #makes sure that same lesson does not go on to the next day
+        randPeriod = random.randint(0,NUM_PERIODS-1-int((duration-0.5)/0.5))
+            
+        #get random prof teaching the class
+        #guarantees that the prof teaches the class
         if courseClass.req == "LEC":
             for prof in courseClass.course.professors:
                 courseClass.professors.append(prof)
@@ -184,7 +185,7 @@ class Coordinator:
                     elif req == "LEC":
                         c.studentGroups.append(stg)
                     stg.courseClasses.append(c)
-                if req == "LEC":
+                if req =="LEC":
                     self.courseClasses.append(c)
 
     def appendSTGtoCC(self):

@@ -9,10 +9,9 @@ class Professor:
 
         # list of tuples
         self.requests = []
-
+        
         self.penalty = 0
-
-    def addCourse(self, course):
+    def addCourse(self,course):
         """adds Course Object to list"""
         self._course.append(course)
         course.professors.append(self)
@@ -27,8 +26,9 @@ class Professor:
             for i in range(s+1, len(self.slots)):
                 # if day and period is the same we add
                 if self.slots[s].day == self.slots[i].day\
-                        and self.slots[s].period == self.slots[i].period:
-                    penalty += 1
+                    and self.slots[s].period == self.slots[i].period:
+                    penalty +=1
+        
 
         for tupl in self.requests:
             day = tupl[0]
@@ -38,7 +38,7 @@ class Professor:
                 for slot in self.slots:
                     if slot.day == day:
                         if slot.period <= endTime and slot.period >= startTime:
-                            penalty += 0.5
+                            penalty += 0.01
                             break
         # check soft constraints
         # if self.startTime != None and self.endTime != None and self.day != None:

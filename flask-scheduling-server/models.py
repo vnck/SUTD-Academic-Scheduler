@@ -41,6 +41,7 @@ class Professor(db.Model):
     name = db.Column(db.String)
     courses = db.Column(db.String)
     colorCode = db.Column(db.Integer)
+    satisfied = db.Column(db.Boolean)
 
     @property
     def serialize(self):
@@ -204,7 +205,52 @@ def existDB():
     import os
     return os.path.isfile('app.db')
 
+def createTestDB(pathName):
+    """
+    Same as createDB but for testing purposes only
+    """
+    db.drop_all()
+    db.create_all()
 
-if not existDB():
-    # if database does not exist we create it
-    createDB()
+    df_professors = pd.read_csv(pathName+"professors.csv", dtype=str)
+    df_courses = pd.read_csv(pathName+"courses.csv", dtype=str)
+    df_rooms = pd.read_csv(pathName+"rooms.csv", dtype=str)
+    df_student_groups = pd.read_csv(pathName+"student_groups.csv", dtype=str)
+    df_hardblocks = pd.read_csv(pathName+"hard_blocks.csv")
+
+    for row in df_professors.iterrows():
+        prof = Professor(name=row[1]['Name'], courses=row[1]['Courses'])
+        db.session.add(prof)
+
+    for row in df_courses.iterrows():
+        course = Course(course=row[1]['Course'], classes=row[1]['Class'])
+        db.session.add(course)
+
+    # for row in df_rooms.iterrows():
+    #     room = Room(cc=row[1]['CC'], lec=row[1]['LEC'],
+    #                 lab=row[1]['LAB'], tt=row[1]['TT'])
+    #     db.session.add(room)
+
+    for i in df_rooms.columns.tolist():
+        for x in df_rooms[i].dropna().tolist():
+            room = Room(name = i + x,req = i)
+            db.session.add(room)
+
+    for row in df_student_groups.iterrows():
+        sg = StudentGroup(student_group=row[1]['Student Groups'],
+                        courses=row[1]['Courses'])
+        db.session.add(sg)
+
+
+    for row in df_hardblocks.iterrows():
+        hb = HardBlocks(day=row[1]["day"],period=row[1]["period"],
+                        room =row[1]["room"],
+                        reason = row[1]["reason"])
+        db.session.add(hb)
+    
+    db.session.commit()
+
+# if not existDB():
+#     #if database does not exist we create it
+#     createDB()
+

@@ -167,6 +167,7 @@ def startAlgo():
     elasped = time.time() - start
     print("time taken = {}s".format(elasped))
     answer = sorted(lss,key = lambda coord : coord.fitnessValue)[0]
+    if answer.fitnessValue > 1: raise Exception("Hard Constraints not Satisfied")
     #key into database
     #deletes all previous data
     models.CourseClass.query.delete()
@@ -206,6 +207,7 @@ def startAlgo():
 
 
 if __name__ == "__main__":
+    models.createDB()
     startAlgo()
 
     for cc in models.CourseClass.query.all():
