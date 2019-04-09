@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import styled, { ThemeProvider } from "styled-components";
+import styled from "styled-components";
 import Header from "../Containers/Header";
 import TableDisplay from "../Schedule/TableDisplay";
 import CoordFunctionContainer from "../Containers/CoordFunctionContainer";
@@ -48,23 +48,48 @@ const Container = styled.div`
 `;
 
 class CoordinatorHome extends Component {
+  constructor(props) {
+    super(props);
+    this.requestChild = React.createRef();
+    this.updateRequests = this.updateRequests.bind(this);
+    this.tableChild = React.createRef();
+  }
+
+  updateTable = () => {
+    this.tableChild.current.updateTable();
+  };
+
+  updateRequests = () => {
+    this.requestChild.current.updateRequests();
+  };
+
   render() {
     return (
       <React.Fragment>
-        <Header handleLogout={this.props.handleLogout} />
+        <Header
+          name={this.props.name}
+          isCoordinator={this.props.isCoordinator}
+          handleLogout={this.props.handleLogout}
+        />
         <ContentBody>
           <FlexContainer>
             <FlexChild>
               <h2 className="subheader">Term Schedule</h2>
-              <TableDisplay />
+              <TableDisplay
+                name={this.props.name}
+                isCoordinator={this.props.isCoordinator}
+              />
             </FlexChild>
             <FlexChildW>
-              <CoordFunctionContainer />
+              <CoordFunctionContainer reqHandler={this.updateRequests} />
             </FlexChildW>
           </FlexContainer>
           <Container>
             <p className="header">Requests</p>
-            <RequestContainer />
+            <RequestContainer
+              isCoordinator={this.props.isCoordinator}
+              ref={this.requestChild}
+            />
           </Container>
         </ContentBody>
       </React.Fragment>

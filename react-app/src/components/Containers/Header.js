@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import { withRouter } from "react-router-dom";
 
 const StyledHeader = styled.div`
   background-color: ${props => props.theme.accent};
@@ -20,6 +21,7 @@ const Title = styled.a`
   margin-left: 10rem;
   color: ${props => props.theme.white};
   text-decoration: none;
+  cursor: pointer;
   @media screen and (max-width: 600px) {
     font-size: 1rem;
     text-align: left;
@@ -46,16 +48,26 @@ class Header extends Component {
     this.state = {
       isHide: false
     };
+    this.refresh = this.refresh.bind(this);
   }
+
+  refresh = () => {
+    if (this.props.isCoordinator) {
+      this.props.history.push("/coordinator-home");
+    } else {
+      this.props.history.push("/instructor-home");
+    }
+  };
 
   render() {
     return (
       <StyledHeader>
-        <Title href="/">SUTD Scheduler</Title>
+        <Title onClick={this.refresh}>SUTD Scheduler</Title>
+        <p>Welcome, {this.props.name}</p>
         <LogoutButton onClick={this.props.handleLogout}>LOG OUT</LogoutButton>
       </StyledHeader>
     );
   }
 }
 
-export default Header;
+export default withRouter(Header);

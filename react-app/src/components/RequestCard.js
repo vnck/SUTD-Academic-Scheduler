@@ -78,25 +78,79 @@ class RequestCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      id: "",
       day: "",
       requester: "",
       startTime: "",
       endTime: "",
-      reason: ""
+      reason: "",
+      status: ""
     };
+    this.approveRequest = this.approveRequest.bind(this);
+    this.removeRequest = this.removeRequest.bind(this);
+    this.setRequests = this.setRequests.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
+    this.setRequests();
+  };
+
+  setRequests = () => {
     if (this.props.request) {
       this.setState({
+        id: this.props.request.id,
         day: this.props.request.day,
         requester: this.props.request.requester,
         startTime: this.props.request.startTime,
         endTime: this.props.request.endTime,
-        reason: this.props.request.reason
+        reason: this.props.request.reason,
+        status: this.props.request.status
       });
     }
-  }
+  };
+
+  approveRequest = async event => {
+    this.setState({
+      status: !this.state.status
+    });
+
+    event.preventDefault();
+    try {
+      // authentication API
+      fetch("http://localhost:5000/approve-request", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          id: this.state.id,
+          status: this.state.status
+        })
+      });
+    } catch (e) {
+      alert(e);
+    }
+  };
+
+  removeRequest = async event => {
+    try {
+      // authentication API
+      fetch("http://localhost:5000/del-request", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          id: this.state.id
+        })
+      });
+      this.props.remRequest(this.state.id);
+    } catch (e) {
+      alert(e);
+    }
+  };
 
   render() {
     return (
@@ -118,11 +172,15 @@ class RequestCard extends Component {
             <p>{this.state.reason}</p>
           </StyledDiv>
           <ButtonContainer>
+            {this.props.isCoordinator && (
+              <ButtonChild>
+                <ApproveButton onClick={this.approveRequest}>
+                  {this.state.status ? "Unapprove" : "Approve"}
+                </ApproveButton>
+              </ButtonChild>
+            )}
             <ButtonChild>
-              <ApproveButton>Approve</ApproveButton>
-            </ButtonChild>
-            <ButtonChild>
-              <CancelButton>Reject</CancelButton>
+              <CancelButton onClick={this.removeRequest}>Delete</CancelButton>
             </ButtonChild>
           </ButtonContainer>
         </FlexContainer>

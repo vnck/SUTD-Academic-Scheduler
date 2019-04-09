@@ -44,11 +44,6 @@ const StyledSelect = styled.select`
   }
 `;
 
-const StyledInput = styled.textarea`
-  width: 100%;
-  margin: 1em 0;
-`;
-
 const TabContainer = styled.div`
   width: 100%;
   display: flex;
@@ -107,7 +102,7 @@ const StyledButton = styled.button`
   }
 `;
 
-class PreferenceForm extends Component {
+class EventForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -160,12 +155,13 @@ class PreferenceForm extends Component {
         "6:00PM",
         "6:30PM"
       ],
+      roomOptions: ["TT1", "TT2", "TT3", "TT4"],
       weekly: true,
-      startTime: "8:00AM",
+      startTime: "Monday",
       endTime: "8:00AM",
-      daySelect: "Monday",
+      daySelect: "8:00AM",
       weekSelect: "1",
-      reason: ""
+      room: ""
     };
     this.onSelectDayChange = this.onSelectDayChange.bind(this);
     this.onSelectDayChange = this.onSelectDayChange.bind(this);
@@ -173,7 +169,7 @@ class PreferenceForm extends Component {
     this.onSelectEndChange = this.onSelectEndChange.bind(this);
     this.onSelectWeekly = this.onSelectWeekly.bind(this);
     this.onNotSelectWeekly = this.onNotSelectWeekly.bind(this);
-    this.updateReason = this.updateReason.bind(this);
+    this.onSelectRoomChange = this.onSelectRoomChange.bind(this);
     this.checkSubmit = this.checkSubmit.bind(this);
   }
 
@@ -201,8 +197,8 @@ class PreferenceForm extends Component {
     this.setState({ endTime: e.target.value });
   };
 
-  updateReason = e => {
-    this.setState({ reason: e.target.value });
+  onSelectRoomChange = e => {
+    this.setState({ room: e.target.value });
   };
 
   checkSubmit = () => {
@@ -221,24 +217,20 @@ class PreferenceForm extends Component {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          daySelect: that.state.daySelect,
-          requester: this.props.name,
           weekly: that.state.weekly,
           startTime: that.state.startTime,
           endTime: that.state.endTime,
-          reason: that.state.reason
+          daySelect: that.state.daySelect
         })
-      }).then(() => {
-        this.props.popUpHandler();
-        this.props.reqHandler();
-      });
-      //.then(response => {
-      //return response.json();
-      //})
-      //.then(data => alert(data));
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then(data => alert(data));
     } catch (e) {
       alert(e);
     }
+    this.props.handler();
   };
 
   render() {
@@ -246,8 +238,15 @@ class PreferenceForm extends Component {
       <React.Fragment>
         <FlexContainer>
           <FlexContainer>
-            <p style={{ marginBottom: "1rem", fontWeight: "600" }}>
-              Add Schedule Block
+            <p
+              style={{
+                "margin-bottom": "1rem",
+                "font-weight": "600",
+                width: "24rem",
+                "text-align": "center"
+              }}
+            >
+              Add Event Form
             </p>
           </FlexContainer>
           <TabContainer>
@@ -266,10 +265,8 @@ class PreferenceForm extends Component {
               <FlexChild>
                 <p>Day:</p>
                 <StyledSelect onChange={this.onSelectDayChange}>
-                  {this.state.dayOptions.map((dayOption, index) => (
-                    <option key={index} value={dayOption}>
-                      {dayOption}
-                    </option>
+                  {this.state.dayOptions.map(dayOption => (
+                    <option value={dayOption}>{dayOption}</option>
                   ))}
                 </StyledSelect>
               </FlexChild>
@@ -278,18 +275,14 @@ class PreferenceForm extends Component {
               <FlexChild>
                 <p>Week:</p>
                 <StyledSelect onChange={this.onSelectWeekChange}>
-                  {this.state.weekOptions.map((weekOption, index) => (
-                    <option key={index} value={weekOption}>
-                      {weekOption}
-                    </option>
+                  {this.state.weekOptions.map(weekOption => (
+                    <option value={weekOption}>{weekOption}</option>
                   ))}
                 </StyledSelect>
                 <p>Day:</p>
                 <StyledSelect onChange={this.onSelectDayChange}>
-                  {this.state.dayOptions.map((dayOption, index) => (
-                    <option key={index} value={dayOption}>
-                      {dayOption}
-                    </option>
+                  {this.state.dayOptions.map(dayOption => (
+                    <option value={dayOption}>{dayOption}</option>
                   ))}
                 </StyledSelect>
               </FlexChild>
@@ -297,33 +290,26 @@ class PreferenceForm extends Component {
             <FlexChild>
               <p>Start Time:</p>
               <StyledSelect onChange={this.onSelectStartChange}>
-                {this.state.timeOptions.map((timeOption, idx) => (
-                  <option key={idx} value={timeOption}>
-                    {timeOption}
-                  </option>
+                {this.state.timeOptions.map(timeOption => (
+                  <option value={timeOption}>{timeOption}</option>
                 ))}
               </StyledSelect>
             </FlexChild>
             <FlexChild>
               <p>End Time:</p>
               <StyledSelect onChange={this.onSelectEndChange}>
-                {this.state.timeOptions.map((timeOption, idx) => (
-                  <option key={idx} value={timeOption}>
-                    {timeOption}
-                  </option>
+                {this.state.timeOptions.map(timeOption => (
+                  <option value={timeOption}>{timeOption}</option>
                 ))}
               </StyledSelect>
             </FlexChild>
             <FlexChild>
-              <p>Reasons:</p>
-              <StyledInput
-                style={{ width: "24rem" }}
-                type="text"
-                value={this.state.reason}
-                onChange={this.updateReason}
-                name="Reasons"
-                rows="4"
-              />
+              <p>Room:</p>
+              <StyledSelect onChange={this.onSelectRoomChange}>
+                {this.state.roomOptions.map(roomOption => (
+                  <option value={roomOption}>{roomOption}</option>
+                ))}
+              </StyledSelect>
             </FlexChild>
             <FlexChild>
               <StyledButton
@@ -340,4 +326,4 @@ class PreferenceForm extends Component {
   }
 }
 
-export default PreferenceForm;
+export default EventForm;

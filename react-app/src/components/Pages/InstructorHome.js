@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Header from "../Containers/Header";
 import TableDisplay from "../Schedule/TableDisplay";
 import InstFunctionContainer from "../Containers/InstFunctionContainer";
+import RequestContainer from "../Containers/RequestContainer";
 
 const ContentBody = styled.div`
   width: 100%;
@@ -35,21 +36,60 @@ const FlexChildW = styled.div`
   padding-top: 2.5rem;
 `;
 
+const Container = styled.div`
+  width: 72%;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+
+  p.header {
+    font-weight: 700;
+    padding-bottom: 0.5em;
+  }
+`;
+
 class InstructorHome extends Component {
+  constructor(props) {
+    super(props);
+    this.requestChild = React.createRef();
+    this.updateRequests = this.updateRequests.bind(this);
+  }
+
+  updateRequests = () => {
+    this.requestChild.current.updateRequests();
+  };
+
   render() {
     return (
       <React.Fragment>
-        <Header handleLogout={this.props.handleLogout} />
+        <Header
+          name={this.props.name}
+          isCoordinator={this.props.isCoordinator}
+          handleLogout={this.props.handleLogout}
+        />
         <ContentBody>
           <FlexContainer>
             <FlexChild>
               <h2 className="subheader">Term Schedule</h2>
-              <TableDisplay />
+              <TableDisplay
+                name={this.props.name}
+                isCoordinator={this.props.isCoordinator}
+              />
             </FlexChild>
             <FlexChildW>
-              <InstFunctionContainer />
+              <InstFunctionContainer
+                name={this.props.name}
+                reqHandler={this.updateRequests}
+              />
             </FlexChildW>
           </FlexContainer>
+          <Container>
+            <p className="header">Requests</p>
+            <RequestContainer
+              isCoordinator={this.props.isCoordinator}
+              name={this.props.name}
+              ref={this.requestChild}
+            />
+          </Container>
         </ContentBody>
       </React.Fragment>
     );
