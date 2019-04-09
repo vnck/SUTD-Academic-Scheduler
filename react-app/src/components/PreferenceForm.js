@@ -221,16 +221,18 @@ class PreferenceForm extends Component {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
+		  daySelect: that.state.daySelect,
+		  requester: this.props.name,
           weekly: that.state.weekly,
           startTime: that.state.startTime,
           endTime: that.state.endTime,
-          daySelect: that.state.daySelect
+          reason: that.state.reason
         })
       })
-        .then(response => {
-          return response.json();
-        })
-        .then(data => alert(data));
+        //.then(response => {
+          //return response.json();
+        //})
+        //.then(data => alert(data));
     } catch (e) {
       alert(e);
     }

@@ -137,10 +137,11 @@ class Request(db.Model):
     endTime = db.Column(db.String, nullable=False)
     reason = db.Column(db.String, nullable=False)
     status = db.Column(db.Boolean, nullable=False)
+    weekly = db.Column(db.Boolean, nullable=False)
 
     def __repr__(self):
         # return {"id":self.id, "day": self.day, "requester": self.requester, "startTime": self.startTime, "endTime":self.endTime, "reason":self.reason,"status":self.status}
-        return "<Request(id='%s',day='%s',requester='%s',startTime='%s',endTime='%s',reason='%s',status='%s')>" % (str(self.id), self.day, self.requester, self.startTime, self.endTime, self.reason, self.status)
+        return "<Request(id='%s',day='%s',requester='%s',startTime='%s',endTime='%s',reason='%s',status='%s',weekly='%s')>" % (str(self.id), self.day, self.requester, self.startTime, self.endTime, self.reason, self.status, self.weekly)
 
 
 def createDB():

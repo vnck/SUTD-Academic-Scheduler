@@ -10,6 +10,11 @@ import Scheduler
 import os
 
 
+#req1 = Request(day="Thursday", requester="JJ", startTime="2pm",
+#               endTime="2pm", reason="lazy", status=False)
+#req2 = Request(day="Friday", requester="GG", startTime="2pm",
+#               endTime="2pm", reason="lazy", status=False)
+
 @app.route('/login', methods=['POST'])
 def login():
     if request.method == 'POST':
@@ -92,6 +97,7 @@ def get_request():
         newls[i]["endTime"]=req[i].endTime
         newls[i]["reason"]=req[i].reason
         newls[i]["status"]=req[i].status
+        newls[i]["weekly"]=req[i].weekly
     return json.dumps(newls)
 
 
@@ -114,6 +120,7 @@ def del_request():
         newls[i]["endTime"]=req[i].endTime
         newls[i]["reason"]=req[i].reason
         newls[i]["status"]=req[i].status
+        newls[i]["weekly"]=req[i].weekly
     return json.dumps(newls)
 
 
@@ -139,8 +146,31 @@ def approve_request():
         newls[i]["endTime"]=req[i].endTime
         newls[i]["reason"]=req[i].reason
         newls[i]["status"]=req[i].status
+        newls[i]["weekly"]=req[i].weekly
     return json.dumps(newls)
 
+
+@app.route('/add-request', methods=['POST'])
+def add_request():
+    if request.method == 'POST':
+        data = request.get_json()
+        req1 = Request(day=data["startTime"], requester=data["requester"], startTime=data["daySelect"], endTime=data["endTime"], reason=data["reason"], weekly=data["weekly"], status=False)
+        db.session.add(req1)
+        db.session.commit()
+        print(Request.query.all())
+    req = Request.query.all()
+    newls = []
+    for i in range (len(req)):
+        newls.append({})
+        newls[i]["id"]=req[i].id
+        newls[i]["day"]=req[i].day
+        newls[i]["requester"]=req[i].requester
+        newls[i]["startTime"]=req[i].startTime
+        newls[i]["endTime"]=req[i].endTime
+        newls[i]["reason"]=req[i].reason
+        newls[i]["status"]=req[i].status
+        newls[i]["weekly"]=req[i].weekly
+    return json.dumps(newls)
 
 @app.route('/upload-inputs', methods=['POST'])
 def fileUpload():
@@ -159,4 +189,5 @@ def fileUpload():
 
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    CORS(app)
+    app.run(debug=True)
