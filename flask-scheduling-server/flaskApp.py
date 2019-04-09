@@ -153,7 +153,7 @@ def approve_request():
 def add_request():
     if request.method == 'POST':
         data = request.get_json()
-        req1 = Request(day=data["startTime"], requester=data["requester"], startTime=data["daySelect"], endTime=data["endTime"], reason=data["reason"], weekly=data["weekly"], status=False)
+        req1 = Request(day=data["daySelect"], requester=data["requester"], startTime=data["startTime"], endTime=data["endTime"], reason=data["reason"], weekly=data["weekly"], status=False)
         db.session.add(req1)
         db.session.commit()
         print(Request.query.all())
