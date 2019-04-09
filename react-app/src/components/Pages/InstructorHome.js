@@ -61,7 +61,11 @@ class InstructorHome extends Component {
   render() {
     return (
       <React.Fragment>
-        <Header name={this.props.name} handleLogout={this.props.handleLogout} />
+        <Header
+          name={this.props.name}
+          isCoordinator={this.props.isCoordinator}
+          handleLogout={this.props.handleLogout}
+        />
         <ContentBody>
           <FlexContainer>
             <FlexChild>
@@ -80,7 +84,11 @@ class InstructorHome extends Component {
           </FlexContainer>
           <Container>
             <p className="header">Requests</p>
-            <RequestContainer name={this.props.name} ref={this.requestChild} />
+            <RequestContainer
+              isCoordinator={this.props.isCoordinator}
+              name={this.props.name}
+              ref={this.requestChild}
+            />
           </Container>
         </ContentBody>
       </React.Fragment>

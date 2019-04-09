@@ -42,7 +42,6 @@ class Professor(db.Model):
     courses = db.Column(db.String)
     colorCode = db.Column(db.Integer)
 
-
     @property
     def serialize(self):
         return {

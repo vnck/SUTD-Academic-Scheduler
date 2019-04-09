@@ -75,9 +75,14 @@ class TableDisplay extends Component {
     this.updateSchedule = this.updateSchedule.bind(this);
     this.updateColorCodes = this.updateColorCodes.bind(this);
     this.updateFilters = this.updateFilters.bind(this);
+    this.updateTable = this.updateTable.bind(this);
   }
 
   componentDidMount = () => {
+    this.updateTable();
+  };
+
+  updateTable = () => {
     var that = this;
     fetch("http://localhost:5000/get-schedule", {
       method: "GET",

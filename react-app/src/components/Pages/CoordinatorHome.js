@@ -52,7 +52,12 @@ class CoordinatorHome extends Component {
     super(props);
     this.requestChild = React.createRef();
     this.updateRequests = this.updateRequests.bind(this);
+    this.tableChild = React.createRef();
   }
+
+  updateTable = () => {
+    this.tableChild.current.updateTable();
+  };
 
   updateRequests = () => {
     this.requestChild.current.updateRequests();
@@ -61,7 +66,11 @@ class CoordinatorHome extends Component {
   render() {
     return (
       <React.Fragment>
-        <Header name={this.props.name} handleLogout={this.props.handleLogout} />
+        <Header
+          name={this.props.name}
+          isCoordinator={this.props.isCoordinator}
+          handleLogout={this.props.handleLogout}
+        />
         <ContentBody>
           <FlexContainer>
             <FlexChild>
@@ -77,7 +86,10 @@ class CoordinatorHome extends Component {
           </FlexContainer>
           <Container>
             <p className="header">Requests</p>
-            <RequestContainer ref={this.requestChild} />
+            <RequestContainer
+              isCoordinator={this.props.isCoordinator}
+              ref={this.requestChild}
+            />
           </Container>
         </ContentBody>
       </React.Fragment>

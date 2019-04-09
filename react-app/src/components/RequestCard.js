@@ -172,11 +172,13 @@ class RequestCard extends Component {
             <p>{this.state.reason}</p>
           </StyledDiv>
           <ButtonContainer>
-            <ButtonChild>
-              <ApproveButton onClick={this.approveRequest}>
-                {this.state.status ? "Unapprove" : "Approve"}
-              </ApproveButton>
-            </ButtonChild>
+            {this.props.isCoordinator && (
+              <ButtonChild>
+                <ApproveButton onClick={this.approveRequest}>
+                  {this.state.status ? "Unapprove" : "Approve"}
+                </ApproveButton>
+              </ButtonChild>
+            )}
             <ButtonChild>
               <CancelButton onClick={this.removeRequest}>Delete</CancelButton>
             </ButtonChild>
