@@ -203,6 +203,13 @@ def createDB():
 
     db.session.commit()
 
+def shuffleColor():
+    colors = list(range(0, 360, 30))
+    random_colors = random.sample(colors, len(colors))
+    courses = Course.query.all()
+    for i, course in enumerate(courses):
+        course.colorCode = random_colors[i]
+    db.session.commit()
 
 def existDB():
     """
@@ -264,4 +271,4 @@ if __name__ == "__main__":
     if not existDB():
         #if database does not exist we create it
         createDB()
-
+    shuffleColor()

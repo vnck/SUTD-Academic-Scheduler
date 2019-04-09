@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Downloader from "../Buttons/Downloader";
 import Uploader from "../Buttons/Uploader";
 import GeneratorButton from "../Buttons/GeneratorButton";
-import AddEvent from "../Buttons/AddEvent";
+// import AddEvent from "../Buttons/AddEvent";
 import PopUp from "../Containers/PopUp";
 import EventForm from "../EventForm";
 

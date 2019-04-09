@@ -13,6 +13,10 @@ const FlexContainer = styled.div`
   padding: 0.4rem;
 `;
 
+const FlexChild = styled.div`
+  padding: 0.2rem;
+`;
+
 const EmptyRequestsContainer = styled.div`
   width: 100%;
   display: flex;
@@ -89,20 +93,20 @@ class RequestContainer extends Component {
     return (
       <React.Fragment>
         <FlexContainer>
-          {this.state.requests.length == 0 && (
+          {this.state.requests.length === 0 && (
             <EmptyRequestsContainer>
               <p>No Requests!</p>
             </EmptyRequestsContainer>
           )}
           {this.state.requests.map((request, index) => (
-            <RequestCard
-              style={{ padding: "0.2em" }}
-              ref={this.RequestCardChild}
-              request={request}
-              remRequest={this.remRequest}
-              isCoordinator={this.props.isCoordinator}
-              key={index}
-            />
+            <FlexChild key={index}>
+              <RequestCard
+                ref={this.RequestCardChild}
+                request={request}
+                remRequest={this.remRequest}
+                isCoordinator={this.props.isCoordinator}
+              />
+            </FlexChild>
           ))}
         </FlexContainer>
       </React.Fragment>

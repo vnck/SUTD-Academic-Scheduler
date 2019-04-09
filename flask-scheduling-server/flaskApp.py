@@ -101,10 +101,10 @@ def get_satisfied():
     satisfied = False
     if request.method == 'POST':
         data = request.get_json()
-        print(data['name'])
         if Professor.query.filter_by(name=data['name']).first() != None:
             satisfied = Professor.query.filter_by(
                 name=data['name']).first().satisfied
+            print(data['name'] + "  " + str(satisfied))
     return json.dumps(satisfied)
 
 

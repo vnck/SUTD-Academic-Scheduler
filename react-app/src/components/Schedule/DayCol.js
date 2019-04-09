@@ -43,7 +43,6 @@ class DayCol extends Component {
       this.setState({
         data: this.props.data.filter(this.filterConditions)
       });
-      console.log(this.props.data.filter(this.filterConditions));
     }
   };
 

@@ -21,6 +21,14 @@ const StyledDiv = styled.div`
   margin-bottom: 1.4em;
 `;
 
+const StyledLabel = styled.div`
+  margin-bottom: 1.4em;
+  background: #87ff8e;
+  border-radius: 10px;
+  width: fit-content;
+  padding: 0.2rem 1rem;
+`;
+
 const ButtonContainer = styled.div`
   display: flex;
   width: 100%;
@@ -85,16 +93,19 @@ class RequestCard extends Component {
       startTime: "",
       endTime: "",
       reason: "",
-      status: ""
+      status: "",
+      satisfied: ""
     };
     this.approveRequest = this.approveRequest.bind(this);
     this.removeRequest = this.removeRequest.bind(this);
     this.setRequests = this.setRequests.bind(this);
     this.timeFloatToString = this.timeFloatToString.bind(this);
+    this.getSatisfied = this.getSatisfied.bind(this);
   }
 
   componentDidMount = () => {
     this.setRequests();
+    this.getSatisfied();
   };
 
   timeFloatToString = timeFlt => {
@@ -121,9 +132,30 @@ class RequestCard extends Component {
         startTime: this.timeFloatToString(this.props.request.startTime),
         endTime: this.timeFloatToString(this.props.request.endTime),
         reason: this.props.request.reason,
-        status: this.props.request.status
+        status: this.props.request.status,
+        satisfied: this.props.request.satisfied
       });
     }
+  };
+
+  getSatisfied = () => {
+    var that = this;
+    fetch("http://localhost:5000/get-satisfied", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: that.props.request.requester
+      })
+    })
+      .then(result => result.json())
+      .then(satisfied => {
+        that.setState({
+          satisfied: satisfied
+        });
+      });
   };
 
   approveRequest = async event => {
@@ -188,6 +220,9 @@ class RequestCard extends Component {
             </p>
             <p>{this.state.reason}</p>
           </StyledDiv>
+          <StyledLabel style={{ opacity: this.state.satisfied ? 1 : 0 }}>
+            <p>In Effect</p>
+          </StyledLabel>
           <ButtonContainer>
             {this.props.isCoordinator && (
               <ButtonChild>

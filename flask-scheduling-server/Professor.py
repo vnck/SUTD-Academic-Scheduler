@@ -32,6 +32,7 @@ class Professor:
                         and self.slots[s].period == self.slots[i].period:
                     penalty += 1
 
+        self.satisfied = True
         for tupl in self.requests:
             day = float(tupl[0])
             startTime = float(tupl[1])
@@ -39,7 +40,6 @@ class Professor:
             if startTime != None and endTime != None and day != None:
                 for slot in self.slots:
                     if float(slot.day) == day:
-                        self.satisfied = True
                         if float(slot.period) <= endTime and float(slot.period) >= startTime:
                             penalty += 0.1
                             self.satisfied = False
