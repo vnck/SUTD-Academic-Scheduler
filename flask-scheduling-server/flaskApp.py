@@ -83,15 +83,15 @@ def generate_schedule():
 def get_request():
     req = Request.query.all()
     newls = []
-    for i in range (len(req)):
+    for i in range(len(req)):
         newls.append({})
-        newls[i]["id"]=req[i].id
-        newls[i]["day"]=req[i].day
-        newls[i]["requester"]=req[i].requester
-        newls[i]["startTime"]=req[i].startTime
-        newls[i]["endTime"]=req[i].endTime
-        newls[i]["reason"]=req[i].reason
-        newls[i]["status"]=req[i].status
+        newls[i]["id"] = req[i].id
+        newls[i]["day"] = req[i].day
+        newls[i]["requester"] = req[i].requester
+        newls[i]["startTime"] = req[i].startTime
+        newls[i]["endTime"] = req[i].endTime
+        newls[i]["reason"] = req[i].reason
+        newls[i]["status"] = req[i].status
     return json.dumps(newls)
 
 
@@ -105,15 +105,15 @@ def del_request():
         print(Request.query.all())
     req = Request.query.all()
     newls = []
-    for i in range (len(req)):
+    for i in range(len(req)):
         newls.append({})
-        newls[i]["id"]=req[i].id
-        newls[i]["day"]=req[i].day
-        newls[i]["requester"]=req[i].requester
-        newls[i]["startTime"]=req[i].startTime
-        newls[i]["endTime"]=req[i].endTime
-        newls[i]["reason"]=req[i].reason
-        newls[i]["status"]=req[i].status
+        newls[i]["id"] = req[i].id
+        newls[i]["day"] = req[i].day
+        newls[i]["requester"] = req[i].requester
+        newls[i]["startTime"] = req[i].startTime
+        newls[i]["endTime"] = req[i].endTime
+        newls[i]["reason"] = req[i].reason
+        newls[i]["status"] = req[i].status
     return json.dumps(newls)
 
 
@@ -127,18 +127,17 @@ def approve_request():
         elif (status.status == False):
             status.status = True
         db.session.commit()
-        print(Request.query.all())
     req = Request.query.all()
     newls = []
-    for i in range (len(req)):
+    for i in range(len(req)):
         newls.append({})
-        newls[i]["id"]=req[i].id
-        newls[i]["day"]=req[i].day
-        newls[i]["requester"]=req[i].requester
-        newls[i]["startTime"]=req[i].startTime
-        newls[i]["endTime"]=req[i].endTime
-        newls[i]["reason"]=req[i].reason
-        newls[i]["status"]=req[i].status
+        newls[i]["id"] = req[i].id
+        newls[i]["day"] = req[i].day
+        newls[i]["requester"] = req[i].requester
+        newls[i]["startTime"] = req[i].startTime
+        newls[i]["endTime"] = req[i].endTime
+        newls[i]["reason"] = req[i].reason
+        newls[i]["status"] = req[i].status
     return json.dumps(newls)
 
 

@@ -12,7 +12,6 @@ class Account(db.Model):
     password = db.Column(db.String)
     name = db.Column(db.String)
     role = db.Column(db.String)
-    logged = db.Column(db.Boolean, default=False)
 
 
 class Course(db.Model):
