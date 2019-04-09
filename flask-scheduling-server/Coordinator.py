@@ -187,7 +187,6 @@ class Coordinator:
                         self.courseClasses.append(c)
                     elif req == "LEC":
                         c.studentGroups.append(stg)
-                    stg.courseClasses.append(c)
                 if req == "LEC":
                     self.courseClasses.append(c)
 
