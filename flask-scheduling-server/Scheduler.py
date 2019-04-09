@@ -188,6 +188,19 @@ def startAlgo():
         courseClassDb = models.CourseClass(course=courseName,studentGroups = stgString,professors = profString,
                                             day = day,startTime= startTime,endTime = endTime,room= roomName)
         db.session.add(courseClassDb)
+    
+    #adding soft constraints
+    for prof in answer.professors:
+        name = prof.name
+        if prof.penalty>0:
+            a = False
+        else:
+            a = True
+        
+        currProf = models.Professor.query.filter(models.Professor.name == name).first()
+        currProf.satisfied = a
+        
+        
     db.session.commit()
 
 
