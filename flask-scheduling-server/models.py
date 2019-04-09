@@ -42,11 +42,6 @@ class Professor(db.Model):
     courses = db.Column(db.String)
     colorCode = db.Column(db.Integer)
 
-    day = db.Column(db.Integer)
-    startTime = db.Column(db.Float)
-    endTime = db.Column(db.Float)
-
-    satisfied = db.Column(db.Boolean)
 
     @property
     def serialize(self):

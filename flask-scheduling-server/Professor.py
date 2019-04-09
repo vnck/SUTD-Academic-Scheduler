@@ -6,14 +6,12 @@ class Professor:
         self._course = []
         self.slots = []
         self.courseClasses = []
-
-        # for soft constraints
-        self.day = None
-        self.startTime = None
-        self.endTime = None
-        self.penalty = 0
-
-    def addCourse(self, course):
+        
+        #list of tuples
+        self.requests = []
+        
+        self.penatly = 0
+    def addCourse(self,course):
         """adds Course Object to list"""
         self._course.append(course)
         course.professors.append(self)
@@ -28,19 +26,30 @@ class Professor:
             for i in range(s+1, len(self.slots)):
                 # if day and period is the same we add
                 if self.slots[s].day == self.slots[i].day\
-                        and self.slots[s].period == self.slots[i].period:
-                    penalty += 1
+                    and self.slots[s].period == self.slots[i].period:
+                    penatly +=1
+        
 
-        # check soft constraints
-        if self.startTime != None and self.endTime != None and self.day != None:
-            for slot in self.slots:
-                if slot.day == self.day:
-                    if slot.period <= self.endTime and slot.period >= self.startTime:
-                        # penalise once
-                        penalty += 0.01
-                        break
-        self.penalty = penalty
-        return penalty
+        for tupl in self.requests:
+            day = tupl[0]
+            startTime = tupl[1]
+            endTime = tupl[2]
+            if startTime !=None and endTime != None and day != None:
+                for slot in self.slots:
+                    if slot.day == day:
+                        if slot.period <= endTime and slot.period >= startTime:
+                            penatly += 0.01
+                            break
+        #check soft constraints
+        # if self.startTime != None and self.endTime != None and self.day != None:
+        #     for slot in self.slots:
+        #         if slot.day == self.day:
+        #             if slot.period<=self.endTime and slot.period>= self.startTime:
+        #                 #penalise once
+        #                 penatly+=0.01
+        #                 break
+        self.penatly = penatly
+        return penatly
 
     def __repr__(self):
         return"<Instructor:{},course:{}>".format(self.name, self._course)

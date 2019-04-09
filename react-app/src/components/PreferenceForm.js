@@ -161,9 +161,9 @@ class PreferenceForm extends Component {
         "6:30PM"
       ],
       weekly: true,
-      startTime: "Monday",
+      startTime: "8:00AM",
       endTime: "8:00AM",
-      daySelect: "8:00AM",
+      daySelect: "Monday",
       weekSelect: "1",
       reason: ""
     };

@@ -70,6 +70,7 @@ def mate(c1,c2):
     c.generateSlots()
     c.generateCourses()
     c.generateProfs()
+    c.assignRequests()
     c.generateStudentGroups()
     c.generateCourseClasses()
     c.appendSTGtoCC()
