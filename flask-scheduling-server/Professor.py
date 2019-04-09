@@ -12,6 +12,8 @@ class Professor:
 
         self.penalty = 0
 
+        self.satisfied = False
+
     def addCourse(self, course):
         """adds Course Object to list"""
         self._course.append(course)
@@ -37,8 +39,10 @@ class Professor:
             if startTime != None and endTime != None and day != None:
                 for slot in self.slots:
                     if float(slot.day) == day:
+                        self.satisfied = True
                         if float(slot.period) <= endTime and float(slot.period) >= startTime:
                             penalty += 0.1
+                            self.satisfied = False
                             break
         # check soft constraints
         # if self.startTime != None and self.endTime != None and self.day != None:

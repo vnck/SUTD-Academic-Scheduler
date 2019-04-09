@@ -8,7 +8,7 @@ from app import db
 
 running = False
 
-def geneticScheduler(numberOfGen,popSize,tourSize,mutateProb = 0.5,mutateRate=0.05,elitismOffset=1):
+def geneticScheduler(numberOfGen,popSize,tourSize,mutateProb = 0.5,mutateRate=0.15,elitismOffset=1):
     """
     parameters \n
     number of generations/iterations \n
@@ -162,7 +162,7 @@ def startAlgo():
     Coordinator.initalizeStatic()
     print("Algorithm starts")
     start = time.time()
-    lss = geneticScheduler(1000,100,5,mutateProb=0.8,elitismOffset=5,mutateRate=0.015)
+    lss = geneticScheduler(500,100,5,mutateProb=0.8,elitismOffset=5,mutateRate=0.015)
     print([f.fitnessValue for f in lss])
     elasped = time.time() - start
     print("time taken = {}s".format(elasped))
@@ -194,13 +194,9 @@ def startAlgo():
     #adding soft constraints
     for prof in answer.professors:
         name = prof.name
-        if prof.penalty>0:
-            a = False
-        else:
-            a = True
         
         currProf = models.Professor.query.filter(models.Professor.name == name).first()
-        currProf.satisfied = a
+        currProf.satisfied = prof.satisfied
         
         
     db.session.commit()

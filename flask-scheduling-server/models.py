@@ -154,6 +154,7 @@ def createDB():
     df_student_groups = pd.read_csv("data/student_groups.csv", dtype=str)
     df_hardblocks = pd.read_csv("data/hard_blocks.csv")
     df_accounts = pd.read_csv("data/accounts.csv")
+    df_requests = pd.read_csv("data/requests.csv")
 
     colors = list(range(0, 360, 10))
     random_colors = random.sample(colors, len(colors))
@@ -194,6 +195,11 @@ def createDB():
                         room=row[1]["room"],
                         reason=row[1]["reason"])
         db.session.add(hb)
+
+    for index, row in df_requests.iterrows():
+        req = Request(day=row['day'], requester=row['requester'],
+                      startTime=row['startTime'], endTime=row['endTime'], reason=row['reason'], status=(row['status'] == 1), weekly=(row['weekly'] == 1))
+        db.session.add(req)
 
     db.session.commit()
 
@@ -245,7 +251,6 @@ def createTestDB(pathName):
         sg = StudentGroup(student_group=row[1]['Student Groups'],
                         courses=row[1]['Courses'])
         db.session.add(sg)
-
 
     for row in df_hardblocks.iterrows():
         hb = HardBlocks(day=row[1]["day"],period=row[1]["period"],

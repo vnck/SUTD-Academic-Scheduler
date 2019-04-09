@@ -5,7 +5,7 @@ from flask_cors import CORS
 #from flask_bcrypt import Bcrypt
 import sqlalchemy
 from app import app, db, bcrypt, UPLOAD_FOLDER
-from models import Account, Request, CourseClass, Course
+from models import Account, Request, CourseClass, Course, Professor
 import Scheduler
 import os
 
@@ -94,6 +94,18 @@ def get_request():
         newls[i]["status"] = req[i].status
         newls[i]["weekly"] = req[i].weekly
     return json.dumps(newls)
+
+
+@app.route('/get-satisfied', methods=['POST'])
+def get_satisfied():
+    satisfied = False
+    if request.method == 'POST':
+        data = request.get_json()
+        print(data['name'])
+        if Professor.query.filter_by(name=data['name']).first() != None:
+            satisfied = Professor.query.filter_by(
+                name=data['name']).first().satisfied
+    return json.dumps(satisfied)
 
 
 @app.route('/del-request', methods=['POST'])
