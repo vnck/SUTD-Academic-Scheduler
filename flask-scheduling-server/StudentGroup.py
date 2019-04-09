@@ -31,11 +31,11 @@ class StudentGroup:
 
         # Check that no two of the same course in a single day
         # cannot have the same subject twice in a single day
-            for i in range(len(self.courseClasses)-1):
-                for j in range(s+1, len(self.courseClasses)):
-                    if self.courseClasses[i].day == self.courseClasses[j].day\
-                            and self.courseClasses[i].course == self.courseClasses[j].course:
-                        penalty += 1
+        for i in range(len(self.courseClasses)-1):
+            for j in range(i+1, len(self.courseClasses)):
+                if self.courseClasses[i].day == self.courseClasses[j].day\
+                        and self.courseClasses[i].course == self.courseClasses[j].course:
+                    penalty += 1.25
         return penalty
 
     def __repr__(self):
