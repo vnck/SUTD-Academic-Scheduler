@@ -46,6 +46,8 @@ class Professor(db.Model):
     startTime = db.Column(db.Float)
     endTime = db.Column(db.Float)
 
+    satisfied = db.Column(db.Boolean)
+
     @property
     def serialize(self):
         return {
