@@ -36,7 +36,7 @@ class CoordFunctionContainer extends Component {
       <React.Fragment>
         <FlexContainer>
           {/* <h3>Coordinator Menu</h3> */}
-          <AddEvent handler={this.callPopup} />
+          {/* <AddEvent handler={this.callPopup} /> */}
           <Uploader />
           <Downloader />
           <GeneratorButton />

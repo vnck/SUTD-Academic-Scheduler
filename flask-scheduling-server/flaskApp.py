@@ -88,7 +88,7 @@ def generate_schedule():
 def get_request():
     req = Request.query.all()
     newls = []
-    for i in range (len(req)):
+    for i in range(len(req)):
         newls.append({})
         newls[i]["id"]=req[i].id
         newls[i]["day"]=req[i].day
@@ -111,7 +111,7 @@ def del_request():
         print(Request.query.all())
     req = Request.query.all()
     newls = []
-    for i in range (len(req)):
+    for i in range(len(req)):
         newls.append({})
         newls[i]["id"]=req[i].id
         newls[i]["day"]=req[i].day
@@ -134,10 +134,9 @@ def approve_request():
         elif (status.status == False):
             status.status = True
         db.session.commit()
-        print(Request.query.all())
     req = Request.query.all()
     newls = []
-    for i in range (len(req)):
+    for i in range(len(req)):
         newls.append({})
         newls[i]["id"]=req[i].id
         newls[i]["day"]=req[i].day

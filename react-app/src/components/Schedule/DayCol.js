@@ -83,12 +83,9 @@ class DayCol extends Component {
     }
     if (item.professors.includes(filterList[0]) && filterList[0] !== "") {
       return true;
-    } else if (item.course.includes(filterList[1]) && filterList[1] !== "") {
+    } else if (item.course === filterList[1] && filterList[1] !== "") {
       return true;
-    } else if (
-      item.studentGroups.includes(filterList[2]) &&
-      filterList[2] !== ""
-    ) {
+    } else if (item.studentGroups === filterList[2] && filterList[2] !== "") {
       return true;
     }
     return false;
