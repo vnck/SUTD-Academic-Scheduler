@@ -78,6 +78,7 @@ class RequestCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
       id: "",
       day: "",
       requester: "",
@@ -89,20 +90,36 @@ class RequestCard extends Component {
     this.approveRequest = this.approveRequest.bind(this);
     this.removeRequest = this.removeRequest.bind(this);
     this.setRequests = this.setRequests.bind(this);
+    this.timeFloatToString = this.timeFloatToString.bind(this);
   }
 
   componentDidMount = () => {
     this.setRequests();
   };
 
+  timeFloatToString = timeFlt => {
+    let front = timeFlt;
+    let end = "AM";
+    let mid = "00";
+    if (front >= 13) {
+      front -= 12;
+      end = "PM";
+    }
+    if (front % 1 !== 0) {
+      mid = "30";
+      front -= 0.5;
+    }
+    return front.toString() + ":" + mid + end;
+  };
+
   setRequests = () => {
     if (this.props.request) {
       this.setState({
         id: this.props.request.id,
-        day: this.props.request.day,
+        day: this.state.days[this.props.request.day - 1],
         requester: this.props.request.requester,
-        startTime: this.props.request.startTime,
-        endTime: this.props.request.endTime,
+        startTime: this.timeFloatToString(this.props.request.startTime),
+        endTime: this.timeFloatToString(this.props.request.endTime),
         reason: this.props.request.reason,
         status: this.props.request.status
       });

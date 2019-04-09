@@ -212,7 +212,6 @@ def createTestDB(pathName):
     db.drop_all()
     db.create_all()
 
-    df_accounts = pd.read_csv(pathName + "accounts.csv", dtype=str)
     df_professors = pd.read_csv(pathName+"professors.csv", dtype=str)
     df_courses = pd.read_csv(pathName+"courses.csv", dtype=str)
     df_rooms = pd.read_csv(pathName+"rooms.csv", dtype=str)
@@ -221,12 +220,6 @@ def createTestDB(pathName):
 
     colors = list(range(0, 360, 10))
     random_colors = random.sample(colors, len(colors))
-
-    for row in df_accounts.iterrows():
-        hash_pass = bcrypt.generate_password_hash(str(row[1]['Password']))
-        acc = Account(user=row[1]['User'], password=hash_pass,
-                      role=row[1]['Role'], name=row[1]['Name'])
-        db.session.add(acc)
 
     for index, row in df_professors.iterrows():
         prof = Professor(name=row['Name'], courses=row['Courses'],

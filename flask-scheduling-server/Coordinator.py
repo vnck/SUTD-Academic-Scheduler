@@ -22,6 +22,7 @@ class Coordinator:
     hardBlocksDb = []
     roomDic = {}
     requests = []
+
     def __init__(self):
         self.days = [1, 2, 3, 4, 5]
         self.slots = []
@@ -103,15 +104,17 @@ class Coordinator:
 
             if roomNum == NUM_ROOMS - 1:
                 randRoomEnd = roomNum
-        if randRoomStart == None or randRoomEnd == None: raise Exception("Assigning CC to non freshmore class")
-        if(self.slots[randRoomStart].getReq()!= self.slots[randRoomEnd].getReq()):raise Exception("random rooms does not meet req")
-        randRoom = random.randint(randRoomStart,randRoomEnd)
-            
-        #makes sure that same lesson does not go on to the next day
-        randPeriod = random.randint(0,NUM_PERIODS-1-int((duration-0.5)/0.5))
-            
-        #get random prof teaching the class
-        #guarantees that the prof teaches the class
+        if randRoomStart == None or randRoomEnd == None:
+            raise Exception("Assigning CC to non freshmore class")
+        if(self.slots[randRoomStart].getReq() != self.slots[randRoomEnd].getReq()):
+            raise Exception("random rooms does not meet req")
+        randRoom = random.randint(randRoomStart, randRoomEnd)
+
+        # makes sure that same lesson does not go on to the next day
+        randPeriod = random.randint(0, NUM_PERIODS-1-int((duration-0.5)/0.5))
+
+        # get random prof teaching the class
+        # guarantees that the prof teaches the class
         if courseClass.req == "LEC":
             for prof in courseClass.course.professors:
                 courseClass.professors.append(prof)
@@ -139,6 +142,7 @@ class Coordinator:
             for prof in courseClass.professors:
                 prof.slots.append(self.slots[position])
             self.slots[position].counter += 1
+
     def assignRequests(self):
         for req in Coordinator.requests:
             prof = self.getProf(req.requester)
@@ -146,8 +150,7 @@ class Coordinator:
             startTime = req.startTime
             endTime = req.endTime
 
-            prof.requests.append((day,startTime,endTime))
-
+            prof.requests.append((day, startTime, endTime))
 
     def getProf(self, name):
         for prof in self.professors:
@@ -185,7 +188,7 @@ class Coordinator:
                     elif req == "LEC":
                         c.studentGroups.append(stg)
                     stg.courseClasses.append(c)
-                if req =="LEC":
+                if req == "LEC":
                     self.courseClasses.append(c)
 
     def appendSTGtoCC(self):
@@ -205,7 +208,7 @@ class Coordinator:
             self.studentGroups.append(studentGroup)
 
     def generateProfs(self):
-        
+
         profs = Coordinator.profDb
         for prof in profs:
             name = prof.name

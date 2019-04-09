@@ -207,7 +207,9 @@ def startAlgo():
 
 
 if __name__ == "__main__":
-    models.createDB()
+    if not models.existDB():
+        models.createDB()
+    
     startAlgo()
 
     for cc in models.CourseClass.query.all():

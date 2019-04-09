@@ -111,15 +111,7 @@ class PreferenceForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dayOptions: [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday"
-      ],
+      dayOptions: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
       weekOptions: [
         "1",
         "2",
@@ -157,8 +149,7 @@ class PreferenceForm extends Component {
         "4:30PM",
         "5:00PM",
         "5:30PM",
-        "6:00PM",
-        "6:30PM"
+        "6:00PM"
       ],
       weekly: true,
       startTime: "8:00AM",
@@ -175,6 +166,7 @@ class PreferenceForm extends Component {
     this.onNotSelectWeekly = this.onNotSelectWeekly.bind(this);
     this.updateReason = this.updateReason.bind(this);
     this.checkSubmit = this.checkSubmit.bind(this);
+    this.timeStringToFloat = this.timeStringToFloat.bind(this);
   }
 
   onSelectWeekly = () => {
@@ -209,6 +201,22 @@ class PreferenceForm extends Component {
     return this.state.reason === "";
   };
 
+  timeStringToFloat = timeStr => {
+    let value = 0;
+    if (timeStr.charAt(1) === ":") {
+      value += parseFloat(timeStr.slice(0, 2));
+    } else {
+      value += parseFloat(timeStr.slice(0, 1));
+    }
+    if (timeStr.includes(":30")) {
+      value += 0.5;
+    }
+    if (timeStr.includes("PM")) {
+      value += 12;
+    }
+    return value;
+  };
+
   submitRequest = e => {
     e.preventDefault();
     var that = this;
@@ -221,11 +229,11 @@ class PreferenceForm extends Component {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          daySelect: that.state.daySelect,
-          requester: this.props.name,
+          daySelect: that.state.dayOptions.indexOf(that.state.daySelect) + 1,
+          requester: that.props.name,
           weekly: that.state.weekly,
-          startTime: that.state.startTime,
-          endTime: that.state.endTime,
+          startTime: that.timeStringToFloat(this.state.startTime),
+          endTime: that.timeStringToFloat(this.state.endTime),
           reason: that.state.reason
         })
       }).then(() => {
