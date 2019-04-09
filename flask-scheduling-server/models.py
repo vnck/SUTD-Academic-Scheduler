@@ -212,18 +212,30 @@ def createTestDB(pathName):
     db.drop_all()
     db.create_all()
 
+    df_accounts = pd.read_csv(pathName + "accounts.csv", dtype=str)
     df_professors = pd.read_csv(pathName+"professors.csv", dtype=str)
     df_courses = pd.read_csv(pathName+"courses.csv", dtype=str)
     df_rooms = pd.read_csv(pathName+"rooms.csv", dtype=str)
     df_student_groups = pd.read_csv(pathName+"student_groups.csv", dtype=str)
     df_hardblocks = pd.read_csv(pathName+"hard_blocks.csv")
 
-    for row in df_professors.iterrows():
-        prof = Professor(name=row[1]['Name'], courses=row[1]['Courses'])
+    colors = list(range(0, 360, 10))
+    random_colors = random.sample(colors, len(colors))
+
+    for row in df_accounts.iterrows():
+        hash_pass = bcrypt.generate_password_hash(str(row[1]['Password']))
+        acc = Account(user=row[1]['User'], password=hash_pass,
+                      role=row[1]['Role'], name=row[1]['Name'])
+        db.session.add(acc)
+
+    for index, row in df_professors.iterrows():
+        prof = Professor(name=row['Name'], courses=row['Courses'],
+                         colorCode=random_colors[index])
         db.session.add(prof)
 
-    for row in df_courses.iterrows():
-        course = Course(course=row[1]['Course'], classes=row[1]['Class'])
+    for index, row in df_courses.iterrows():
+        course = Course(course=row['Course'], classes=row['Class'],
+                        colorCode=random_colors[index])
         db.session.add(course)
 
     # for row in df_rooms.iterrows():
@@ -250,7 +262,8 @@ def createTestDB(pathName):
     
     db.session.commit()
 
-# if not existDB():
-#     #if database does not exist we create it
-#     createDB()
+if __name__ == "__main__":
+    if not existDB():
+        #if database does not exist we create it
+        createDB()
 
