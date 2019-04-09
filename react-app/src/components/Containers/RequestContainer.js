@@ -50,6 +50,7 @@ class RequestContainer extends Component {
             status: items[i]["status"]
           };
           requests.push(req);
+          //requests.push(req);
           console.log(requests);
         }
         that.updateRequests(requests);
@@ -64,25 +65,16 @@ class RequestContainer extends Component {
   };
 
   remRequest = async id => {
-    //try {
-      //// authentication API
-      //fetch("http://localhost:5000/del-request", {
-        //method: "POST",
-        //headers: {
-          //Accept: "application/json",
-          //"Content-Type": "application/json"
-        //},
-        //body: JSON.stringify({
-          //id: this.state.id
-        //})
-      //});
-      //var newReqls = this.state.requests.filter(r => r.id === id);
-      //this.setState({
-        //requests: newReqls
-      //});
-    //} catch (e) {
-      //alert(e);
-    //}
+	console.log(id);
+    try { 
+      var newReqls = this.state.requests.filter(r => r.id === id-1);
+      this.setState({
+        requests: newReqls
+      });
+    } catch (e) {
+      alert(e);
+    }
+    
   };
 
   render() {

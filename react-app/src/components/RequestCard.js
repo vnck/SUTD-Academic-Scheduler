@@ -87,6 +87,7 @@ class RequestCard extends Component {
       status: ""
     };
     this.approveRequest = this.approveRequest.bind(this);
+    this.removeRequest = this.removeRequest.bind(this);
   }
 
   componentDidMount = () => {
@@ -126,6 +127,26 @@ class RequestCard extends Component {
       alert(e);
     }
   };
+  
+  
+  removeRequest = async event => {
+    try { 
+      // authentication API
+      fetch("http://localhost:5000/del-request", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          id: this.state.id
+        })
+      });
+    this.props.remRequest(this.state.id);
+    } catch (e) {
+      alert(e);
+    }
+  };
 
   render() {
     return (
@@ -153,8 +174,8 @@ class RequestCard extends Component {
               </ApproveButton>
             </ButtonChild>
             <ButtonChild>
-              <CancelButton onClick={this.props.remRequest(this.state.id)}>
-                Reject
+              <CancelButton onClick={this.removeRequest}>
+                Delete
               </CancelButton>
             </ButtonChild>
           </ButtonContainer>
