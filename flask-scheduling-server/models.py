@@ -41,7 +41,7 @@ class Professor(db.Model):
     name = db.Column(db.String)
     courses = db.Column(db.String)
     colorCode = db.Column(db.Integer)
-
+    satisfied = db.Column(db.Boolean)
 
     @property
     def serialize(self):
