@@ -37,8 +37,8 @@ class CoordFunctionContainer extends Component {
         <FlexContainer>
           {/* <h3>Coordinator Menu</h3> */}
           {/* <AddEvent handler={this.callPopup} reqHandler={this.updateRequests} /> */}
-          <Uploader />
-          <Downloader />
+          {/* <Uploader /> */}
+          <Downloader name={this.props.name} isCoordinator={true} />
           <GeneratorButton />
         </FlexContainer>
         {this.state.popup && (

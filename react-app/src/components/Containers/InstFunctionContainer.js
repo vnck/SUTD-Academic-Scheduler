@@ -33,7 +33,7 @@ class InstFunctionContainer extends Component {
     return (
       <React.Fragment>
         <FlexContainer>
-          <Downloader />
+          <Downloader name={this.props.name} isCoordinator={false}/>
           <CustomisePreferences handler={this.callPopup} />
         </FlexContainer>
         {this.state.popup && (

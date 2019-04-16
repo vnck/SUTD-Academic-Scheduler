@@ -31,11 +31,44 @@ const Container = styled.div`
 `;
 
 class Downloader extends Component {
+  constructor(props) {
+    super(props);
+    this.downloadCSV = this.downloadCSV.bind(this);
+  }
+
+  downloadCSV = () => {
+    fetch("http://localhost:5000/download-csv", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    }).then(response => {
+      console.log(response);
+    });
+  };
+
   render() {
     return (
       <React.Fragment>
         <Container>
-          <button type="button">Download CSV</button>
+          {!this.props.isCoordinator ? (
+            <a
+              href={"http://localhost:5000/schedule/" + this.props.name}
+              download={"schedule-" + this.props.name + ".csv"}
+            >
+              Download CSV
+            </a>
+          ) : (
+            <a
+              href={"http://localhost:5000/schedule/all"}
+              download="schedule.csv"
+            >
+              Download CSV
+            </a>
+          )}
+
+          {/* <button onClick={this.downloadCSV}>Download CSV</button> */}
         </Container>
       </React.Fragment>
     );

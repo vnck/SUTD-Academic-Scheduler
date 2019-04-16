@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, jsonify
+from flask import Flask, render_template, redirect, url_for, request, jsonify, send_file
 from flask_sqlalchemy import SQLAlchemy
 import json
 from flask_cors import CORS
@@ -6,6 +6,7 @@ from flask_cors import CORS
 import sqlalchemy
 from app import app, db, bcrypt, UPLOAD_FOLDER
 from models import Account, Request, CourseClass, Course, Professor
+from csv_convert import makeICS, makeCSV
 import Scheduler
 import os
 
@@ -194,6 +195,21 @@ def fileUpload():
     except:
         out = "NOT OK"
     return out
+
+
+@app.route('/schedule/<path:name>', methods=['GET'])
+def downloadCSV(name):
+    if name == 'all':
+        course_classes = CourseClass.query.all()
+    else:
+        course_classes = CourseClass.query.filter_by(
+            CourseClass.professors.contains(name))
+        print(course_classes)
+    makeCSV(course_classes, name)
+    try:
+        return send_file('files/schedule.csv', 'schedule' + name + '.csv', as_attachment=True)
+    except Exception as e:
+        print(e)
 
 
 if __name__ == '__main__':

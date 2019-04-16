@@ -94,7 +94,7 @@ class RequestCard extends Component {
       endTime: "",
       reason: "",
       status: "",
-      satisfied: ""
+      satisfied: false
     };
     this.approveRequest = this.approveRequest.bind(this);
     this.removeRequest = this.removeRequest.bind(this);
