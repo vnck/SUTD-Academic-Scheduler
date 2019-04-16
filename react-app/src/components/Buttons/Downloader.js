@@ -4,28 +4,31 @@ import styled from "styled-components";
 const Container = styled.div`
   margin-top: 1rem;
 
-  button {
+  a {
     width: 100%;
     padding: 1rem;
     border: none;
     text-align: center;
     text-decoration: none;
     background-color: ${props => props.theme.grey};
+    color: ${props => props.theme.black};
     font-weight: 600;
     border-radius: 6px;
+    font-size: 11px;
+    white-space: nowrap;
     outline: none;
     cursor: pointer;
   }
 
-  button:hover {
+  a:hover {
     background-color: ${props => props.theme.darkergrey};
   }
 
-  button:active {
+  a:active {
     background-color: ${props => props.theme.darkestgrey};
   }
 
-  button:focus {
+  a:focus {
     box-shadow: 0 0 0 2px ${props => props.theme.darkestgrey};
   }
 `;
