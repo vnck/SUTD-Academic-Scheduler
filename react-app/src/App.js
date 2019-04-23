@@ -4,10 +4,13 @@ import { withRouter } from "react-router-dom";
 import { GlobalStyle } from "./theme/globalStyle";
 import { theme } from "./theme/theme";
 import Routes from "./routes/Routes";
+import Cookies from "universal-cookie";
 
 class App extends Component {
   constructor(props) {
     super(props);
+
+    this.cookies = new Cookies();
 
     this.state = {
       isAuthenticated: false,
@@ -17,12 +20,33 @@ class App extends Component {
     };
   }
 
+  // componentDidMount = () => {
+  //   if (this.cookies.get("authenticated") === "TRUE") {
+  //     this.setState({ isAuthenticated: true });
+  //     if (this.cookies.get("isCoordinator") === "TRUE") {
+  //       this.setState({ isCoordinator: true });
+  //     } else if (this.cookies.get("isCoordinator") === "FALSE") {
+  //       this.setState({ isCoordinator: false });
+  //     }
+  //   }
+  //   this.props.history.push("/login");
+  // };
+
   userHasAuthenticated = authenticated => {
     this.setState({ isAuthenticated: authenticated });
+    if (authenticated) {
+      this.cookies.set("authenticated", "TRUE", { path: "/" });
+    }
   };
 
   userIsCoordinator = isCoordinator => {
+    console.log("isCoordinator:", isCoordinator);
     this.setState({ isCoordinator: isCoordinator });
+    if (isCoordinator) {
+      this.cookies.set("isCoordinator", "TRUE", { path: "/" });
+    } else if (!isCoordinator) {
+      this.cookies.set("isCoordinator", "FALSE", { path: "/" });
+    }
   };
 
   setName = name => {
@@ -35,6 +59,8 @@ class App extends Component {
 
   handleLogout = async event => {
     // await logout api
+    this.cookies.set("authenticated", "FALSE", { path: "/" });
+    this.cookies.set("isCoordinator", "", { path: "/" });
     this.userHasAuthenticated(false);
     this.userIsCoordinator(false);
     this.props.history.push("/login");
@@ -42,13 +68,6 @@ class App extends Component {
   };
 
   async componentDidMount() {
-    try {
-      // await authentication API
-      this.userIsCoordinator(false);
-      this.userHasAuthenticated(false);
-    } catch (e) {
-      alert(e);
-    }
     this.setState({ isAuthenticating: false });
   }
 

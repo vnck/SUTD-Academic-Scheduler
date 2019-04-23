@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import Cookies from "universal-cookie";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -79,13 +80,21 @@ class Login extends Component {
     this.updateUser = this.updateUser.bind(this);
     this.updatePassword = this.updatePassword.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.cookies = new Cookies();
   }
 
   componentDidMount() {
-    // this.props.userHasAuthenticated(true);
-    // this.props.history.push("/instructor-home");
-    // this.props.userIsCoordinator(true);
-    // this.props.history.push("/coordinator-home");
+    if (this.cookies.get("authenticated") === "TRUE") {
+      this.props.userHasAuthenticated(true);
+      console.log(this.cookies.get("isCoordinator"));
+      if (this.cookies.get("isCoordinator") === "TRUE") {
+        this.props.userIsCoordinator(true);
+        this.props.history.push("/coordinator-home");
+      } else if (this.cookies.get("isCoordinator") === "FALSE") {
+        this.props.userIsCoordinator(false);
+        this.props.history.push("/instructor-home");
+      }
+    }
   }
 
   validateForm = () => {
