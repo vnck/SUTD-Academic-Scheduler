@@ -5,6 +5,7 @@ const Container = styled.div`
   margin-top: 1rem;
 
   a {
+    display: inline-block;
     width: 100%;
     padding: 1rem;
     border: none;

@@ -86,7 +86,7 @@ class Login extends Component {
   componentDidMount() {
     if (this.cookies.get("authenticated") === "TRUE") {
       this.props.userHasAuthenticated(true);
-      console.log(this.cookies.get("isCoordinator"));
+      this.props.setName(this.cookies.get("name"));
       if (this.cookies.get("isCoordinator") === "TRUE") {
         this.props.userIsCoordinator(true);
         this.props.history.push("/coordinator-home");
@@ -134,9 +134,9 @@ class Login extends Component {
         })
         .then(function(data) {
           if (data.isAuthenticated) {
+            that.props.setName(data.name);
             that.props.userHasAuthenticated(data.isAuthenticated);
             that.props.userIsCoordinator(data.isCoordinator);
-            that.props.setName(data.name);
 
             if (data.isCoordinator) {
               that.props.history.push("/coordinator-home");

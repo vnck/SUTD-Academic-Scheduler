@@ -40,7 +40,6 @@ class App extends Component {
   };
 
   userIsCoordinator = isCoordinator => {
-    console.log("isCoordinator:", isCoordinator);
     this.setState({ isCoordinator: isCoordinator });
     if (isCoordinator) {
       this.cookies.set("isCoordinator", "TRUE", { path: "/" });
@@ -51,6 +50,7 @@ class App extends Component {
 
   setName = name => {
     this.setState({ name: name });
+    this.cookies.set("name", name, { path: "/" });
   };
 
   getName = () => {
@@ -61,6 +61,7 @@ class App extends Component {
     // await logout api
     this.cookies.set("authenticated", "FALSE", { path: "/" });
     this.cookies.set("isCoordinator", "", { path: "/" });
+    this.cookies.set("name", "", { path: "/" });
     this.userHasAuthenticated(false);
     this.userIsCoordinator(false);
     this.props.history.push("/login");

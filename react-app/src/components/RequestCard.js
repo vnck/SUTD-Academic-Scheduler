@@ -152,6 +152,7 @@ class RequestCard extends Component {
     })
       .then(result => result.json())
       .then(satisfied => {
+        console.log(satisfied);
         that.setState({
           satisfied: satisfied
         });
@@ -220,7 +221,12 @@ class RequestCard extends Component {
             </p>
             <p>{this.state.reason}</p>
           </StyledDiv>
-          <StyledLabel style={{ opacity: this.state.satisfied ? 1 : 0 }}>
+          <StyledLabel
+            style={{
+              opacity:
+                this.state.satisfied && this.state.reason !== "holiday" ? 1 : 0
+            }}
+          >
             <p>In Effect</p>
           </StyledLabel>
           <ButtonContainer>
