@@ -2,6 +2,23 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+To run:
+Clone the repository.
+
+Make sure to have Node JS installed (see below).
+
+Navigate to `/flask-scheduling server` and run the command
+```
+python models.py
+python flaskApp.py
+```
+
+Navigate to `/react-app` and run the command
+```
+npm install 
+npm start
+```
+
 ## Requirements
 
 For development, you will only need Node.js installed on your environement.
