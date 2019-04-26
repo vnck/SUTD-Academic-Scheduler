@@ -19,6 +19,8 @@ npm install
 npm start
 ```
 
+View app on <http://localhost:3000/login>
+
 ## Requirements
 
 For development, you will only need Node.js installed on your environement.
